@@ -1,0 +1,135 @@
+# cc-company CLI Specification
+
+## Overview
+
+cc-company는 Claude Code를 직무(agent) 단위로 조직화하여 실행할 수 있게 해주는 CLI 도구다.
+핵심 가치: "CEO처럼 목표를 제시하면, AI agent가 알아서 실행한다."
+
+## CLI Commands
+
+### 프로젝트 초기화
+
+```bash
+cc-company init          # .cc-company/ 구조 생성 + 기본 agent 3개 (developer, designer, hr)
+cc-company init --force  # 기존 .cc-company/ 덮어쓰기
+```
+
+### Agent 실행
+
+```bash
+cc-company run <agent-name> <prompt>                          # interactive mode
+cc-company run <agent-name> <prompt> -p                       # headless mode
+cc-company run <agent-name> <prompt> -p --output-format json  # headless + JSON 출력
+```
+
+- 포지셔널 인자: `<agent-name>`, `<prompt>` 2개만 추출
+- 나머지 플래그는 전부 Claude Code CLI에 패스스루
+- stdout/stderr는 그대로 사용자에게 파이프
+
+### Agent 관리
+
+```bash
+cc-company agent create <name>    # agent 생성
+cc-company agent list             # agent 목록 조회
+cc-company agent remove <name>    # agent 삭제
+cc-company agent <name> show      # agent 상세 조회 (할당된 리소스 포함)
+```
+
+### Agent 리소스 할당
+
+```bash
+cc-company agent <agent-name> add subagent <name>       # 공용 풀에 없으면 생성 + 할당
+cc-company agent <agent-name> add skill <name>
+cc-company agent <agent-name> add hook <name>
+cc-company agent <agent-name> remove subagent <name>    # 할당 해제
+cc-company agent <agent-name> remove skill <name>
+cc-company agent <agent-name> remove hook <name>
+```
+
+### 공용 리소스 관리
+
+```bash
+cc-company subagent add <name>       # 공용 풀에만 생성 (할당 없이)
+cc-company subagent list
+cc-company subagent remove <name>    # 삭제 (할당된 agent 있으면 경고)
+
+cc-company skill add|list|remove <name>
+cc-company hook add|list|remove <name>
+```
+
+## .cc-company/ 디렉토리 구조
+
+```
+.cc-company/
+├── config.json              # 프로젝트 레벨 설정 (version 포함)
+├── subagents/               # 공용 subagent 풀
+│   ├── git-expert.md
+│   └── code-reviewer.md
+├── skills/                  # 공용 skills 풀
+│   └── deploy.md
+├── hooks/                   # 공용 hooks 풀
+│   └── pre-commit.json
+├── agents/
+│   ├── developer/
+│   │   ├── agent.json       # 메타데이터 + 공용 리소스 참조
+│   │   ├── prompt.md        # 시스템 프롬프트
+│   │   ├── settings.json    # claude code settings
+│   │   └── mcp.json         # MCP 서버 설정
+│   ├── designer/
+│   │   └── ...
+│   └── hr/
+│       └── ...
+└── runs/                    # 실행 로그
+    └── 2026-03-19T100000-uuid.json
+```
+
+## agent.json 스키마
+
+```json
+{
+  "name": "developer",
+  "description": "소프트웨어 개발 전담 에이전트",
+  "subagents": ["git-expert", "code-reviewer"],
+  "skills": ["deploy"],
+  "hooks": ["pre-commit"]
+}
+```
+
+- 모든 리소스 필드는 optional
+- 값은 공용 풀의 리소스 이름(식별자) 배열
+
+## 실행 로그 스키마
+
+```json
+{
+  "id": "uuid",
+  "agent": "developer",
+  "prompt": "버그 고쳐줘",
+  "startedAt": "2026-03-19T10:00:00Z",
+  "finishedAt": "2026-03-19T10:05:00Z",
+  "exitCode": 0,
+  "flags": ["--model", "opus"],
+  "stdout": "...",
+  "stderr": "..."
+}
+```
+
+## Claude Code 플래그 매핑
+
+| agent 설정 | Claude Code 플래그 |
+|---|---|
+| prompt.md | `--append-system-prompt-file` |
+| subagents (resolved) | `--agents '{...}'` |
+| mcp.json | `--mcp-config` |
+| settings.json | `--settings` |
+| skills/hooks (plugins) | `--plugin-dir` |
+
+## 기본 Agent 템플릿
+
+`cc-company init` 시 생성되는 기본 agent 3종:
+
+- **developer**: 소프트웨어 개발 전담. 기본 subagent/skills 포함.
+- **designer**: UI/UX 디자인 전담. 기본 subagent/skills 포함.
+- **hr**: 인사/조직 관리 전담. 기본 subagent/skills 포함.
+
+각 agent는 prompt.md + 직무에 맞는 subagent/skills/hooks 풀세트로 제공.
