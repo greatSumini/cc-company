@@ -21,13 +21,15 @@
 ```json
 {
   "tasks": [
-    { "id": 0, "name": "mvp", "dir": "0-mvp", "status": "completed" },
-    { "id": 1, "name": "<task-name>", "dir": "1-<task-name>", "status": "pending" }
+    { "id": 0, "name": "mvp", "dir": "0-mvp", "status": "completed", "created_at": "...", "completed_at": "..." },
+    { "id": 1, "name": "<task-name>", "dir": "1-<task-name>", "status": "pending", "created_at": "..." }
   ]
 }
 ```
 
 - `status`는 모든 phase가 완료되면 `"completed"`, 하나라도 실패하면 `"error"`, 그 외 `"pending"`.
+- 타임스탬프: `created_at`은 task 생성 시, `completed_at`은 전체 완료 시, `failed_at`은 실패 시. ISO 8601 형식 (예: `2026-03-19T01:55:23+0900`).
+- `created_at`만 생성 시 기록. `completed_at`, `failed_at`은 `run-phases.py`가 자동 기록.
 
 ### 2. `/tasks/{id}-{name}/index.json` (task-level phase index)
 
@@ -36,6 +38,7 @@
   "project": "<프로젝트명>",
   "task": "<task-name>",
   "totalPhases": <N>,
+  "created_at": "...",
   "phases": [
     { "phase": 0, "name": "<phase-slug>", "status": "pending" },
     ...
@@ -45,6 +48,8 @@
 
 - `name`은 kebab-case slug. 해당 phase의 핵심 모듈/작업을 한 단어~두 단어로 표현.
 - 모든 phase의 초기 status는 `"pending"`.
+- 타임스탬프: task-level `created_at`은 생성 시 기록. `completed_at`은 전체 완료 시 `run-phases.py`가 기록.
+- phase-level 타임스탬프(`created_at`, `completed_at`, `failed_at`)는 `run-phases.py`가 실행 시 자동 기록. 생성 시 넣지 않는다.
 
 ### 3. `/tasks/{id}-{name}/phase{N}.md` (각 phase마다 1개)
 

@@ -11,11 +11,19 @@ Example: python3 run-phases.py 0-mvp
 import json
 import subprocess
 import sys
+from datetime import datetime, timezone, timedelta
 from pathlib import Path
 
 ROOT = Path(__file__).parent
 TASKS_DIR = ROOT / "tasks"
 TOP_INDEX_FILE = TASKS_DIR / "index.json"
+
+KST = timezone(timedelta(hours=9))
+
+
+def now_iso() -> str:
+    return datetime.now(KST).strftime("%Y-%m-%dT%H:%M:%S%z")
+    # e.g. 2026-03-19T02:09:18+0900
 
 
 def get_task_dir() -> Path:
@@ -138,9 +146,14 @@ def update_top_index_status(task_dir_name: str, status: str):
     if not TOP_INDEX_FILE.exists():
         return
     top_index = load_index(TOP_INDEX_FILE)
+    ts = now_iso()
     for task in top_index.get("tasks", []):
         if task.get("dir") == task_dir_name:
             task["status"] = status
+            if status == "completed":
+                task["completed_at"] = ts
+            elif status == "error":
+                task["failed_at"] = ts
             break
     save_index(TOP_INDEX_FILE, top_index)
 
@@ -170,6 +183,19 @@ def main():
         print(f"Fix the issue and reset the status to 'pending' in {index_file} to retry.")
         sys.exit(1)
 
+    # Set task-level created_at if not already set
+    if "created_at" not in index:
+        index["created_at"] = now_iso()
+        save_index(index_file, index)
+    # Set top-level task created_at if not already set
+    if TOP_INDEX_FILE.exists():
+        top_index = load_index(TOP_INDEX_FILE)
+        for task in top_index.get("tasks", []):
+            if task.get("dir") == task_dir_name and "created_at" not in task:
+                task["created_at"] = index["created_at"]
+                save_index(TOP_INDEX_FILE, top_index)
+                break
+
     while True:
         index = load_index(index_file)
         phase = find_next_phase(index)
@@ -178,40 +204,65 @@ def main():
             print("\nAll phases completed!")
             break
 
+        # Record phase created_at (= execution start)
+        ts_start = now_iso()
+        for p in index["phases"]:
+            if p["phase"] == phase["phase"] and "created_at" not in p:
+                p["created_at"] = ts_start
+                save_index(index_file, index)
+                break
+
         run_phase(task_dir, phase, preamble)
 
         # Re-read index.json to check what Claude did
-        status = check_phase_status(index_file, phase["phase"])
+        fresh_index = load_index(index_file)
+        status = None
+        for p in fresh_index["phases"]:
+            if p["phase"] == phase["phase"]:
+                status = p.get("status", "pending")
+                break
+        status = status or "pending"
+
+        ts_end = now_iso()
 
         if status == "error":
-            fresh_index = load_index(index_file)
             for p in fresh_index["phases"]:
                 if p["phase"] == phase["phase"]:
+                    p["failed_at"] = ts_end
                     print(f"\nERROR: Phase {phase['phase']} ({phase['name']}) failed.")
                     if "error_message" in p:
                         print(f"Error: {p['error_message']}")
                     break
+            save_index(index_file, fresh_index)
             print(f"Fix the issue and reset the status to 'pending' in {index_file} to retry.")
             update_top_index_status(task_dir_name, "error")
             sys.exit(1)
 
         if status == "completed":
+            for p in fresh_index["phases"]:
+                if p["phase"] == phase["phase"]:
+                    p["completed_at"] = ts_end
+                    break
+            save_index(index_file, fresh_index)
             print(f"\nPhase {phase['phase']} ({phase['name']}) completed successfully.")
         elif status == "pending":
             print(f"\nWARN: Phase {phase['phase']} status still 'pending' after execution.")
             print("Claude may not have updated index.json. Marking as error.")
 
-            fresh_index = load_index(index_file)
             for p in fresh_index["phases"]:
                 if p["phase"] == phase["phase"]:
                     p["status"] = "error"
                     p["error_message"] = "Claude did not update index.json status"
+                    p["failed_at"] = ts_end
                     break
             save_index(index_file, fresh_index)
             update_top_index_status(task_dir_name, "error")
             sys.exit(1)
 
-    # All phases done — update top-level index
+    # All phases done — record task-level completed_at and update top-level index
+    index = load_index(index_file)
+    index["completed_at"] = now_iso()
+    save_index(index_file, index)
     update_top_index_status(task_dir_name, "completed")
 
     print("\n" + "=" * 60)
