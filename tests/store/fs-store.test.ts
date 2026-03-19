@@ -116,7 +116,7 @@ describe('FsStore', () => {
   })
 
   describe('공용 리소스 CRUD - Subagent', () => {
-    it('createSubagent → .cc-company/subagents/ 에 파일 생성', () => {
+    it('createSubagent → .cc-company/subagents/ 에 .md 파일 생성', () => {
       const config: SubagentConfig = {
         name: 'git-expert',
         description: 'Git 전문가',
@@ -125,11 +125,15 @@ describe('FsStore', () => {
 
       store.createSubagent(config)
 
-      const filePath = path.join(tmpDir, 'subagents', 'git-expert.json')
+      const filePath = path.join(tmpDir, 'subagents', 'git-expert.md')
       expect(fs.existsSync(filePath)).toBe(true)
 
-      const saved = JSON.parse(fs.readFileSync(filePath, 'utf-8'))
-      expect(saved).toEqual(config)
+      // frontmatter + body 형식 검증
+      const content = fs.readFileSync(filePath, 'utf-8')
+      expect(content).toContain('---')
+      expect(content).toContain('name: git-expert')
+      expect(content).toContain('description: Git 전문가')
+      expect(content).toContain('You are a git expert.')
     })
 
     it('listSubagents → 전체 목록', () => {
@@ -157,7 +161,7 @@ describe('FsStore', () => {
         description: 'To be deleted',
         prompt: 'prompt',
       })
-      const filePath = path.join(tmpDir, 'subagents', 'tobedeleted.json')
+      const filePath = path.join(tmpDir, 'subagents', 'tobedeleted.md')
       expect(fs.existsSync(filePath)).toBe(true)
 
       store.removeSubagent('tobedeleted')
@@ -173,7 +177,7 @@ describe('FsStore', () => {
   })
 
   describe('공용 리소스 CRUD - Skill', () => {
-    it('createSkill → skills 디렉토리에 파일 생성', () => {
+    it('createSkill → skills 디렉토리에 .md 파일 생성', () => {
       const config: SkillConfig = {
         name: 'deploy',
         description: '배포 스킬',
@@ -182,8 +186,15 @@ describe('FsStore', () => {
 
       store.createSkill(config)
 
-      const filePath = path.join(tmpDir, 'skills', 'deploy.json')
+      const filePath = path.join(tmpDir, 'skills', 'deploy.md')
       expect(fs.existsSync(filePath)).toBe(true)
+
+      // frontmatter + body 형식 검증
+      const content = fs.readFileSync(filePath, 'utf-8')
+      expect(content).toContain('---')
+      expect(content).toContain('name: deploy')
+      expect(content).toContain('description: 배포 스킬')
+      expect(content).toContain('You can deploy applications.')
     })
 
     it('listSkills → 전체 목록', () => {
@@ -211,7 +222,7 @@ describe('FsStore', () => {
 
       store.removeSkill('tobedeleted')
 
-      const filePath = path.join(tmpDir, 'skills', 'tobedeleted.json')
+      const filePath = path.join(tmpDir, 'skills', 'tobedeleted.md')
       expect(fs.existsSync(filePath)).toBe(false)
     })
 

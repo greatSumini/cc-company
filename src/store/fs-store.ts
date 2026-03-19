@@ -10,6 +10,12 @@ import type {
   RunLogFilter,
   ProjectConfig,
 } from '../types/index.js'
+import {
+  parseSubagentMd,
+  parseSkillMd,
+  serializeSubagentMd,
+  serializeSkillMd,
+} from '../utils/frontmatter.js'
 
 export class FsStore implements IStore {
   private readonly rootPath: string
@@ -85,13 +91,13 @@ export class FsStore implements IStore {
 
   // Subagents (공용 풀)
   getSubagent(name: string): SubagentConfig {
-    const filePath = path.join(this.rootPath, 'subagents', `${name}.json`)
+    const filePath = path.join(this.rootPath, 'subagents', `${name}.md`)
 
     if (!fs.existsSync(filePath)) {
       throw new Error(`Subagent not found: ${name}`)
     }
 
-    return JSON.parse(fs.readFileSync(filePath, 'utf-8'))
+    return parseSubagentMd(fs.readFileSync(filePath, 'utf-8'))
   }
 
   listSubagents(): SubagentConfig[] {
@@ -102,16 +108,16 @@ export class FsStore implements IStore {
 
     return fs
       .readdirSync(dir)
-      .filter((file) => file.endsWith('.json'))
+      .filter((file) => file.endsWith('.md'))
       .map((file) => {
-        const name = file.replace('.json', '')
+        const name = file.replace('.md', '')
         return this.getSubagent(name)
       })
   }
 
   createSubagent(config: SubagentConfig): void {
     const dir = path.join(this.rootPath, 'subagents')
-    const filePath = path.join(dir, `${config.name}.json`)
+    const filePath = path.join(dir, `${config.name}.md`)
 
     if (fs.existsSync(filePath)) {
       throw new Error(`Subagent already exists: ${config.name}`)
@@ -121,11 +127,11 @@ export class FsStore implements IStore {
       fs.mkdirSync(dir, { recursive: true })
     }
 
-    fs.writeFileSync(filePath, JSON.stringify(config, null, 2))
+    fs.writeFileSync(filePath, serializeSubagentMd(config))
   }
 
   removeSubagent(name: string): void {
-    const filePath = path.join(this.rootPath, 'subagents', `${name}.json`)
+    const filePath = path.join(this.rootPath, 'subagents', `${name}.md`)
 
     if (!fs.existsSync(filePath)) {
       throw new Error(`Subagent not found: ${name}`)
@@ -136,13 +142,13 @@ export class FsStore implements IStore {
 
   // Skills (공용 풀)
   getSkill(name: string): SkillConfig {
-    const filePath = path.join(this.rootPath, 'skills', `${name}.json`)
+    const filePath = path.join(this.rootPath, 'skills', `${name}.md`)
 
     if (!fs.existsSync(filePath)) {
       throw new Error(`Skill not found: ${name}`)
     }
 
-    return JSON.parse(fs.readFileSync(filePath, 'utf-8'))
+    return parseSkillMd(fs.readFileSync(filePath, 'utf-8'))
   }
 
   listSkills(): SkillConfig[] {
@@ -153,16 +159,16 @@ export class FsStore implements IStore {
 
     return fs
       .readdirSync(dir)
-      .filter((file) => file.endsWith('.json'))
+      .filter((file) => file.endsWith('.md'))
       .map((file) => {
-        const name = file.replace('.json', '')
+        const name = file.replace('.md', '')
         return this.getSkill(name)
       })
   }
 
   createSkill(config: SkillConfig): void {
     const dir = path.join(this.rootPath, 'skills')
-    const filePath = path.join(dir, `${config.name}.json`)
+    const filePath = path.join(dir, `${config.name}.md`)
 
     if (fs.existsSync(filePath)) {
       throw new Error(`Skill already exists: ${config.name}`)
@@ -172,11 +178,11 @@ export class FsStore implements IStore {
       fs.mkdirSync(dir, { recursive: true })
     }
 
-    fs.writeFileSync(filePath, JSON.stringify(config, null, 2))
+    fs.writeFileSync(filePath, serializeSkillMd(config))
   }
 
   removeSkill(name: string): void {
-    const filePath = path.join(this.rootPath, 'skills', `${name}.json`)
+    const filePath = path.join(this.rootPath, 'skills', `${name}.md`)
 
     if (!fs.existsSync(filePath)) {
       throw new Error(`Skill not found: ${name}`)
