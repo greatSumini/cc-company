@@ -6,6 +6,7 @@
 - **Language**: TypeScript
 - **CLI Parser**: commander
 - **Claude Code 연동**: child_process.spawn
+- **Frontmatter 파싱**: gray-matter
 - **배포**: npm
 
 ## 레이어 구조
@@ -51,7 +52,7 @@ interface IStore {
 }
 ```
 
-- **fs-store.ts** — 파일시스템 구현체 (MVP)
+- **fs-store.ts** — 파일시스템 구현체 (MVP). subagent/skill은 `.md` 파일을 `gray-matter`로 파싱하여 frontmatter → 메타데이터, body → prompt로 분리.
 - **api-store.ts** — HTTP API 구현체 (향후 대시보드 연동 시)
 
 ### Claude Runner
@@ -89,6 +90,8 @@ src/
 │   └── spawner.ts
 ├── logger/
 │   └── run-logger.ts
+├── utils/
+│   └── frontmatter.ts        # subagent/skill MD 파일의 파싱(parse*Md)과 직렬화(serialize*Md)
 ├── types/
 │   └── index.ts
 └── templates/                # init 시 복사할 기본 agent 템플릿

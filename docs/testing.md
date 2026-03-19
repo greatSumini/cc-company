@@ -15,6 +15,7 @@
 | 모듈 | 테스트 유형 | 수준 | 이유 |
 |---|---|---|---|
 | flag-builder | 유닛 | 철저히 | 변환 로직이 틀리면 claude가 엉뚱하게 실행됨 |
+| frontmatter (utils) | 유닛 | 철저히 | 파싱이 틀리면 prompt가 통째로 날아감 |
 | store (fs-store) | 통합 | 핵심 경로 | 파일 I/O는 실제로 돌려봐야 의미 있음 |
 | services | 유닛 | 핵심 분기만 | 리소스 없을 때 에러, assign 자동 생성 등 |
 | commands | 없음 | - | commander 파싱은 프레임워크 책임 |

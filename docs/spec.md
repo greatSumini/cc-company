@@ -101,6 +101,49 @@ cc-company hook add|list|remove <name>
 - 모든 리소스 필드는 optional
 - 값은 공용 풀의 리소스 이름(식별자) 배열
 
+## Subagent MD 형식
+
+YAML frontmatter + 마크다운 본문 구조:
+
+```markdown
+---
+name: git-expert
+description: Git 버전 관리 전문가
+model: sonnet          # optional
+tools: Read, Glob, Grep  # optional
+maxTurns: 10           # optional
+---
+
+You are a Git version control expert...
+```
+
+**필수 필드**: `name`, `description`
+**Optional 필드**: `model`, `tools`, `disallowedTools`, `maxTurns`, `permissionMode`
+
+## Skill MD 형식
+
+YAML frontmatter + 마크다운 본문 구조:
+
+```markdown
+---
+name: deploy
+description: 배포 프로세스 관리
+allowedTools: Bash, Read  # optional
+model: sonnet             # optional
+---
+
+# Deploy Skill
+
+Manages deployment processes...
+```
+
+**필수 필드**: `name`, `description`
+**Optional 필드**: `model`, `allowedTools`, `context`, `agent`, `userInvocable`, `disableModelInvocation`, `argumentHint`
+
+## Hook JSON 형식
+
+Hook은 config 필드가 구조화된 JSON이므로 `.json` 형식을 유지한다.
+
 ## 실행 로그 스키마
 
 ```json

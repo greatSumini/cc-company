@@ -165,3 +165,21 @@
 - ADR-003에서 "패스스루 전략"을 확정했지만, `-p`는 cc-company 자체의 동작 분기에 필요한 유일한 flag. 패스스루 원칙을 깨는 것이 아니라, "인식 + 전달"의 하이브리드 접근.
 - interactive mode는 Claude Code의 핵심 UX. 이를 지원하지 않으면 cc-company의 가치가 print mode에만 한정됨.
 - prompt optional화로 `cc-company run developer`라는 최소 입력으로 agent를 실행할 수 있어 DX 향상.
+
+---
+
+## ADR-012: Subagent/Skill 저장 형식을 JSON에서 Frontmatter MD로 전환
+
+**상태**: 확정 (2026-03-19)
+
+**맥락**: subagent/skill 리소스의 저장 형식을 `.json`에서 YAML frontmatter를 포함한 `.md` 파일로 변경한다.
+
+**결정**: prompt 필드가 JSON 문자열로 저장되면 가독성이 극히 떨어진다. 마크다운 본문으로 관리하면 IDE에서 넓게 보고 편집할 수 있다.
+
+**구현**:
+- frontmatter (YAML, `---` 구분자): `name`, `description`, 그리고 Claude Code 호환 optional 필드들 (`model`, `tools`, `disallowedTools`, `maxTurns`, `permissionMode` 등)
+- 마크다운 본문: 기존 `prompt` 필드의 내용. 런타임에서 파싱하여 `SubagentConfig.prompt`로 주입.
+- 파싱 라이브러리: `gray-matter` (dependencies)
+- Hook은 JSON 유지 (config 필드가 구조화된 JSON이므로 md 변환 부자연스러움)
+
+**영향**: `.cc-company/subagents/*.json` → `*.md`, `.cc-company/skills/*.json` → `*.md`. 런타임 인터페이스(SubagentConfig, SkillConfig) 유지.

@@ -5,10 +5,31 @@
   "totalPhases": 5,
   "created_at": "2026-03-19T17:57:00+0900",
   "phases": [
-    { "phase": 0, "name": "docs-update", "status": "pending" },
-    { "phase": 1, "name": "types-frontmatter-parser", "status": "pending" },
-    { "phase": 2, "name": "fs-store-migration", "status": "pending" },
-    { "phase": 3, "name": "services-commands-templates", "status": "pending" },
-    { "phase": 4, "name": "data-migration", "status": "pending" }
+    {
+      "phase": 0,
+      "name": "docs-update",
+      "status": "completed",
+      "created_at": "2026-03-19T18:00:19+0900"
+    },
+    {
+      "phase": 1,
+      "name": "types-frontmatter-parser",
+      "status": "pending"
+    },
+    {
+      "phase": 2,
+      "name": "fs-store-migration",
+      "status": "pending"
+    },
+    {
+      "phase": 3,
+      "name": "services-commands-templates",
+      "status": "pending"
+    },
+    {
+      "phase": 4,
+      "name": "data-migration",
+      "status": "pending"
+    }
   ]
 }

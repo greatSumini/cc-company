@@ -78,3 +78,21 @@ store는 in-memory fake 또는 실제 fs-store + 임시 디렉토리.
 ✓ spawner exitCode 0 → 로그에 정상 기록
 ✓ spawner exitCode 1 → 로그에 실패 기록 + exitCode 전파
 ```
+
+## frontmatter utils (유닛, ~8개)
+
+```
+[파싱 - subagent]
+✓ 정상적인 frontmatter + body → name, description, prompt 추출
+✓ optional 필드(model, tools, maxTurns) 포함 → 해당 필드 파싱
+✓ name 필드 누락 → 에러
+✓ frontmatter 없는 순수 마크다운 → 에러
+✓ 빈 body → prompt가 빈 문자열
+
+[파싱 - skill]
+✓ 정상적인 skill frontmatter + body → name, description, prompt 추출
+✓ skill optional 필드(allowedTools, context, agent) 포함 → 해당 필드 파싱
+
+[직렬화]
+✓ serialize 후 parse → 원본과 동일 (round-trip)
+```
