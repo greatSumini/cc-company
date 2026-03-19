@@ -36,7 +36,9 @@
     {
       "phase": 4,
       "name": "data-migration",
-      "status": "pending"
+      "status": "completed",
+      "created_at": "2026-03-19T18:11:01+0900",
+      "completed_at": "2026-03-19T18:14:00+0900"
     }
   ]
 }
