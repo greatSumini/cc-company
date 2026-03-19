@@ -1,4 +1,5 @@
 import type { FlagBuilderInput, SubagentConfig } from '../types/index.js'
+import { isEmptyStringOrNil } from '../utils/index.js'
 
 function buildSubagentsJson(subagents: SubagentConfig[]): string {
   const obj: Record<string, { description: string; prompt: string }> = {}
@@ -43,7 +44,7 @@ export function buildFlags(input: FlagBuilderInput): string[] {
   }
 
   // prompt (마지막) — interactive mode에서는 prompt 없이 실행
-  if (input.prompt) {
+  if (!isEmptyStringOrNil(input.prompt)) {
     flags.push(input.prompt)
   }
 

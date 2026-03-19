@@ -35,8 +35,9 @@ export function registerRunCommand(program: Command): void {
       while (i < allArgs.length) {
         const arg = allArgs[i]
 
+        // ADR-011: -p는 cc-company가 mode 결정에 사용하면서 동시에 Claude CLI에도 전달한다.
+        // 여기서 skip하고, 아래에서 printMode일 때 수동 추가한다.
         if (arg === '-p' || arg === '--print') {
-          // -p는 passthrough에 추가하지 않음 (아래에서 별도 처리)
           i++
           continue
         }
@@ -45,19 +46,10 @@ export function registerRunCommand(program: Command): void {
           // 플래그: 패스스루에 추가
           passthroughFlags.push(arg)
 
-          // 플래그가 값을 가지는지 확인 (다음 인자가 -로 시작하지 않으면)
+          // 플래그가 값을 가지는지 확인 (다음 인자가 -로 시작하지 않으면 flag value로 취급)
           if (i + 1 < allArgs.length && !allArgs[i + 1].startsWith('-')) {
-            // 다음 인자가 positional이 아닌 flag value인지 확인
-            // 이미 포지셔널 2개를 다 찾았으면 다음 것도 패스스루
-            if (positionalCount >= 2) {
-              passthroughFlags.push(allArgs[i + 1])
-              i++
-            } else {
-              // 아직 포지셔널을 찾는 중이면 다음 것이 flag의 값인지 positional인지 알 수 없음
-              // flag 값으로 취급
-              passthroughFlags.push(allArgs[i + 1])
-              i++
-            }
+            passthroughFlags.push(allArgs[i + 1])
+            i++
           }
         } else {
           // 포지셔널 인자

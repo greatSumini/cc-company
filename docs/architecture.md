@@ -128,7 +128,7 @@ src/
    prompt: null, mode: "interactive"
 ```
 
-### Print Mode 예시: `cc-company run developer "버그 고쳐줘" --model opus`
+### Interactive Mode with Prompt 예시: `cc-company run developer "버그 고쳐줘" --model opus`
 
 ```
 1. commands/run.ts
