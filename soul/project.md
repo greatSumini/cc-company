@@ -10,5 +10,7 @@
 - [2026-03-19] subagent/skills는 agent와 lifecycle이 다름 → 공용 풀 + 참조 구조로 결정
 - [2026-03-19] 아키텍처/ADR 상세 내용은 /docs/architecture.md, /docs/adr.md 참조
 
+- [2026-03-19] subagent/skill 저장 형식을 JSON → frontmatter MD로 전환 결정. JSON은 prompt가 escape 문자(`\n` 등) 포함된 한 줄 문자열이 되어 사람이 읽고 편집하기 어려움. MD라면 본문으로 넓게 펼쳐서 볼 수 있고, Claude Code 공식 형식과도 일치.
+
 ### Gotchas
 
