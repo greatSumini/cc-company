@@ -70,6 +70,7 @@ describe('RunService', () => {
       expect(mockLogger.log).toHaveBeenCalledWith(
         'developer',
         '버그 고쳐줘',
+        'print',
         expect.arrayContaining(['--append-system-prompt-file']),
         expect.objectContaining({ exitCode: 0 })
       )

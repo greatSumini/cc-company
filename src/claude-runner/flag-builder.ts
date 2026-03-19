@@ -42,8 +42,10 @@ export function buildFlags(input: FlagBuilderInput): string[] {
     flags.push(...input.passthroughFlags)
   }
 
-  // prompt (마지막)
-  flags.push(input.prompt)
+  // prompt (마지막) — interactive mode에서는 prompt 없이 실행
+  if (input.prompt) {
+    flags.push(input.prompt)
+  }
 
   return flags
 }

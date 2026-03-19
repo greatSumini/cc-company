@@ -47,7 +47,7 @@ export class RunService {
 
     // 6. logger가 있으면 로그 저장
     if (this.logger) {
-      this.logger.log(agentName, prompt, flags, result)
+      this.logger.log(agentName, prompt, 'print', flags, result)
     }
 
     // 7. SpawnResult 반환

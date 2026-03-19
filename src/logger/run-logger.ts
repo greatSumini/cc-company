@@ -8,7 +8,8 @@ export class RunLogger implements IRunLogger {
 
   log(
     agent: string,
-    prompt: string,
+    prompt: string | null,
+    mode: 'interactive' | 'print',
     flags: string[],
     result: { exitCode: number; stdout: string; stderr: string }
   ): void {
@@ -17,6 +18,7 @@ export class RunLogger implements IRunLogger {
       id: randomUUID(),
       agent,
       prompt,
+      mode,
       startedAt: now.toISOString(),
       finishedAt: now.toISOString(),
       exitCode: result.exitCode,
