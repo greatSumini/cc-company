@@ -13,8 +13,9 @@
 
 ```bash
 npx cc-company init
-cc-company run developer "Fix the login bug"
-cc-company run designer "Redesign the onboarding flow"
+cc-company run developer                          # interactive TUI
+cc-company run developer "Fix the login bug"      # interactive + prompt
+cc-company run developer -p "Fix the login bug"   # headless print mode
 ```
 
 ## Why?
@@ -61,11 +62,14 @@ Creates a `.cc-company/` directory with 3 default agents: `developer`, `designer
 ### 2. Run an Agent
 
 ```bash
-# Interactive mode
+# Interactive TUI (no prompt)
+cc-company run developer
+
+# Interactive TUI with initial prompt
 cc-company run developer "Refactor the auth module"
 
-# Headless mode (for scripts/CI)
-cc-company run developer "Run all tests and fix failures" -p
+# Print mode — headless, for scripts/CI
+cc-company run developer -p "Run all tests and fix failures"
 
 # Pass any Claude Code flag
 cc-company run developer "Explain this codebase" --model opus
@@ -127,7 +131,7 @@ cc-company translates your agent configuration into Claude Code CLI flags, then 
 | Command | Description |
 |---|---|
 | `cc-company init` | Initialize project (add `--force` to overwrite) |
-| `cc-company run <agent> <prompt>` | Run an agent |
+| `cc-company run <agent> [prompt]` | Run an agent (`-p` for print mode) |
 | `cc-company agent create <name>` | Create a new agent |
 | `cc-company agent list` | List all agents |
 | `cc-company agent remove <name>` | Remove an agent |
