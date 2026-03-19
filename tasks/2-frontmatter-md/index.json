@@ -22,7 +22,9 @@
     {
       "phase": 2,
       "name": "fs-store-migration",
-      "status": "pending"
+      "status": "completed",
+      "created_at": "2026-03-19T18:06:07+0900",
+      "completed_at": "2026-03-19T18:08:40+0900"
     },
     {
       "phase": 3,
