@@ -24,6 +24,7 @@ TOP_INDEX_FILE = TASKS_DIR / "index.json"
 KST = timezone(timedelta(hours=9))
 
 COMMIT_MSG_TEMPLATE = "feat({task_name}): phase {phase_num} — {phase_name}"
+RUNNER_COMMIT_MSG_TEMPLATE = "chore({task_name}): phase {phase_num} output + timestamps"
 SPINNER_CHARS = "⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏"
 
 
@@ -121,21 +122,54 @@ def git_ensure_branch(task_name: str):
     print(f"  Branch: {branch}")
 
 
-def git_commit_phase(task_name: str, phase_num: int, phase_name: str) -> bool:
-    """Fallback commit — runs only if Claude left uncommitted changes."""
-    git_run("add", "-A")
+def git_commit_docs(task_name: str):
+    """Commit task plan files (tasks/, docs/, prompts/) before phase execution."""
+    git_run("add", "tasks/", "docs/", "prompts/")
 
-    # Nothing staged → Claude already committed (or no changes)
     if git_run("diff", "--cached", "--quiet").returncode == 0:
-        return False
+        return
 
-    msg = COMMIT_MSG_TEMPLATE.format(
-        task_name=task_name, phase_num=phase_num, phase_name=phase_name
-    )
+    msg = f"docs: create {task_name} plan"
     r = git_run("commit", "-m", msg)
-    if r.returncode != 0:
-        print(f"  WARN: fallback commit failed: {r.stderr.strip()}")
-        return False
+    if r.returncode == 0:
+        print(f"  ✓ {msg}")
+    else:
+        print(f"  WARN: docs commit failed: {r.stderr.strip()}")
+
+
+def git_commit_phase(task_name: str, task_dir_name: str, phase_num: int, phase_name: str) -> bool:
+    """Two-step commit: Claude fallback (if needed) + runner housekeeping."""
+    output_file = f"tasks/{task_dir_name}/phase{phase_num}-output.json"
+    index_file = f"tasks/{task_dir_name}/index.json"
+    top_index = "tasks/index.json"
+
+    # --- Step 1: Claude fallback commit (code changes Claude didn't commit) ---
+    git_run("add", "-A")
+    # Unstage runner-generated files so they don't mix into Claude's commit
+    git_run("reset", "HEAD", "--", output_file)
+    # index.json and top index may have runner timestamp updates — unstage too
+    git_run("reset", "HEAD", "--", index_file)
+    git_run("reset", "HEAD", "--", top_index)
+
+    if git_run("diff", "--cached", "--quiet").returncode != 0:
+        msg = COMMIT_MSG_TEMPLATE.format(
+            task_name=task_name, phase_num=phase_num, phase_name=phase_name
+        )
+        r = git_run("commit", "-m", msg)
+        if r.returncode != 0:
+            print(f"  WARN: fallback commit failed: {r.stderr.strip()}")
+
+    # --- Step 2: Runner housekeeping commit (output + timestamps) ---
+    git_run("add", "-A")
+    if git_run("diff", "--cached", "--quiet").returncode != 0:
+        msg = RUNNER_COMMIT_MSG_TEMPLATE.format(
+            task_name=task_name, phase_num=phase_num
+        )
+        r = git_run("commit", "-m", msg)
+        if r.returncode != 0:
+            print(f"  WARN: housekeeping commit failed: {r.stderr.strip()}")
+            return False
+
     return True
 
 
@@ -304,8 +338,9 @@ def main():
         print(f"  Fix the issue and reset status to 'pending' in {index_file} to retry.")
         sys.exit(1)
 
-    # --- Git branch ---
+    # --- Git branch + docs commit ---
     git_ensure_branch(task_name)
+    git_commit_docs(task_name)
 
     # --- Preamble ---
     preamble = build_preamble(project_name, task_dir_name, task_name)
@@ -323,6 +358,8 @@ def main():
                 break
 
     # --- Phase loop ---
+    baseline = git_run("rev-parse", "HEAD").stdout.strip()
+
     while True:
         index = load_index(index_file)
         phase = find_next_phase(index)
@@ -380,7 +417,15 @@ def main():
                     p["completed_at"] = ts_end
                     break
             save_index(index_file, fresh_index)
-            git_commit_phase(task_name, phase_num, phase_name)
+
+            # Generate docs-diff.md after phase 0 (docs update)
+            if phase_num == 0:
+                subprocess.run(
+                    ["python3", "gen-docs-diff.py", str(task_dir), baseline],
+                    cwd=str(ROOT),
+                )
+
+            git_commit_phase(task_name, task_dir_name, phase_num, phase_name)
             print(f"  ✓ Phase {phase_num}: {phase_name} completed [{elapsed}s]")
         elif status == "pending":
             print(f"  ✗ Phase {phase_num}: {phase_name} — status still 'pending' after execution")

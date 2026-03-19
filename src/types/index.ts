@@ -27,7 +27,8 @@ export interface HookConfig {
 export interface RunLog {
   id: string
   agent: string
-  prompt: string
+  prompt: string | null
+  mode: 'interactive' | 'print'
   startedAt: string
   finishedAt: string
   exitCode: number
@@ -54,15 +55,18 @@ export interface FlagBuilderInput {
   settingsFilePath?: string
   mcpConfigFilePath?: string
   pluginDirPath?: string
-  prompt: string
+  prompt?: string
   passthroughFlags: string[]
 }
 
 export interface RunLogger {
   log(
     agent: string,
-    prompt: string,
+    prompt: string | null,
+    mode: 'interactive' | 'print',
     flags: string[],
-    result: { exitCode: number; stdout: string; stderr: string }
+    result: { exitCode: number; stdout: string; stderr: string },
+    startedAt: Date,
+    finishedAt: Date
   ): void
 }

@@ -8,17 +8,20 @@ export class RunLogger implements IRunLogger {
 
   log(
     agent: string,
-    prompt: string,
+    prompt: string | null,
+    mode: 'interactive' | 'print',
     flags: string[],
-    result: { exitCode: number; stdout: string; stderr: string }
+    result: { exitCode: number; stdout: string; stderr: string },
+    startedAt: Date,
+    finishedAt: Date
   ): void {
-    const now = new Date()
     const log: RunLog = {
       id: randomUUID(),
       agent,
       prompt,
-      startedAt: now.toISOString(),
-      finishedAt: now.toISOString(),
+      mode,
+      startedAt: startedAt.toISOString(),
+      finishedAt: finishedAt.toISOString(),
       exitCode: result.exitCode,
       flags,
       stdout: result.stdout,

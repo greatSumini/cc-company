@@ -1,6 +1,6 @@
 {
   "name": "cc-company",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Run Claude Code like a company — organize AI agents by role, run them with one command",
   "main": "dist/index.js",
   "bin": {

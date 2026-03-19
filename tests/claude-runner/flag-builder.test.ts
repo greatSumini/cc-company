@@ -260,6 +260,40 @@ describe('flag-builder', () => {
       // 특수문자가 그대로 포함되어야 함 (spawn이 처리)
       expect(flags[flags.length - 1]).toBe('버그를 "고쳐줘" & 테스트 해줘 | grep foo')
     })
+
+    it('prompt가 undefined이면 플래그 배열에 prompt가 포함되지 않음', () => {
+      const input: FlagBuilderInput = {
+        agent: baseAgent,
+        promptFilePath: '/path/to/prompt.md',
+        prompt: undefined,
+        passthroughFlags: [],
+      }
+
+      const flags = buildFlags(input)
+
+      expect(flags).toEqual([
+        '--append-system-prompt-file',
+        '/path/to/prompt.md',
+      ])
+    })
+
+    it('prompt가 undefined이고 passthrough flags가 있으면 flags만 포함', () => {
+      const input: FlagBuilderInput = {
+        agent: baseAgent,
+        promptFilePath: '/path/to/prompt.md',
+        prompt: undefined,
+        passthroughFlags: ['--model', 'opus'],
+      }
+
+      const flags = buildFlags(input)
+
+      expect(flags).toEqual([
+        '--append-system-prompt-file',
+        '/path/to/prompt.md',
+        '--model',
+        'opus',
+      ])
+    })
   })
 
   describe('[엣지 케이스]', () => {
@@ -296,6 +330,29 @@ describe('flag-builder', () => {
         '/path/to/prompt.md',
         'minimal test',
       ])
+    })
+
+    it('prompt undefined + subagents + settings → prompt 없이 정상 빌드', () => {
+      const subagents: SubagentConfig[] = [
+        { name: 'git-expert', description: 'Git 전문가', prompt: 'You are a git expert.' },
+      ]
+
+      const input: FlagBuilderInput = {
+        agent: { ...baseAgent, subagents: ['git-expert'] },
+        promptFilePath: '/path/to/prompt.md',
+        subagents,
+        settingsFilePath: '/path/to/settings.json',
+        prompt: undefined,
+        passthroughFlags: [],
+      }
+
+      const flags = buildFlags(input)
+
+      expect(flags).toContain('--append-system-prompt-file')
+      expect(flags).toContain('--agents')
+      expect(flags).toContain('--settings')
+      // prompt가 마지막에 없어야 함
+      expect(flags[flags.length - 1]).toBe('/path/to/settings.json')
     })
   })
 })
