@@ -96,12 +96,46 @@ src/
 
 ## 데이터 흐름
 
-### `cc-company run developer "버그 고쳐줘" --model opus`
+### Interactive Mode 예시: `cc-company run developer`
 
 ```
 1. commands/run.ts
-   포지셔널 추출: agent="developer", prompt="버그 고쳐줘"
+   포지셔널 추출: agent="developer", prompt=undefined (optional)
+   mode 결정: -p flag 없음 → interactive mode
+   패스스루 수집: []
+        │
+        ▼
+2. services/run.service.ts
+   store.getAgent("developer") → AgentConfig
+   store.getSubagents(config.subagents) → SubagentConfig[]
+   mode="interactive" 전달
+        │
+        ▼
+3. claude-runner/flag-builder.ts
+   AgentConfig + SubagentConfig[] → claude CLI 플래그 배열
+   prompt가 undefined이면 마지막 positional arg 생략
+   ["--append-system-prompt-file", "...prompt.md",
+    "--agents", '{"git-expert":{...}}']
+        │
+        ▼
+4. claude-runner/spawner.ts
+   child_process.spawn("claude", flags)
+   stdio: 'inherit' → interactive TUI가 터미널에 표시됨
+        │
+        ▼
+5. logger/run-logger.ts
+   RunLog JSON → .cc-company/runs/{timestamp}-{uuid}.json
+   prompt: null, mode: "interactive"
+```
+
+### Print Mode 예시: `cc-company run developer "버그 고쳐줘" --model opus`
+
+```
+1. commands/run.ts
+   포지셔널 추출: agent="developer", prompt="버그 고쳐줘" (optional)
+   mode 결정: -p flag 없음 → interactive mode (prompt 있는 interactive)
    패스스루 수집: ["--model", "opus"]
+   (-p flag 사용 시 mode="print", prompt 필수)
         │
         ▼
 2. services/run.service.ts
@@ -112,6 +146,7 @@ src/
         ▼
 3. claude-runner/flag-builder.ts
    AgentConfig + SubagentConfig[] → claude CLI 플래그 배열
+   prompt가 있으면 마지막 positional arg로 포함
    ["--append-system-prompt-file", "...prompt.md",
     "--agents", '{"git-expert":{...}}',
     "--model", "opus",
@@ -125,4 +160,5 @@ src/
         ▼
 5. logger/run-logger.ts
    RunLog JSON → .cc-company/runs/{timestamp}-{uuid}.json
+   prompt: "버그 고쳐줘", mode: "interactive"
 ```

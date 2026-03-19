@@ -17,14 +17,17 @@ cc-company init --force  # 기존 .cc-company/ 덮어쓰기
 ### Agent 실행
 
 ```bash
-cc-company run <agent-name> <prompt>                          # interactive mode
-cc-company run <agent-name> <prompt> -p                       # headless mode
-cc-company run <agent-name> <prompt> -p --output-format json  # headless + JSON 출력
+cc-company run <agent-name>                                    # interactive TUI
+cc-company run <agent-name> <prompt>                           # interactive + 초기 prompt
+cc-company run <agent-name> -p <prompt>                        # print mode (headless)
+cc-company run <agent-name> -p <prompt> --output-format json   # print mode + JSON 출력
 ```
 
-- 포지셔널 인자: `<agent-name>`, `<prompt>` 2개만 추출
-- 나머지 플래그는 전부 Claude Code CLI에 패스스루
-- stdout/stderr는 그대로 사용자에게 파이프
+- 포지셔널 인자: `<agent-name>` 필수, `[prompt]` 선택
+- `-p` (print mode): cc-company가 인식하는 first-class option. Claude Code CLI에도 동시에 전달된다. `-p` 사용 시 `<prompt>`는 필수.
+- `-p` 없이 실행하면 Claude Code의 interactive TUI가 터미널에 표시된다.
+- `-p`, `<prompt>` 외의 나머지 플래그는 전부 Claude Code CLI에 패스스루.
+- stdout/stderr는 그대로 사용자에게 파이프 (`stdio: 'inherit'`).
 
 ### Agent 관리
 
@@ -105,14 +108,18 @@ cc-company hook add|list|remove <name>
   "id": "uuid",
   "agent": "developer",
   "prompt": "버그 고쳐줘",
+  "mode": "interactive",
   "startedAt": "2026-03-19T10:00:00Z",
   "finishedAt": "2026-03-19T10:05:00Z",
   "exitCode": 0,
   "flags": ["--model", "opus"],
-  "stdout": "...",
-  "stderr": "..."
+  "stdout": "",
+  "stderr": ""
 }
 ```
+
+- `mode`: `"interactive"` 또는 `"print"`. `-p` flag 유무로 결정.
+- `prompt`: interactive mode에서 prompt 없이 시작한 경우 `null`.
 
 ## Claude Code 플래그 매핑
 

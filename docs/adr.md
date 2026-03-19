@@ -144,3 +144,24 @@
 **근거**:
 - 사용자 설정을 실수로 날리는 것 방지
 - 머지 로직은 구현 복잡도 대비 가치 낮음
+
+---
+
+## ADR-011: run command의 prompt optional화 및 -p first-class option 등록
+
+**상태**: 확정 (2026-03-19)
+
+**맥락**: 현재 run command는 `<agent>` `<prompt>` 두 개의 필수 인자를 받으며, `-p`는 passthrough flag로 처리된다. 사용자가 prompt 없이 interactive TUI를 시작하고 싶은 니즈가 있고, cc-company가 `-p` 여부를 인식해야 mode별 로직(로깅 전략, prompt 필수 여부 validation 등)을 분기할 수 있다.
+
+**결정**:
+1. `<prompt>`를 optional (`[prompt]`)로 변경. `-`로 시작하지 않는 첫 번째 인자를 prompt로 취급.
+2. `-p`를 cc-company의 first-class option으로 등록. commander `.option('-p, --print')`로 파싱하되, 동시에 Claude Code CLI에도 전달.
+3. `-p` 없이 실행하면 interactive TUI 모드, `-p`로 실행하면 print (headless) 모드.
+4. `-p` 사용 시 prompt는 필수. 없으면 에러.
+5. RunLog에 `mode` 필드 추가, `prompt`는 nullable.
+6. `startedAt`은 spawn 직전, `finishedAt`은 spawn 완료 후 기록 (interactive 세션의 실제 소요 시간 반영).
+
+**근거**:
+- ADR-003에서 "패스스루 전략"을 확정했지만, `-p`는 cc-company 자체의 동작 분기에 필요한 유일한 flag. 패스스루 원칙을 깨는 것이 아니라, "인식 + 전달"의 하이브리드 접근.
+- interactive mode는 Claude Code의 핵심 UX. 이를 지원하지 않으면 cc-company의 가치가 print mode에만 한정됨.
+- prompt optional화로 `cc-company run developer`라는 최소 입력으로 agent를 실행할 수 있어 DX 향상.
