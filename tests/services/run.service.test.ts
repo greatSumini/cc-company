@@ -36,7 +36,7 @@ describe('RunService', () => {
   describe('[run]', () => {
     it('존재하지 않는 agent로 run → 에러', () => {
       expect(() =>
-        runService.run('nonexistent', 'test prompt', [])
+        runService.run('nonexistent', 'test prompt', 'print', [])
       ).toThrow('Agent not found: nonexistent')
     })
 
@@ -45,7 +45,7 @@ describe('RunService', () => {
       store.createAgent({ name: 'developer', description: '개발자' })
 
       // 실행
-      const result = runService.run('developer', '버그 고쳐줘', [])
+      const result = runService.run('developer', '버그 고쳐줘', 'print', [])
 
       expect(result.exitCode).toBe(0)
       expect(result.stdout).toBe('')
@@ -64,7 +64,7 @@ describe('RunService', () => {
       const runServiceWithLogger = new RunService(store, tmpDir, mockLogger)
 
       // 실행
-      runServiceWithLogger.run('developer', '버그 고쳐줘', ['--model', 'opus'])
+      runServiceWithLogger.run('developer', '버그 고쳐줘', 'print', ['--model', 'opus'])
 
       // logger.log 호출 확인
       expect(mockLogger.log).toHaveBeenCalledWith(
@@ -72,7 +72,9 @@ describe('RunService', () => {
         '버그 고쳐줘',
         'print',
         expect.arrayContaining(['--append-system-prompt-file']),
-        expect.objectContaining({ exitCode: 0 })
+        expect.objectContaining({ exitCode: 0 }),
+        expect.any(Date),
+        expect.any(Date)
       )
     })
 
@@ -81,7 +83,7 @@ describe('RunService', () => {
       store.createAgent({ name: 'developer', description: '개발자' })
 
       // dry-run 모드에서는 exitCode가 항상 0
-      const result = runService.run('developer', 'test', [])
+      const result = runService.run('developer', 'test', 'print', [])
       expect(result.exitCode).toBe(0)
     })
 
@@ -104,7 +106,7 @@ describe('RunService', () => {
       const writeSpy = vi.spyOn(process.stdout, 'write').mockImplementation(() => true)
 
       // 실행
-      runService.run('developer', 'test', [])
+      runService.run('developer', 'test', 'print', [])
 
       // dry-run 출력에 --agents가 포함되어 있는지 확인
       expect(writeSpy).toHaveBeenCalled()
@@ -130,7 +132,7 @@ describe('RunService', () => {
 
       const writeSpy = vi.spyOn(process.stdout, 'write').mockImplementation(() => true)
 
-      runService.run('developer', 'test', [])
+      runService.run('developer', 'test', 'print', [])
 
       const output = writeSpy.mock.calls
         .map((call) => call[0])
@@ -145,7 +147,7 @@ describe('RunService', () => {
 
       const writeSpy = vi.spyOn(process.stdout, 'write').mockImplementation(() => true)
 
-      runService.run('developer', 'test', ['--model', 'opus', '-p'])
+      runService.run('developer', 'test', 'print', ['--model', 'opus', '-p'])
 
       const output = writeSpy.mock.calls
         .map((call) => call[0])
@@ -155,6 +157,43 @@ describe('RunService', () => {
       expect(output).toContain('-p')
 
       writeSpy.mockRestore()
+    })
+
+    it('prompt 없이 interactive mode로 실행', () => {
+      store.createAgent({ name: 'developer', description: '개발자' })
+
+      const result = runService.run('developer', null, 'interactive', [])
+
+      expect(result.exitCode).toBe(0)
+    })
+
+    it('interactive mode + prompt로 실행', () => {
+      store.createAgent({ name: 'developer', description: '개발자' })
+
+      const result = runService.run('developer', '버그 고쳐줘', 'interactive', [])
+
+      expect(result.exitCode).toBe(0)
+    })
+
+    it('logger에 mode가 전달되는지 확인', () => {
+      store.createAgent({ name: 'developer', description: '개발자' })
+
+      const mockLogger: RunLogger = {
+        log: vi.fn(),
+      }
+
+      const runServiceWithLogger = new RunService(store, tmpDir, mockLogger)
+      runServiceWithLogger.run('developer', null, 'interactive', [])
+
+      expect(mockLogger.log).toHaveBeenCalledWith(
+        'developer',
+        null,
+        'interactive',
+        expect.any(Array),
+        expect.objectContaining({ exitCode: 0 }),
+        expect.any(Date),
+        expect.any(Date)
+      )
     })
   })
 })

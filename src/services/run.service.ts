@@ -12,7 +12,7 @@ export class RunService {
     private logger?: RunLogger
   ) {}
 
-  run(agentName: string, prompt: string, passthroughFlags: string[]): SpawnResult {
+  run(agentName: string, prompt: string | null, mode: 'interactive' | 'print', passthroughFlags: string[]): SpawnResult {
     // 1. agent 존재 확인
     const agent = this.store.getAgent(agentName)
 
@@ -38,16 +38,18 @@ export class RunService {
       settingsFilePath,
       mcpConfigFilePath,
       pluginDirPath,
-      prompt,
+      prompt: prompt ?? undefined, // null → undefined 변환 (FlagBuilderInput은 string | undefined)
       passthroughFlags,
     })
 
-    // 5. spawnClaude 호출
+    // 5. spawnClaude 호출 (startedAt / finishedAt 분리)
+    const startedAt = new Date()
     const result = spawnClaude(flags)
+    const finishedAt = new Date()
 
     // 6. logger가 있으면 로그 저장
     if (this.logger) {
-      this.logger.log(agentName, prompt, 'print', flags, result)
+      this.logger.log(agentName, prompt, mode, flags, result, startedAt, finishedAt)
     }
 
     // 7. SpawnResult 반환

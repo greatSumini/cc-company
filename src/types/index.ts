@@ -65,6 +65,8 @@ export interface RunLogger {
     prompt: string | null,
     mode: 'interactive' | 'print',
     flags: string[],
-    result: { exitCode: number; stdout: string; stderr: string }
+    result: { exitCode: number; stdout: string; stderr: string },
+    startedAt: Date,
+    finishedAt: Date
   ): void
 }
