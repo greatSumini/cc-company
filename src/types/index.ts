@@ -10,12 +10,26 @@ export interface SubagentConfig {
   name: string
   description: string
   prompt: string
+  // Claude Code 호환 optional 필드
+  model?: string
+  tools?: string
+  disallowedTools?: string
+  maxTurns?: number
+  permissionMode?: string
 }
 
 export interface SkillConfig {
   name: string
   description: string
   prompt: string
+  // Claude Code 호환 optional 필드
+  model?: string
+  allowedTools?: string
+  context?: string
+  agent?: string
+  userInvocable?: boolean
+  disableModelInvocation?: boolean
+  argumentHint?: string
 }
 
 export interface HookConfig {

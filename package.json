@@ -40,7 +40,8 @@
     "README.md"
   ],
   "dependencies": {
-    "commander": "^12.1.0"
+    "commander": "^12.1.0",
+    "gray-matter": "^4.0.3"
   },
   "devDependencies": {
     "@types/node": "^22.10.0",
