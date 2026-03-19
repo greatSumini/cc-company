@@ -339,6 +339,8 @@ def main():
                 break
 
     # --- Phase loop ---
+    baseline = git_run("rev-parse", "HEAD").stdout.strip()
+
     while True:
         index = load_index(index_file)
         phase = find_next_phase(index)
@@ -396,6 +398,14 @@ def main():
                     p["completed_at"] = ts_end
                     break
             save_index(index_file, fresh_index)
+
+            # Generate docs-diff.md after phase 0 (docs update)
+            if phase_num == 0:
+                subprocess.run(
+                    ["python3", "gen-docs-diff.py", str(task_dir), baseline],
+                    cwd=str(ROOT),
+                )
+
             git_commit_phase(task_name, phase_num, phase_name)
             print(f"  ✓ Phase {phase_num}: {phase_name} completed [{elapsed}s]")
         elif status == "pending":

@@ -68,29 +68,28 @@
 
 ### 3. `/tasks/{id}-{name}/docs-diff.md` (문서 변경 기록)
 
-Phase 0(문서 업데이트)의 결과물로 생성된다. 이번 task에서 어떤 문서가 어떻게 변경되었는지를 기록하여, 이후 구현 phase들이 시스템적 변경점을 정확히 파악할 수 있도록 한다.
+Phase 0 완료 후 `run-phases.py`가 `gen-docs-diff.py`를 자동 호출하여 생성한다.
+Phase 0 시작 전 HEAD를 baseline으로 기록하고, Phase 0 완료 후 `git diff {baseline} -- docs/`를 실행하여 실제 diff를 추출한다.
+
+**에이전트가 직접 작성하지 않는다.** Phase 0는 문서 업데이트만 수행하면 된다.
+
+생성되는 형식:
 
 ```markdown
 # docs-diff: {task-name}
 
-## 변경된 문서 목록
+Baseline: `a1b2c3d`
 
-### `docs/spec.md`
+## `docs/spec.md`
 
-- 변경 요약: {어떤 섹션이 어떻게 바뀌었는지}
-- 핵심 변경점:
-  - {구체적인 diff 설명}
-
-### `docs/architecture.md`
-
-- 변경 요약: ...
-- 핵심 변경점:
-  - ...
-
-(변경된 문서가 없는 파일은 생략)
+\`\`\`diff
+@@ -45,6 +45,18 @@
+ ### `cc-company agent list`
++### `cc-company run <agent-name>`
++...
+\`\`\`
 ```
 
-- Phase 0에서 문서를 업데이트한 뒤, 변경 내용을 이 파일에 기록한다.
 - 이후 구현 phase들의 "사전 준비" 섹션에서 이 파일을 참조하도록 한다.
 
 ### 4. `/tasks/{id}-{name}/phase{N}.md` (각 phase마다 1개)
@@ -143,7 +142,7 @@ npm test # 모든 테스트 통과
 
 #### phase 파일 작성 원칙
 
-1. **Phase 0는 문서 업데이트**: 첫 번째 phase는 반드시 관련 문서(spec, architecture, ADR 등)를 업데이트하고, `docs-diff.md`를 생성한다. 이후 구현 phase들이 최신 설계를 기반으로 작업할 수 있도록 한다.
+1. **Phase 0는 문서 업데이트**: 첫 번째 phase는 반드시 관련 문서(spec, architecture, ADR 등)를 업데이트한다. `docs-diff.md`는 Phase 0 완료 후 `gen-docs-diff.py`가 자동 생성하므로, 에이전트가 직접 작성하지 않는다.
 2. **자기완결성**: 각 phase 파일은 독립 session에서 실행된다. "이전 대화에서 논의한 바와 같이" 같은 참조 금지. 필요한 정보는 전부 파일 안에 적어라.
 3. **사전 준비 필수**: 관련 문서 경로 + `docs-diff.md` + 이전 phase 산출물 경로를 명시. session이 코드를 읽고 맥락을 파악한 뒤 작업하도록 강제.
 4. **시그니처 수준 지시**: 함수/클래스의 인터페이스만 제시. 내부 구현은 에이전트 재량. 단, 핵심 비즈니스 규칙(멱등성, 보안, 데이터 무결성 등)은 반드시 명시.
