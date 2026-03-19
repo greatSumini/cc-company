@@ -64,7 +64,7 @@
 - `name`은 kebab-case slug. 해당 phase의 핵심 모듈/작업을 한 단어~두 단어로 표현.
 - 모든 phase의 초기 status는 `"pending"`.
 - 타임스탬프: task-level `created_at`은 생성 시 기록. `completed_at`은 전체 완료 시 `run-phases.py`가 기록.
-- phase-level 타임스탬프(`created_at`, `completed_at`, `failed_at`)는 `run-phases.py`가 실행 시 자동 기록. 생성 시 넣지 않는다.
+- phase-level 타임스탬프(`started_at`, `completed_at`, `failed_at`)는 `run-phases.py`가 실행 시 자동 기록. 생성 시 넣지 않는다.
 
 ### 3. `/tasks/{id}-{name}/docs-diff.md` (문서 변경 기록)
 

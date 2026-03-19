@@ -372,11 +372,11 @@ def main():
         phase_name = phase["name"]
         done_count = sum(1 for p in index["phases"] if p["status"] == "completed")
 
-        # Record phase created_at (= execution start)
+        # Record phase started_at (= execution start)
         ts_start = now_iso()
         for p in index["phases"]:
-            if p["phase"] == phase_num and "created_at" not in p:
-                p["created_at"] = ts_start
+            if p["phase"] == phase_num and "started_at" not in p:
+                p["started_at"] = ts_start
                 save_index(index_file, index)
                 break
 
