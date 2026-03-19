@@ -121,6 +121,21 @@ def git_ensure_branch(task_name: str):
     print(f"  Branch: {branch}")
 
 
+def git_commit_docs(task_name: str):
+    """Commit task plan files (tasks/, docs/, prompts/) before phase execution."""
+    git_run("add", "tasks/", "docs/", "prompts/")
+
+    if git_run("diff", "--cached", "--quiet").returncode == 0:
+        return
+
+    msg = f"docs: create {task_name} plan"
+    r = git_run("commit", "-m", msg)
+    if r.returncode == 0:
+        print(f"  ✓ {msg}")
+    else:
+        print(f"  WARN: docs commit failed: {r.stderr.strip()}")
+
+
 def git_commit_phase(task_name: str, phase_num: int, phase_name: str) -> bool:
     """Fallback commit — runs only if Claude left uncommitted changes."""
     git_run("add", "-A")
@@ -304,8 +319,9 @@ def main():
         print(f"  Fix the issue and reset status to 'pending' in {index_file} to retry.")
         sys.exit(1)
 
-    # --- Git branch ---
+    # --- Git branch + docs commit ---
     git_ensure_branch(task_name)
+    git_commit_docs(task_name)
 
     # --- Preamble ---
     preamble = build_preamble(project_name, task_dir_name, task_name)
