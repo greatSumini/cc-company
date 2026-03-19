@@ -24,6 +24,7 @@ TOP_INDEX_FILE = TASKS_DIR / "index.json"
 KST = timezone(timedelta(hours=9))
 
 COMMIT_MSG_TEMPLATE = "feat({task_name}): phase {phase_num} — {phase_name}"
+RUNNER_COMMIT_MSG_TEMPLATE = "chore({task_name}): phase {phase_num} output + timestamps"
 SPINNER_CHARS = "⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏"
 
 
@@ -136,21 +137,39 @@ def git_commit_docs(task_name: str):
         print(f"  WARN: docs commit failed: {r.stderr.strip()}")
 
 
-def git_commit_phase(task_name: str, phase_num: int, phase_name: str) -> bool:
-    """Fallback commit — runs only if Claude left uncommitted changes."""
+def git_commit_phase(task_name: str, task_dir_name: str, phase_num: int, phase_name: str) -> bool:
+    """Two-step commit: Claude fallback (if needed) + runner housekeeping."""
+    output_file = f"tasks/{task_dir_name}/phase{phase_num}-output.json"
+    index_file = f"tasks/{task_dir_name}/index.json"
+    top_index = "tasks/index.json"
+
+    # --- Step 1: Claude fallback commit (code changes Claude didn't commit) ---
     git_run("add", "-A")
+    # Unstage runner-generated files so they don't mix into Claude's commit
+    git_run("reset", "HEAD", "--", output_file)
+    # index.json and top index may have runner timestamp updates — unstage too
+    git_run("reset", "HEAD", "--", index_file)
+    git_run("reset", "HEAD", "--", top_index)
 
-    # Nothing staged → Claude already committed (or no changes)
-    if git_run("diff", "--cached", "--quiet").returncode == 0:
-        return False
+    if git_run("diff", "--cached", "--quiet").returncode != 0:
+        msg = COMMIT_MSG_TEMPLATE.format(
+            task_name=task_name, phase_num=phase_num, phase_name=phase_name
+        )
+        r = git_run("commit", "-m", msg)
+        if r.returncode != 0:
+            print(f"  WARN: fallback commit failed: {r.stderr.strip()}")
 
-    msg = COMMIT_MSG_TEMPLATE.format(
-        task_name=task_name, phase_num=phase_num, phase_name=phase_name
-    )
-    r = git_run("commit", "-m", msg)
-    if r.returncode != 0:
-        print(f"  WARN: fallback commit failed: {r.stderr.strip()}")
-        return False
+    # --- Step 2: Runner housekeeping commit (output + timestamps) ---
+    git_run("add", "-A")
+    if git_run("diff", "--cached", "--quiet").returncode != 0:
+        msg = RUNNER_COMMIT_MSG_TEMPLATE.format(
+            task_name=task_name, phase_num=phase_num
+        )
+        r = git_run("commit", "-m", msg)
+        if r.returncode != 0:
+            print(f"  WARN: housekeeping commit failed: {r.stderr.strip()}")
+            return False
+
     return True
 
 
@@ -406,7 +425,7 @@ def main():
                     cwd=str(ROOT),
                 )
 
-            git_commit_phase(task_name, phase_num, phase_name)
+            git_commit_phase(task_name, task_dir_name, phase_num, phase_name)
             print(f"  ✓ Phase {phase_num}: {phase_name} completed [{elapsed}s]")
         elif status == "pending":
             print(f"  ✗ Phase {phase_num}: {phase_name} — status still 'pending' after execution")

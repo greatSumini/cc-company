@@ -199,7 +199,8 @@ python3 run-phases.py 0-mvp
 ### run-phases.py 자동 동작
 
 - `feat-{task-name}` 브랜치를 자동 생성/체크아웃 (이미 존재하면 resume)
-- 각 phase 완료 후 자동 커밋: `feat({task-name}): phase {N} — {phase-name}`
-  - 커밋 메시지 템플릿은 `run-phases.py`의 `COMMIT_MSG_TEMPLATE` 상수로 관리
-  - 프롬프트에 삽입되어 Claude가 직접 커밋하되, 누락 시 러너가 fallback 커밋 수행
+- 각 phase 완료 후 2단계 커밋:
+  1. **Claude fallback 커밋**: `feat({task-name}): phase {N} — {phase-name}` — Claude가 직접 커밋하지 않은 코드 변경이 있을 때만 수행
+  2. **Runner housekeeping 커밋**: `chore({task-name}): phase {N} output + timestamps` — phase-output.json 저장 및 index.json timestamp 업데이트를 별도 커밋
+  - 커밋 메시지 템플릿은 `run-phases.py`의 `COMMIT_MSG_TEMPLATE`, `RUNNER_COMMIT_MSG_TEMPLATE` 상수로 관리
 - 스피너 + 진행상황 표시 (현재 phase / 전체 phase / 경과시간)
