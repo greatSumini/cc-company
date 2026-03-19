@@ -1,0 +1,14 @@
+{
+  "project": "cc-company",
+  "task": "frontmatter-md",
+  "prompt": "subagents, skills가 현재 json 파일로 저장되고있는데, claude code처럼 frontmatter field를 포함한 md 파일로 관리하고싶다. 이유는 가독성이다. prompt 필드를 json field로서 관리하는 대신, 마크다운 본문으로서 넓게 보고싶다. claude code의 공식 구현을 참고해서 유사하게 구현해야한다.",
+  "totalPhases": 5,
+  "created_at": "2026-03-19T17:57:00+0900",
+  "phases": [
+    { "phase": 0, "name": "docs-update", "status": "pending" },
+    { "phase": 1, "name": "types-frontmatter-parser", "status": "pending" },
+    { "phase": 2, "name": "fs-store-migration", "status": "pending" },
+    { "phase": 3, "name": "services-commands-templates", "status": "pending" },
+    { "phase": 4, "name": "data-migration", "status": "pending" }
+  ]
+}
