@@ -16,6 +16,7 @@ import threading
 import time
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
+from typing import Optional
 
 ROOT = Path(__file__).parent
 TASKS_DIR = ROOT / "tasks"
@@ -47,14 +48,14 @@ def save_index(index_file: Path, data: dict):
         json.dump(data, f, indent=2, ensure_ascii=False)
 
 
-def find_next_phase(index: dict) -> dict | None:
+def find_next_phase(index: dict) -> Optional[dict]:
     for phase in index["phases"]:
         if phase["status"] == "pending":
             return phase
     return None
 
 
-def get_last_phase(index: dict) -> dict | None:
+def get_last_phase(index: dict) -> Optional[dict]:
     for phase in reversed(index["phases"]):
         if phase["status"] != "pending":
             return phase
