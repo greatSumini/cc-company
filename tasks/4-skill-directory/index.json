@@ -36,7 +36,9 @@
     {
       "phase": 4,
       "name": "run-flagbuilder-adddir",
-      "status": "pending"
+      "status": "completed",
+      "started_at": "2026-03-22T04:00:02+0900",
+      "completed_at": "2026-03-22T04:05:00+0900"
     },
     {
       "phase": 5,
