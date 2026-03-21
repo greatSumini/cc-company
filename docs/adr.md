@@ -183,3 +183,27 @@
 - Hook은 JSON 유지 (config 필드가 구조화된 JSON이므로 md 변환 부자연스러움)
 
 **영향**: `.cc-company/subagents/*.json` → `*.md`, `.cc-company/skills/*.json` → `*.md`. 런타임 인터페이스(SubagentConfig, SkillConfig) 유지.
+
+---
+
+## ADR-013: Skill 저장 형식을 단일 MD에서 디렉토리로 전환
+
+**상태**: 확정 (2026-03-22)
+
+**맥락**: Anthropic 공식 skills 프레임워크는 디렉토리 단위(SKILL.md + scripts/, references/, assets/)로 관리. 현재 cc-company는 단일 `.md` 파일. 보조 리소스(스크립트, 참조 문서, 템플릿 등)를 함께 관리할 수 없음.
+
+**결정**: `skills/{name}/SKILL.md` 디렉토리 구조로 전환. `resources` 필드를 SKILL.md frontmatter에 매니페스트로 포함. 런타임 디렉토리 스캔이 아닌 메타데이터 기반 — 향후 원격 서버 호스팅(api-store) 전환 시 필요한 파일만 fetch 가능하도록.
+
+**마이그레이션**: 기존 단일 `.md` 파일 감지 시 자동으로 디렉토리 형식으로 변환. 임시 코드로 명시적 주석 처리.
+
+---
+
+## ADR-014: `--add-dir` passthrough 차단 및 내부 사용
+
+**상태**: 확정 (2026-03-22)
+
+**맥락**: Claude Code CLI의 `--add-dir` 플래그는 추가 디렉토리 내 `.claude/skills/`를 자동 로드한다. cc-company가 agent에 할당된 skills를 임시 디렉토리에 복사하여 `--add-dir`로 전달하는 방식을 사용한다.
+
+**결정**: `--add-dir`을 cc-company 내부 전용으로 사용. 사용자가 passthrough로 전달하면 에러. `--add-dir` 차단 검증은 run.service(서비스 레이어)에서 수행 — command 레이어가 아닌 서비스 레이어에서 검증해야 테스트 가능.
+
+**임시 디렉토리**: `.cc-company/.tmp/run-{uuid}/.claude/skills/`에 skill 디렉토리 복사. `try/finally`로 정리 + 다음 run 시 1시간 이상 stale 디렉토리 자동 삭제.

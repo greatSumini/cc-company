@@ -46,6 +46,13 @@ interface IStore {
   removeSubagent(name: string): void
   // skills, hooks 동일 패턴
 
+  // Skill file operations
+  addSkillFile(skillName: string, filePath: string, content: string): void
+  editSkillFile(skillName: string, filePath: string, content: string): void
+  removeSkillFile(skillName: string, filePath: string): void
+  getSkillFile(skillName: string, filePath: string): string
+  getSkillDir(skillName: string): string
+
   // 실행 로그
   saveRunLog(log: RunLog): void
   getRunLogs(filter?: RunLogFilter): RunLog[]
@@ -164,4 +171,42 @@ src/
 5. logger/run-logger.ts
    RunLog JSON → .cc-company/runs/{timestamp}-{uuid}.json
    prompt: "버그 고쳐줘", mode: "interactive"
+```
+
+### Skill 전달 흐름 (--add-dir)
+
+run.service에서 skills resolve 후:
+
+```
+1. stale temp 정리
+   .cc-company/.tmp/run-* 중 1시간 이상 경과한 디렉토리 자동 삭제
+
+2. 임시 디렉토리 생성
+   .cc-company/.tmp/run-{uuid}/.claude/skills/ 생성
+
+3. skill 디렉토리 복사
+   할당된 skill 디렉토리 전체를 임시 경로로 복사
+
+4. flag-builder
+   addDirPath: ".cc-company/.tmp/run-{uuid}" → --add-dir 플래그 생성
+
+5. spawner
+   child_process.spawn("claude", [...flags, "--add-dir", addDirPath])
+
+6. 정리 (try/finally)
+   spawn 완료 후 임시 디렉토리 삭제
+```
+
+### FlagBuilderInput
+
+```typescript
+interface FlagBuilderInput {
+  promptFilePath: string
+  subagents?: SubagentConfig[]
+  mcpConfigPath?: string
+  settingsPath?: string
+  addDirPath?: string           // skills 임시 디렉토리 경로
+  passthroughFlags?: string[]
+  prompt?: string
+}
 ```
