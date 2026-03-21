@@ -129,4 +129,70 @@ describe('ResourceService', () => {
       expect(hooks).toHaveLength(2)
     })
   })
+
+  describe('[Skill show + 불일치 경고]', () => {
+    it('showSkill → config + 파일 목록 반환', () => {
+      // Skill 생성
+      resourceService.createSkill('deploy', '배포', 'Deploy prompt')
+
+      // 파일 추가
+      resourceService.addSkillFile('deploy', 'scripts/run.sh', '#!/bin/bash\necho deploy')
+      resourceService.addSkillFile('deploy', 'references/schema.json', '{}')
+
+      const result = resourceService.showSkill('deploy')
+
+      expect(result.config.name).toBe('deploy')
+      expect(result.config.description).toBe('배포')
+      expect(result.config.resources).toContain('scripts/run.sh')
+      expect(result.config.resources).toContain('references/schema.json')
+      expect(result.files).toContain('scripts/run.sh')
+      expect(result.files).toContain('references/schema.json')
+      expect(result.warnings).toHaveLength(0)
+    })
+
+    it('showSkill resources 불일치 시 경고 출력', () => {
+      // Skill 생성
+      resourceService.createSkill('deploy', '배포', 'Deploy prompt')
+
+      // 파일 추가 (resources에 자동 등록됨)
+      resourceService.addSkillFile('deploy', 'scripts/run.sh', '#!/bin/bash')
+
+      // 파일 직접 추가 (resources에 미등록)
+      const skillDir = store.getSkillDir('deploy')
+      fs.writeFileSync(path.join(skillDir, 'assets', 'logo.png'), 'fake-image')
+
+      // resources에 없는 파일 직접 등록 (실제 파일은 없음)
+      const skillMdPath = path.join(skillDir, 'SKILL.md')
+      let content = fs.readFileSync(skillMdPath, 'utf-8')
+      content = content.replace(
+        'resources:\n  - scripts/run.sh',
+        'resources:\n  - scripts/run.sh\n  - missing-file.txt'
+      )
+      fs.writeFileSync(skillMdPath, content)
+
+      const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {})
+
+      const result = resourceService.showSkill('deploy')
+
+      // resources에 등록됐지만 파일 없음
+      expect(warnSpy).toHaveBeenCalledWith(
+        expect.stringContaining('resources에 등록됐지만 파일 없음')
+      )
+      expect(warnSpy).toHaveBeenCalledWith(
+        expect.stringContaining('missing-file.txt')
+      )
+
+      // 파일 존재하지만 resources에 미등록
+      expect(warnSpy).toHaveBeenCalledWith(
+        expect.stringContaining('파일 존재하지만 resources에 미등록')
+      )
+      expect(warnSpy).toHaveBeenCalledWith(
+        expect.stringContaining('assets/logo.png')
+      )
+
+      expect(result.warnings.length).toBeGreaterThan(0)
+
+      warnSpy.mockRestore()
+    })
+  })
 })
