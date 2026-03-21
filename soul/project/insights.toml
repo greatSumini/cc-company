@@ -42,3 +42,8 @@ content = "아키텍처/ADR 상세 내용은 /docs/architecture.md, /docs/adr.md
 created_at = "2026-03-19"
 last_used_at = "2026-03-21"
 content = "subagent/skill 저장 형식을 JSON → frontmatter MD로 전환 결정. JSON은 prompt가 escape 문자(`\\n` 등) 포함된 한 줄 문자열이 되어 사람이 읽고 편집하기 어려움. MD라면 본문으로 넓게 펼쳐서 볼 수 있고, Claude Code 공식 형식과도 일치."
+
+[[entries]]
+created_at = "2026-03-22"
+last_used_at = "2026-03-22"
+content = "cc-company는 향후 원격 서버에 호스팅될 것을 전제로 설계한다. 따라서 파일시스템 직접 접근에 의존하지 않고, CLI 커맨드라는 인터페이스를 통해 모든 CRUD를 수행하도록 하여, IStore 추상화 교체 시 변경 범위를 최소화한다."

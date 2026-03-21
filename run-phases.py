@@ -448,6 +448,24 @@ def main():
     save_index(index_file, index)
     update_top_index_status(task_dir_name, "completed")
 
+    # Commit any remaining changed files
+    git_run("add", "-A")
+    if git_run("diff", "--cached", "--quiet").returncode != 0:
+        msg = f"chore({task_name}): mark task completed"
+        r = git_run("commit", "-m", msg)
+        if r.returncode == 0:
+            print(f"  ✓ {msg}")
+        else:
+            print(f"  WARN: final commit failed: {r.stderr.strip()}")
+
+    # Push branch to remote
+    branch = f"feat-{task_name}"
+    r = git_run("push", "-u", "origin", branch)
+    if r.returncode != 0:
+        print(f"\n  ERROR: git push failed: {r.stderr.strip()}")
+        sys.exit(1)
+    print(f"  ✓ Pushed to origin/{branch}")
+
     print(f"\n{'='*60}")
     print(f"  Task {task_dir_name}: all phases completed!")
     print(f"{'='*60}")
