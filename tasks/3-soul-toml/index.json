@@ -1,0 +1,11 @@
+{
+  "project": "cc-company",
+  "task": "soul-toml",
+  "prompt": "모든 soul 문서 내용에 대해서, 현재 created_at/content/last_used_at이 기록되고 있으나 단순 마크다운이라서 향후에 데이터를 구조적으로 활용하기 어렵다는 문제가 있다. 더 잘 구조화 되는 포맷을 도입하고싶은데, json은 아무래도 긴 텍스트를 읽기엔 가독성이 안좋으니 toml이 좋지 않을까싶다.",
+  "totalPhases": 2,
+  "created_at": "2026-03-22T02:43:00+0900",
+  "phases": [
+    { "phase": 0, "name": "docs-update", "status": "pending" },
+    { "phase": 1, "name": "migrate-toml", "status": "pending" }
+  ]
+}
