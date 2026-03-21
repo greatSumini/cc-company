@@ -140,15 +140,56 @@ export class FsStore implements IStore {
     fs.unlinkSync(filePath)
   }
 
-  // Skills (공용 풀)
-  getSkill(name: string): SkillConfig {
-    const filePath = path.join(this.rootPath, 'skills', `${name}.md`)
+  // Skills (공용 풀) - 디렉토리 기반
 
-    if (!fs.existsSync(filePath)) {
+  // [MIGRATION v0.3] 단일 .md → 디렉토리 전환. 안정화 후 삭제 예정
+  private migrateSkillIfNeeded(name: string): void {
+    const legacyPath = path.join(this.rootPath, 'skills', `${name}.md`)
+    const dirPath = path.join(this.rootPath, 'skills', name)
+
+    if (fs.existsSync(legacyPath) && !fs.existsSync(dirPath)) {
+      // 단일 .md → 디렉토리로 변환
+      const content = fs.readFileSync(legacyPath, 'utf-8')
+      fs.mkdirSync(dirPath, { recursive: true })
+      fs.writeFileSync(path.join(dirPath, 'SKILL.md'), content)
+      // 관례적 서브디렉토리 생성
+      fs.mkdirSync(path.join(dirPath, 'scripts'), { recursive: true })
+      fs.mkdirSync(path.join(dirPath, 'references'), { recursive: true })
+      fs.mkdirSync(path.join(dirPath, 'assets'), { recursive: true })
+      // 원본 삭제
+      fs.unlinkSync(legacyPath)
+      console.log(`Migrated skill '${name}' from .md to directory format.`)
+    }
+  }
+
+  // [MIGRATION v0.3] listSkills 전 단일 .md 파일 전부 마이그레이션
+  private migrateAllLegacySkills(): void {
+    const skillsDir = path.join(this.rootPath, 'skills')
+    if (!fs.existsSync(skillsDir)) {
+      return
+    }
+
+    const entries = fs.readdirSync(skillsDir)
+    for (const entry of entries) {
+      if (entry.endsWith('.md')) {
+        const name = entry.replace('.md', '')
+        this.migrateSkillIfNeeded(name)
+      }
+    }
+  }
+
+  getSkill(name: string): SkillConfig {
+    // 마이그레이션 체크
+    this.migrateSkillIfNeeded(name)
+
+    const dirPath = path.join(this.rootPath, 'skills', name)
+    const skillMdPath = path.join(dirPath, 'SKILL.md')
+
+    if (!fs.existsSync(skillMdPath)) {
       throw new Error(`Skill not found: ${name}`)
     }
 
-    return parseSkillMd(fs.readFileSync(filePath, 'utf-8'))
+    return parseSkillMd(fs.readFileSync(skillMdPath, 'utf-8'))
   }
 
   listSkills(): SkillConfig[] {
@@ -157,38 +198,47 @@ export class FsStore implements IStore {
       return []
     }
 
-    return fs
-      .readdirSync(dir)
-      .filter((file) => file.endsWith('.md'))
-      .map((file) => {
-        const name = file.replace('.md', '')
-        return this.getSkill(name)
-      })
+    // 먼저 레거시 .md 파일 전부 마이그레이션
+    this.migrateAllLegacySkills()
+
+    const entries = fs.readdirSync(dir, { withFileTypes: true })
+    return entries
+      .filter((entry) => entry.isDirectory())
+      .map((entry) => this.getSkill(entry.name))
   }
 
   createSkill(config: SkillConfig): void {
-    const dir = path.join(this.rootPath, 'skills')
-    const filePath = path.join(dir, `${config.name}.md`)
+    const skillsDir = path.join(this.rootPath, 'skills')
+    const dirPath = path.join(skillsDir, config.name)
 
-    if (fs.existsSync(filePath)) {
+    if (fs.existsSync(dirPath)) {
       throw new Error(`Skill already exists: ${config.name}`)
     }
 
-    if (!fs.existsSync(dir)) {
-      fs.mkdirSync(dir, { recursive: true })
+    // 레거시 .md 파일도 체크
+    const legacyPath = path.join(skillsDir, `${config.name}.md`)
+    if (fs.existsSync(legacyPath)) {
+      throw new Error(`Skill already exists: ${config.name}`)
     }
 
-    fs.writeFileSync(filePath, serializeSkillMd(config))
+    // 디렉토리 생성
+    fs.mkdirSync(dirPath, { recursive: true })
+    // SKILL.md 작성
+    fs.writeFileSync(path.join(dirPath, 'SKILL.md'), serializeSkillMd(config))
+    // 관례적 서브디렉토리 생성
+    fs.mkdirSync(path.join(dirPath, 'scripts'), { recursive: true })
+    fs.mkdirSync(path.join(dirPath, 'references'), { recursive: true })
+    fs.mkdirSync(path.join(dirPath, 'assets'), { recursive: true })
   }
 
   removeSkill(name: string): void {
-    const filePath = path.join(this.rootPath, 'skills', `${name}.md`)
+    const dirPath = path.join(this.rootPath, 'skills', name)
 
-    if (!fs.existsSync(filePath)) {
+    if (!fs.existsSync(dirPath) || !fs.statSync(dirPath).isDirectory()) {
       throw new Error(`Skill not found: ${name}`)
     }
 
-    fs.unlinkSync(filePath)
+    fs.rmSync(dirPath, { recursive: true })
   }
 
   // Hooks (공용 풀)
@@ -285,25 +335,87 @@ export class FsStore implements IStore {
     })
   }
 
-  // Skill file operations (stub - Phase 2에서 구현)
-  addSkillFile(_skillName: string, _filePath: string, _content: string): void {
-    throw new Error('Not implemented')
+  // Skill file operations
+  addSkillFile(skillName: string, filePath: string, content: string): void {
+    const skillDir = path.join(this.rootPath, 'skills', skillName)
+    if (!fs.existsSync(skillDir) || !fs.statSync(skillDir).isDirectory()) {
+      throw new Error(`Skill not found: ${skillName}`)
+    }
+
+    const targetPath = path.join(skillDir, filePath)
+    // 부모 디렉토리 생성
+    fs.mkdirSync(path.dirname(targetPath), { recursive: true })
+    // 파일 쓰기
+    fs.writeFileSync(targetPath, content)
+
+    // SKILL.md resources에 등록
+    const skillMdPath = path.join(skillDir, 'SKILL.md')
+    const skillConfig = parseSkillMd(fs.readFileSync(skillMdPath, 'utf-8'))
+    const resources = skillConfig.resources ?? []
+    if (!resources.includes(filePath)) {
+      resources.push(filePath)
+      skillConfig.resources = resources
+      fs.writeFileSync(skillMdPath, serializeSkillMd(skillConfig))
+    }
   }
 
-  editSkillFile(_skillName: string, _filePath: string, _content: string): void {
-    throw new Error('Not implemented')
+  editSkillFile(skillName: string, filePath: string, content: string): void {
+    const skillDir = path.join(this.rootPath, 'skills', skillName)
+    if (!fs.existsSync(skillDir) || !fs.statSync(skillDir).isDirectory()) {
+      throw new Error(`Skill not found: ${skillName}`)
+    }
+
+    const targetPath = path.join(skillDir, filePath)
+    if (!fs.existsSync(targetPath)) {
+      throw new Error(`File not found: ${filePath} in skill '${skillName}'`)
+    }
+
+    fs.writeFileSync(targetPath, content)
   }
 
-  removeSkillFile(_skillName: string, _filePath: string): void {
-    throw new Error('Not implemented')
+  removeSkillFile(skillName: string, filePath: string): void {
+    const skillDir = path.join(this.rootPath, 'skills', skillName)
+    if (!fs.existsSync(skillDir) || !fs.statSync(skillDir).isDirectory()) {
+      throw new Error(`Skill not found: ${skillName}`)
+    }
+
+    const targetPath = path.join(skillDir, filePath)
+    if (!fs.existsSync(targetPath)) {
+      throw new Error(`File not found: ${filePath} in skill '${skillName}'`)
+    }
+
+    // 파일 삭제
+    fs.unlinkSync(targetPath)
+
+    // SKILL.md resources에서 제거
+    const skillMdPath = path.join(skillDir, 'SKILL.md')
+    const skillConfig = parseSkillMd(fs.readFileSync(skillMdPath, 'utf-8'))
+    if (skillConfig.resources) {
+      skillConfig.resources = skillConfig.resources.filter((r) => r !== filePath)
+      fs.writeFileSync(skillMdPath, serializeSkillMd(skillConfig))
+    }
   }
 
-  getSkillFile(_skillName: string, _filePath: string): string {
-    throw new Error('Not implemented')
+  getSkillFile(skillName: string, filePath: string): string {
+    const skillDir = path.join(this.rootPath, 'skills', skillName)
+    if (!fs.existsSync(skillDir) || !fs.statSync(skillDir).isDirectory()) {
+      throw new Error(`Skill not found: ${skillName}`)
+    }
+
+    const targetPath = path.join(skillDir, filePath)
+    if (!fs.existsSync(targetPath)) {
+      throw new Error(`File not found: ${filePath} in skill '${skillName}'`)
+    }
+
+    return fs.readFileSync(targetPath, 'utf-8')
   }
 
-  getSkillDir(_skillName: string): string {
-    throw new Error('Not implemented')
+  getSkillDir(skillName: string): string {
+    const dirPath = path.join(this.rootPath, 'skills', skillName)
+    if (!fs.existsSync(dirPath) || !fs.statSync(dirPath).isDirectory()) {
+      throw new Error(`Skill not found: ${skillName}`)
+    }
+    return dirPath
   }
 
   // 참조 해석

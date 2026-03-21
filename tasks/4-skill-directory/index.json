@@ -22,7 +22,9 @@
     {
       "phase": 2,
       "name": "fs-store-directory",
-      "status": "pending"
+      "status": "completed",
+      "started_at": "2026-03-22T03:54:02+0900",
+      "completed_at": "2026-03-22T03:57:30+0900"
     },
     {
       "phase": 3,

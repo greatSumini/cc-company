@@ -176,8 +176,8 @@ describe('FsStore', () => {
     })
   })
 
-  describe('공용 리소스 CRUD - Skill', () => {
-    it('createSkill → skills 디렉토리에 .md 파일 생성', () => {
+  describe('[Skill 디렉토리 CRUD]', () => {
+    it('createSkill → skills/{name}/ 디렉토리 + SKILL.md + 서브디렉토리 스캐폴딩 생성', () => {
       const config: SkillConfig = {
         name: 'deploy',
         description: '배포 스킬',
@@ -186,18 +186,44 @@ describe('FsStore', () => {
 
       store.createSkill(config)
 
-      const filePath = path.join(tmpDir, 'skills', 'deploy.md')
-      expect(fs.existsSync(filePath)).toBe(true)
+      const skillDir = path.join(tmpDir, 'skills', 'deploy')
+      expect(fs.existsSync(skillDir)).toBe(true)
+      expect(fs.statSync(skillDir).isDirectory()).toBe(true)
+
+      // SKILL.md 존재 확인
+      const skillMdPath = path.join(skillDir, 'SKILL.md')
+      expect(fs.existsSync(skillMdPath)).toBe(true)
 
       // frontmatter + body 형식 검증
-      const content = fs.readFileSync(filePath, 'utf-8')
+      const content = fs.readFileSync(skillMdPath, 'utf-8')
       expect(content).toContain('---')
       expect(content).toContain('name: deploy')
       expect(content).toContain('description: 배포 스킬')
       expect(content).toContain('You can deploy applications.')
+
+      // 관례적 서브디렉토리 존재 확인
+      expect(fs.existsSync(path.join(skillDir, 'scripts'))).toBe(true)
+      expect(fs.existsSync(path.join(skillDir, 'references'))).toBe(true)
+      expect(fs.existsSync(path.join(skillDir, 'assets'))).toBe(true)
     })
 
-    it('listSkills → 전체 목록', () => {
+    it('getSkill → 디렉토리 내 SKILL.md 파싱하여 SkillConfig 반환', () => {
+      const config: SkillConfig = {
+        name: 'deploy',
+        description: '배포 스킬',
+        prompt: 'You can deploy applications.',
+        resources: ['scripts/run.sh'],
+      }
+
+      store.createSkill(config)
+      const loaded = store.getSkill('deploy')
+
+      expect(loaded.name).toBe('deploy')
+      expect(loaded.description).toBe('배포 스킬')
+      expect(loaded.prompt).toBe('You can deploy applications.')
+    })
+
+    it('listSkills → 디렉토리 순회로 전체 목록 반환', () => {
       store.createSkill({
         name: 'skill1',
         description: 'Skill 1',
@@ -211,25 +237,194 @@ describe('FsStore', () => {
 
       const skills = store.listSkills()
       expect(skills).toHaveLength(2)
+      const names = skills.map((s) => s.name).sort()
+      expect(names).toEqual(['skill1', 'skill2'])
     })
 
-    it('removeSkill → 파일 삭제', () => {
+    it('removeSkill → 디렉토리 통째로 삭제', () => {
       store.createSkill({
         name: 'tobedeleted',
         description: 'To be deleted',
         prompt: 'prompt',
       })
 
+      const skillDir = path.join(tmpDir, 'skills', 'tobedeleted')
+      expect(fs.existsSync(skillDir)).toBe(true)
+
       store.removeSkill('tobedeleted')
 
-      const filePath = path.join(tmpDir, 'skills', 'tobedeleted.md')
-      expect(fs.existsSync(filePath)).toBe(false)
+      expect(fs.existsSync(skillDir)).toBe(false)
     })
 
-    it('존재하지 않는 skill get → 에러', () => {
+    it('존재하지 않는 skill getSkill → 에러', () => {
       expect(() => store.getSkill('nonexistent')).toThrow(
         'Skill not found: nonexistent'
       )
+    })
+  })
+
+  describe('[Skill 파일 CRUD]', () => {
+    beforeEach(() => {
+      // 테스트용 skill 생성
+      store.createSkill({
+        name: 'deploy',
+        description: '배포 스킬',
+        prompt: 'You can deploy applications.',
+      })
+    })
+
+    it('addSkillFile → 파일 생성 + SKILL.md resources에 자동 등록', () => {
+      store.addSkillFile('deploy', 'scripts/run.sh', '#!/bin/bash\necho "deploy"')
+
+      // 파일 생성 확인
+      const filePath = path.join(tmpDir, 'skills', 'deploy', 'scripts', 'run.sh')
+      expect(fs.existsSync(filePath)).toBe(true)
+      expect(fs.readFileSync(filePath, 'utf-8')).toBe('#!/bin/bash\necho "deploy"')
+
+      // resources에 등록 확인
+      const skill = store.getSkill('deploy')
+      expect(skill.resources).toContain('scripts/run.sh')
+    })
+
+    it('addSkillFile 중복 호출 → resources에 중복 등록 안됨', () => {
+      store.addSkillFile('deploy', 'scripts/run.sh', 'content1')
+      store.addSkillFile('deploy', 'scripts/run.sh', 'content2') // 덮어쓰기
+
+      const skill = store.getSkill('deploy')
+      const runShCount = skill.resources?.filter((r) => r === 'scripts/run.sh').length ?? 0
+      expect(runShCount).toBe(1)
+    })
+
+    it('editSkillFile 존재하지 않는 파일 → 에러', () => {
+      expect(() => store.editSkillFile('deploy', 'scripts/nonexistent.sh', 'content')).toThrow(
+        "File not found: scripts/nonexistent.sh in skill 'deploy'"
+      )
+    })
+
+    it('editSkillFile → 파일 내용 업데이트', () => {
+      store.addSkillFile('deploy', 'scripts/run.sh', 'original')
+      store.editSkillFile('deploy', 'scripts/run.sh', 'updated')
+
+      const content = store.getSkillFile('deploy', 'scripts/run.sh')
+      expect(content).toBe('updated')
+    })
+
+    it('removeSkillFile → 파일 삭제 + resources에서 자동 제거', () => {
+      store.addSkillFile('deploy', 'scripts/run.sh', 'content')
+      expect(store.getSkill('deploy').resources).toContain('scripts/run.sh')
+
+      store.removeSkillFile('deploy', 'scripts/run.sh')
+
+      // 파일 삭제 확인
+      const filePath = path.join(tmpDir, 'skills', 'deploy', 'scripts', 'run.sh')
+      expect(fs.existsSync(filePath)).toBe(false)
+
+      // resources에서 제거 확인 (빈 배열이면 undefined가 됨)
+      const skill = store.getSkill('deploy')
+      const hasRunSh = (skill.resources ?? []).includes('scripts/run.sh')
+      expect(hasRunSh).toBe(false)
+    })
+
+    it('removeSkillFile 존재하지 않는 파일 → 에러', () => {
+      expect(() => store.removeSkillFile('deploy', 'scripts/nonexistent.sh')).toThrow(
+        "File not found: scripts/nonexistent.sh in skill 'deploy'"
+      )
+    })
+
+    it('getSkillDir → skill 디렉토리 경로 반환', () => {
+      const dirPath = store.getSkillDir('deploy')
+      expect(dirPath).toBe(path.join(tmpDir, 'skills', 'deploy'))
+    })
+
+    it('getSkillDir 존재하지 않는 skill → 에러', () => {
+      expect(() => store.getSkillDir('nonexistent')).toThrow(
+        'Skill not found: nonexistent'
+      )
+    })
+  })
+
+  describe('[마이그레이션]', () => {
+    it('skills/ 내 단일 .md 파일 → getSkill 시 디렉토리로 자동 변환 + 원본 제거', () => {
+      // 레거시 형식으로 skill 파일 직접 생성
+      const legacyPath = path.join(tmpDir, 'skills', 'legacy-skill.md')
+      const legacyContent = `---
+name: legacy-skill
+description: 레거시 스킬
+---
+
+Legacy skill prompt.`
+      fs.writeFileSync(legacyPath, legacyContent)
+
+      // getSkill 호출 시 마이그레이션 발생
+      const skill = store.getSkill('legacy-skill')
+
+      expect(skill.name).toBe('legacy-skill')
+      expect(skill.description).toBe('레거시 스킬')
+      expect(skill.prompt).toBe('Legacy skill prompt.')
+
+      // 레거시 파일 삭제 확인
+      expect(fs.existsSync(legacyPath)).toBe(false)
+
+      // 디렉토리 형식으로 변환 확인
+      const dirPath = path.join(tmpDir, 'skills', 'legacy-skill')
+      expect(fs.existsSync(dirPath)).toBe(true)
+      expect(fs.statSync(dirPath).isDirectory()).toBe(true)
+      expect(fs.existsSync(path.join(dirPath, 'SKILL.md'))).toBe(true)
+      expect(fs.existsSync(path.join(dirPath, 'scripts'))).toBe(true)
+      expect(fs.existsSync(path.join(dirPath, 'references'))).toBe(true)
+      expect(fs.existsSync(path.join(dirPath, 'assets'))).toBe(true)
+    })
+
+    it('이미 디렉토리인 skill → 마이그레이션 스킵 (정상 동작)', () => {
+      // 디렉토리 형식으로 skill 생성
+      store.createSkill({
+        name: 'modern-skill',
+        description: '현대 스킬',
+        prompt: 'Modern skill prompt.',
+      })
+
+      // getSkill 여러 번 호출해도 정상 동작
+      const skill1 = store.getSkill('modern-skill')
+      const skill2 = store.getSkill('modern-skill')
+
+      expect(skill1.name).toBe('modern-skill')
+      expect(skill2.name).toBe('modern-skill')
+
+      // 디렉토리 구조 유지 확인
+      const dirPath = path.join(tmpDir, 'skills', 'modern-skill')
+      expect(fs.existsSync(dirPath)).toBe(true)
+      expect(fs.statSync(dirPath).isDirectory()).toBe(true)
+    })
+
+    it('listSkills → 레거시 .md 파일 전부 마이그레이션', () => {
+      // 레거시 형식으로 여러 skill 파일 직접 생성
+      const legacy1 = `---
+name: legacy1
+description: Legacy 1
+---
+
+Prompt 1.`
+      const legacy2 = `---
+name: legacy2
+description: Legacy 2
+---
+
+Prompt 2.`
+      fs.writeFileSync(path.join(tmpDir, 'skills', 'legacy1.md'), legacy1)
+      fs.writeFileSync(path.join(tmpDir, 'skills', 'legacy2.md'), legacy2)
+
+      // listSkills 호출
+      const skills = store.listSkills()
+
+      expect(skills).toHaveLength(2)
+
+      // 레거시 파일 삭제 확인
+      expect(fs.existsSync(path.join(tmpDir, 'skills', 'legacy1.md'))).toBe(false)
+      expect(fs.existsSync(path.join(tmpDir, 'skills', 'legacy2.md'))).toBe(false)
+
+      // 디렉토리로 변환 확인
+      expect(fs.existsSync(path.join(tmpDir, 'skills', 'legacy1'))).toBe(true)
+      expect(fs.existsSync(path.join(tmpDir, 'skills', 'legacy2'))).toBe(true)
     })
   })
 
