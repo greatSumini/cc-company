@@ -3,6 +3,7 @@ import * as path from 'path'
 import { Command } from 'commander'
 import { getRootPath } from './context.js'
 import { subagentTemplates, skillTemplates, agentTemplates } from '../templates/index.js'
+import { serializeSubagentMd, serializeSkillMd } from '../utils/frontmatter.js'
 
 export function registerInitCommand(program: Command): void {
   program
@@ -35,20 +36,25 @@ export function registerInitCommand(program: Command): void {
         JSON.stringify(config, null, 2)
       )
 
-      // 공용 subagents 생성
+      // 공용 subagents 생성 (MD 형식)
       for (const subagent of subagentTemplates) {
         fs.writeFileSync(
-          path.join(rootPath, 'subagents', `${subagent.name}.json`),
-          JSON.stringify(subagent, null, 2)
+          path.join(rootPath, 'subagents', `${subagent.name}.md`),
+          serializeSubagentMd(subagent)
         )
       }
 
-      // 공용 skills 생성
+      // 공용 skills 생성 (디렉토리 형식)
       for (const skill of skillTemplates) {
-        fs.writeFileSync(
-          path.join(rootPath, 'skills', `${skill.name}.json`),
-          JSON.stringify(skill, null, 2)
-        )
+        const skillDir = path.join(rootPath, 'skills', skill.name)
+        fs.mkdirSync(skillDir, { recursive: true })
+        fs.writeFileSync(path.join(skillDir, 'SKILL.md'), serializeSkillMd(skill))
+        // 관례적 서브디렉토리 생성 (.gitkeep 포함)
+        for (const subDir of ['scripts', 'references', 'assets']) {
+          const subDirPath = path.join(skillDir, subDir)
+          fs.mkdirSync(subDirPath, { recursive: true })
+          fs.writeFileSync(path.join(subDirPath, '.gitkeep'), '')
+        }
       }
 
       // agents 생성
