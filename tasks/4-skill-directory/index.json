@@ -1,0 +1,15 @@
+{
+  "project": "cc-company",
+  "task": "skill-directory",
+  "prompt": "skills가 단순 md 파일이 아닌, anthropic 공식 skills처럼 디렉토리 단위로 관리 되면서 다양한 파일들을 가질 수 있으면 좋겠어. 먼저 제공된 공식문서 링크들을 읽고 anthropic의 skills에 대한 철학, 어떻게 관리하는지, 어떻게 생성하기를 권장하는지, 어떻게 테스트하는지를 정확히 파악해줘. 이걸 /docs/external 경로에 문서로 정리해두면 좋겠다. 그리고 우리 프로젝트에서 사용자의 skills를 어떻게 처리할지 정해야해.",
+  "totalPhases": 6,
+  "created_at": "2026-03-22T15:00:00+0900",
+  "phases": [
+    { "phase": 0, "name": "docs-update", "status": "pending" },
+    { "phase": 1, "name": "types-istore-frontmatter", "status": "pending" },
+    { "phase": 2, "name": "fs-store-directory", "status": "pending" },
+    { "phase": 3, "name": "service-cli-commands", "status": "pending" },
+    { "phase": 4, "name": "run-flagbuilder-adddir", "status": "pending" },
+    { "phase": 5, "name": "templates-final-tests", "status": "pending" }
+  ]
+}
