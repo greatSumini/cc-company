@@ -41,6 +41,13 @@ export interface IStore {
   saveRunLog(log: RunLog): void
   getRunLogs(filter?: RunLogFilter): RunLog[]
 
+  // Skill file operations
+  addSkillFile(skillName: string, filePath: string, content: string): void
+  editSkillFile(skillName: string, filePath: string, content: string): void
+  removeSkillFile(skillName: string, filePath: string): void
+  getSkillFile(skillName: string, filePath: string): string
+  getSkillDir(skillName: string): string
+
   // 참조 해석
   resolveSubagents(names: string[]): SubagentConfig[]
   resolveSkills(names: string[]): SkillConfig[]

@@ -38,7 +38,7 @@ describe('flag-builder', () => {
         subagents,
         settingsFilePath: '/path/to/settings.json',
         mcpConfigFilePath: '/path/to/mcp.json',
-        pluginDirPath: '/path/to/plugins',
+        addDirPath: '/path/to/add-dir',
         prompt: '테스트 프롬프트',
         passthroughFlags: ['--model', 'opus'],
       }
@@ -52,8 +52,8 @@ describe('flag-builder', () => {
       expect(flags).toContain('/path/to/settings.json')
       expect(flags).toContain('--mcp-config')
       expect(flags).toContain('/path/to/mcp.json')
-      expect(flags).toContain('--plugin-dir')
-      expect(flags).toContain('/path/to/plugins')
+      expect(flags).toContain('--add-dir')
+      expect(flags).toContain('/path/to/add-dir')
       expect(flags).toContain('--model')
       expect(flags).toContain('opus')
       expect(flags[flags.length - 1]).toBe('테스트 프롬프트')
@@ -160,19 +160,33 @@ describe('flag-builder', () => {
       expect(flags).toContain('/path/to/settings.json')
     })
 
-    it('plugins 디렉토리 존재 → --plugin-dir 경로 포함', () => {
+    it('addDirPath 있으면 → --add-dir 플래그 생성', () => {
       const input: FlagBuilderInput = {
         agent: baseAgent,
         promptFilePath: '/path/to/prompt.md',
-        pluginDirPath: '/path/to/plugins',
+        addDirPath: '/path/to/add-dir',
         prompt: 'test',
         passthroughFlags: [],
       }
 
       const flags = buildFlags(input)
 
-      expect(flags).toContain('--plugin-dir')
-      expect(flags).toContain('/path/to/plugins')
+      expect(flags).toContain('--add-dir')
+      expect(flags).toContain('/path/to/add-dir')
+    })
+
+    it('addDirPath undefined → --add-dir 생략', () => {
+      const input: FlagBuilderInput = {
+        agent: baseAgent,
+        promptFilePath: '/path/to/prompt.md',
+        addDirPath: undefined,
+        prompt: 'test',
+        passthroughFlags: [],
+      }
+
+      const flags = buildFlags(input)
+
+      expect(flags).not.toContain('--add-dir')
     })
   })
 
@@ -318,7 +332,7 @@ describe('flag-builder', () => {
         subagents: undefined,
         settingsFilePath: undefined,
         mcpConfigFilePath: undefined,
-        pluginDirPath: undefined,
+        addDirPath: undefined,
         prompt: 'minimal test',
         passthroughFlags: [],
       }

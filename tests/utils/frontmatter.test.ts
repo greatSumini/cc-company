@@ -170,6 +170,39 @@ Just a markdown file.`
     })
   })
 
+  describe('[파싱 - Skill / resources]', () => {
+    it('resources 배열 포함된 frontmatter → resources 필드 정상 파싱', () => {
+      const content = `---
+name: deploy
+description: 배포 프로세스 관리
+resources:
+  - scripts/run-deploy.sh
+  - references/env-schema.json
+---
+
+Deploy to production.`
+
+      const result = parseSkillMd(content)
+
+      expect(result.name).toBe('deploy')
+      expect(result.resources).toEqual(['scripts/run-deploy.sh', 'references/env-schema.json'])
+    })
+
+    it('resources 미포함 → resources는 undefined', () => {
+      const content = `---
+name: deploy
+description: 배포 프로세스 관리
+---
+
+Deploy to production.`
+
+      const result = parseSkillMd(content)
+
+      expect(result.name).toBe('deploy')
+      expect(result.resources).toBeUndefined()
+    })
+  })
+
   describe('[직렬화]', () => {
     it('subagent serialize 후 parse → 원본과 동일 (round-trip)', () => {
       const original = {
@@ -243,6 +276,40 @@ Just a markdown file.`
 
       expect(parsed.name).toBe('no-body')
       expect(parsed.prompt).toBe('')
+    })
+  })
+
+  describe('[직렬화 - Skill / resources]', () => {
+    it('resources 있는 SkillConfig serialize → parse → 원본과 동일 (round-trip)', () => {
+      const original = {
+        name: 'deploy',
+        description: '배포 관리',
+        prompt: '# Deploy\n\nManages deployments.',
+        resources: ['scripts/run-deploy.sh', 'references/env-schema.json'],
+      }
+
+      const serialized = serializeSkillMd(original)
+      const parsed = parseSkillMd(serialized)
+
+      expect(parsed.name).toBe(original.name)
+      expect(parsed.description).toBe(original.description)
+      expect(parsed.prompt).toBe(original.prompt)
+      expect(parsed.resources).toEqual(original.resources)
+    })
+
+    it('resources가 undefined → 직렬화 시 resources 키 생략', () => {
+      const config = {
+        name: 'minimal-skill',
+        description: '최소 스킬',
+        prompt: 'Minimal skill prompt.',
+        resources: undefined,
+      }
+
+      const serialized = serializeSkillMd(config)
+
+      expect(serialized).not.toContain('resources:')
+      expect(serialized).toContain('name: minimal-skill')
+      expect(serialized).toContain('description: 최소 스킬')
     })
   })
 })

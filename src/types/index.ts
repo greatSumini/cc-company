@@ -22,6 +22,7 @@ export interface SkillConfig {
   name: string
   description: string
   prompt: string
+  resources?: string[] // 보조 파일 상대경로 목록 (SKILL.md 기준)
   // Claude Code 호환 optional 필드
   model?: string
   allowedTools?: string
@@ -68,7 +69,7 @@ export interface FlagBuilderInput {
   subagents?: SubagentConfig[]
   settingsFilePath?: string
   mcpConfigFilePath?: string
-  pluginDirPath?: string
+  addDirPath?: string // --add-dir 경로 (skills 임시 디렉토리)
   prompt?: string
   passthroughFlags: string[]
 }

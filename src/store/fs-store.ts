@@ -285,6 +285,27 @@ export class FsStore implements IStore {
     })
   }
 
+  // Skill file operations (stub - Phase 2에서 구현)
+  addSkillFile(_skillName: string, _filePath: string, _content: string): void {
+    throw new Error('Not implemented')
+  }
+
+  editSkillFile(_skillName: string, _filePath: string, _content: string): void {
+    throw new Error('Not implemented')
+  }
+
+  removeSkillFile(_skillName: string, _filePath: string): void {
+    throw new Error('Not implemented')
+  }
+
+  getSkillFile(_skillName: string, _filePath: string): string {
+    throw new Error('Not implemented')
+  }
+
+  getSkillDir(_skillName: string): string {
+    throw new Error('Not implemented')
+  }
+
   // 참조 해석
   resolveSubagents(names: string[]): SubagentConfig[] {
     return names.map((name) => this.getSubagent(name))

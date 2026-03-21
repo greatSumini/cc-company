@@ -33,9 +33,9 @@ export function buildFlags(input: FlagBuilderInput): string[] {
     flags.push('--mcp-config', input.mcpConfigFilePath)
   }
 
-  // --plugin-dir
-  if (input.pluginDirPath) {
-    flags.push('--plugin-dir', input.pluginDirPath)
+  // --add-dir
+  if (input.addDirPath) {
+    flags.push('--add-dir', input.addDirPath)
   }
 
   // passthrough flags

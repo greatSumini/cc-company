@@ -28,7 +28,8 @@ export class RunService {
     // optional 파일 경로 확인
     const settingsFilePath = this.getIfExists(path.join(agentDir, 'settings.json'))
     const mcpConfigFilePath = this.getIfExists(path.join(agentDir, 'mcp.json'))
-    const pluginDirPath = this.getIfExists(path.join(agentDir, 'plugins'))
+    // addDirPath는 Phase 4에서 skills 임시 디렉토리로 구현 예정
+    const addDirPath: string | undefined = undefined
 
     // 4. buildFlags 호출
     const flags = buildFlags({
@@ -37,7 +38,7 @@ export class RunService {
       subagents,
       settingsFilePath,
       mcpConfigFilePath,
-      pluginDirPath,
+      addDirPath,
       prompt: prompt ?? undefined, // null → undefined 변환 (FlagBuilderInput은 string | undefined)
       passthroughFlags,
     })

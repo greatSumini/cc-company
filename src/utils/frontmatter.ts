@@ -45,6 +45,7 @@ export function parseSkillMd(content: string): SkillConfig {
   const {
     name,
     description,
+    resources,
     model,
     allowedTools,
     context,
@@ -58,6 +59,7 @@ export function parseSkillMd(content: string): SkillConfig {
     name: name as string,
     description: (description as string) ?? '',
     prompt: parsed.content.trim(),
+    resources: resources as string[] | undefined,
     model: model as string | undefined,
     allowedTools: allowedTools as string | undefined,
     context: context as string | undefined,
@@ -95,6 +97,9 @@ export function serializeSkillMd(config: SkillConfig): string {
   }
 
   // optional 필드는 값이 있을 때만 포함
+  if (config.resources !== undefined && config.resources.length > 0) {
+    frontmatterData.resources = config.resources
+  }
   if (config.model !== undefined) frontmatterData.model = config.model
   if (config.allowedTools !== undefined) frontmatterData.allowedTools = config.allowedTools
   if (config.context !== undefined) frontmatterData.context = config.context
