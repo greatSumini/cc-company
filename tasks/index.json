@@ -28,8 +28,9 @@
       "id": 3,
       "name": "soul-toml",
       "dir": "3-soul-toml",
-      "status": "pending",
-      "created_at": "2026-03-22T02:43:00+0900"
+      "status": "completed",
+      "created_at": "2026-03-22T02:43:00+0900",
+      "completed_at": "2026-03-22T02:51:44+0900"
     }
   ]
 }
