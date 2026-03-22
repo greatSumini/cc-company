@@ -29,7 +29,9 @@
     {
       "phase": 3,
       "name": "review-soul-prompt",
-      "status": "pending"
+      "status": "completed",
+      "started_at": "2026-03-22T16:17:21+0900",
+      "completed_at": "2026-03-22T16:18:55+0900"
     }
   ]
 }
