@@ -16,7 +16,8 @@
       "phase": 1,
       "name": "script-move",
       "status": "completed",
-      "started_at": "2026-03-22T16:08:27+0900"
+      "started_at": "2026-03-22T16:08:27+0900",
+      "completed_at": "2026-03-22T16:12:55+0900"
     },
     {
       "phase": 2,
