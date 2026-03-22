@@ -94,6 +94,7 @@ export class TicketService {
    * Ticket 상태 업데이트
    * - in_progress로 변경 시 startedAt 자동 설정
    * - completed/failed로 변경 시 completedAt 자동 설정
+   * - cc_review가 completed되면 parent ticket 체크
    */
   async updateTicketStatus(
     id: string,
@@ -101,6 +102,12 @@ export class TicketService {
     expectedVersion: number,
     result?: TicketResult
   ): Promise<Ticket> {
+    // ticket 조회 (cc_review 체크용)
+    const ticket = await this.ticketStore.get(id)
+    if (!ticket) {
+      throw new Error(`Ticket not found: ${id}`)
+    }
+
     const now = new Date().toISOString()
 
     const updateInput: {
@@ -125,7 +132,14 @@ export class TicketService {
       }
     }
 
-    return this.ticketStore.update(id, updateInput)
+    const updated = await this.ticketStore.update(id, updateInput)
+
+    // cc_review가 completed되면 parent 체크
+    if (ticket.type === 'cc_review' && status === 'completed' && ticket.parentTicketId) {
+      await this.checkCcCompletion(ticket.parentTicketId)
+    }
+
+    return updated
   }
 
   /**

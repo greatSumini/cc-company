@@ -43,7 +43,9 @@
     {
       "phase": 5,
       "name": "agent-runner",
-      "status": "pending"
+      "status": "completed",
+      "started_at": "2026-03-22T18:07:10+0900",
+      "completed_at": "2026-03-22T18:10:31+0900"
     },
     {
       "phase": 6,
