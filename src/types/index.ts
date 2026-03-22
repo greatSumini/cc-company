@@ -144,6 +144,7 @@ export interface UpdateTicketInput {
   completedAt?: string
   cancelledAt?: string
   result?: TicketResult
+  ccReviewTicketIds?: string[]
   expectedVersion: number
 }
 

@@ -130,6 +130,7 @@ export class FsTicketStore implements ITicketStore {
       ...(input.completedAt !== undefined && { completedAt: input.completedAt }),
       ...(input.cancelledAt !== undefined && { cancelledAt: input.cancelledAt }),
       ...(input.result !== undefined && { result: input.result }),
+      ...(input.ccReviewTicketIds !== undefined && { ccReviewTicketIds: input.ccReviewTicketIds }),
       version: ticket.version + 1,
     }
 
