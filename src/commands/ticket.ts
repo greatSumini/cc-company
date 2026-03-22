@@ -39,7 +39,7 @@ export function registerTicketCommand(program: Command): void {
         })
 
         if (!res.ok) {
-          const error = await res.json()
+          const error = await res.json().catch(() => ({ error: res.statusText }))
           console.error(`Error: ${error.error}`)
           process.exit(1)
         }
@@ -85,7 +85,7 @@ export function registerTicketCommand(program: Command): void {
         const res = await fetch(`${serverUrl}/tickets?${params}`)
 
         if (!res.ok) {
-          const error = await res.json()
+          const error = await res.json().catch(() => ({ error: res.statusText }))
           console.error(`Error: ${error.error}`)
           process.exit(1)
         }
@@ -221,7 +221,7 @@ export function registerTicketCommand(program: Command): void {
         })
 
         if (!res.ok) {
-          const error = await res.json()
+          const error = await res.json().catch(() => ({ error: res.statusText }))
           console.error(`Error: ${error.error}`)
           process.exit(1)
         }
