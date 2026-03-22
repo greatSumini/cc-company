@@ -30,6 +30,29 @@ CLI arg 파싱만 수행하고 service를 호출한다. 로직 없음.
 파일시스템 읽기/쓰기를 인터페이스로 추상화.
 향후 대시보드 서버 API 구현체로 교체 가능.
 
+### Server
+
+HTTP API를 제공하는 Ticket Server.
+
+- **server/index.ts** — Express 앱 생성 및 미들웨어 설정
+- **server/routes/tickets.ts** — /tickets API 라우트
+- **server/routes/agents.ts** — /agents/status API 라우트
+
+### Ticket Store
+
+Ticket 데이터 저장소 추상화.
+
+- **ticket-store.ts** — ITicketStore 인터페이스
+- **fs-ticket-store.ts** — 파일 기반 구현. 낙관적 락 지원.
+- **agent-status-store.ts** — agent 실시간 상태 저장
+
+### Orchestrator
+
+데몬 모드 시스템 관리.
+
+- **orchestrator.service.ts** — Ticket Server 시작 + agent worker spawn + shutdown 관리
+- **agent-runner.service.ts** — 개별 agent의 polling loop + ticket 처리
+
 ```typescript
 interface IStore {
   // agent
@@ -90,9 +113,19 @@ src/
 │   ├── agent.service.ts
 │   ├── resource.service.ts
 │   └── run.service.ts
+├── server/
+│   ├── index.ts
+│   ├── routes/
+│   │   ├── tickets.ts
+│   │   └── agents.ts
+│   └── middleware/
+│       └── error-handler.ts
 ├── store/
-│   ├── store.ts              # IStore 인터페이스
-│   └── fs-store.ts
+│   ├── store.ts              # 기존 IStore
+│   ├── fs-store.ts           # 기존
+│   ├── ticket-store.ts       # ITicketStore 인터페이스
+│   ├── fs-ticket-store.ts    # 파일 기반 구현
+│   └── agent-status-store.ts # agent 상태 저장
 ├── claude-runner/
 │   ├── flag-builder.ts
 │   ├── env-builder.ts
@@ -103,6 +136,7 @@ src/
 │   └── frontmatter.ts        # subagent/skill MD 파일의 파싱(parse*Md)과 직렬화(serialize*Md)
 ├── types/
 │   └── index.ts
+├── agent-worker.ts           # fork용 엔트리포인트
 └── templates/                # init 시 복사할 기본 agent 템플릿
 ```
 
@@ -221,4 +255,62 @@ interface FlagBuilderInput {
   passthroughFlags?: string[]
   prompt?: string
 }
+```
+
+### 데몬 모드 예시: `cc-company start`
+
+```
+1. commands/start.ts
+   orchestrator.start() 호출
+        │
+        ▼
+2. services/orchestrator.service.ts
+   Ticket Server 시작 (http://localhost:3847)
+   모든 agent에 대해 child_process.fork('agent-worker.ts')
+        │
+        ├──▶ Agent Worker (developer)
+        ├──▶ Agent Worker (designer)
+        └──▶ Agent Worker (hr)
+             │
+             ▼
+3. agent-worker.ts → services/agent-runner.service.ts
+   while (alive) {
+     sendHeartbeat()
+     ticket = HTTP GET /tickets?assignee={name}&status=ready
+     if (ticket) processTicket(ticket)
+     if (idleTime > 3분) break
+     sleep(5초)
+   }
+        │
+        ▼
+4. ticket 처리 시
+   HTTP PATCH /tickets/{id} { status: 'in_progress' }
+   spawnSync('claude', ...) // 기존 claude-runner 활용
+   HTTP PATCH /tickets/{id} { status: 'completed', result: {...} }
+```
+
+### Ticket 생성 → 처리 흐름 (cc 포함)
+
+```
+1. cc-company ticket create --assignee developer --cc designer
+        │
+        ▼
+2. HTTP POST /tickets
+   TicketService.createTicket():
+     - task ticket 생성 (status: blocked)
+     - cc_review ticket 생성 (assignee: designer, status: ready)
+        │
+        ▼
+3. Designer Worker
+   cc_review ticket 발견 → 처리 → completed
+   의견이 있으면 comment 추가
+        │
+        ▼
+4. TicketService.checkCcCompletion()
+   모든 cc_review completed → task status: blocked → ready
+   cc_review comments를 task에 복사
+        │
+        ▼
+5. Developer Worker
+   task ticket 발견 → 처리 → completed
 ```

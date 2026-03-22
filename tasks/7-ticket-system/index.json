@@ -1,0 +1,66 @@
+{
+  "project": "cc-company",
+  "task": "ticket-system",
+  "prompt": "cc-company run하면 각 에이전트별 프로세스가 실행되고, 자기한테 assign된 작업이 생길때까지 대기하다가 작업을 받아 실행하도록 변경. 각 agent는 동시에 1개의 작업만 처리. 작업 ticket에는 참조 기능이 있으며, 이 경우 참조된 agent들이 모두 수신확인or의견보충을 해야 assignee agent가 작업을 시작할 수 있음. ticket 관리 시스템은 agent만을 위한 jira/linear라고 생각하면 된다. 당장은 아니지만 향후 사용자의 모니터링을 위한 gui 대시보드 제작도 고려하며 구현해야한다.",
+  "totalPhases": 8,
+  "created_at": "2026-03-22T21:30:00+0900",
+  "phases": [
+    {
+      "phase": 0,
+      "name": "docs",
+      "status": "completed",
+      "started_at": "2026-03-22T17:49:58+0900",
+      "completed_at": "2026-03-22T17:55:11+0900"
+    },
+    {
+      "phase": 1,
+      "name": "types",
+      "status": "completed",
+      "started_at": "2026-03-22T17:55:11+0900",
+      "completed_at": "2026-03-22T17:56:47+0900"
+    },
+    {
+      "phase": 2,
+      "name": "ticket-store",
+      "status": "completed",
+      "started_at": "2026-03-22T17:56:47+0900",
+      "completed_at": "2026-03-22T18:00:33+0900"
+    },
+    {
+      "phase": 3,
+      "name": "ticket-service",
+      "status": "completed",
+      "started_at": "2026-03-22T18:00:33+0900",
+      "completed_at": "2026-03-22T18:04:49+0900"
+    },
+    {
+      "phase": 4,
+      "name": "http-server",
+      "status": "completed",
+      "started_at": "2026-03-22T18:04:50+0900",
+      "completed_at": "2026-03-22T18:07:10+0900"
+    },
+    {
+      "phase": 5,
+      "name": "agent-runner",
+      "status": "completed",
+      "started_at": "2026-03-22T18:07:10+0900",
+      "completed_at": "2026-03-22T18:09:36+0900"
+    },
+    {
+      "phase": 6,
+      "name": "orchestrator",
+      "status": "completed",
+      "started_at": "2026-03-22T18:09:36+0900",
+      "completed_at": "2026-03-22T18:12:19+0900"
+    },
+    {
+      "phase": 7,
+      "name": "ticket-commands",
+      "status": "completed",
+      "started_at": "2026-03-22T18:12:19+0900",
+      "completed_at": "2026-03-22T18:14:29+0900"
+    }
+  ],
+  "completed_at": "2026-03-22T18:14:29+0900"
+}

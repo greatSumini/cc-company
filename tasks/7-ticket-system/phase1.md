@@ -1,93 +1,27 @@
-export interface AgentConfig {
-  name: string
-  description: string
-  gh_user?: string // gh CLI에 등록된 GitHub 계정명
-  can_delegate?: boolean // true이면 다른 agent에게 ticket 위임(생성) 가능
-  subagents?: string[]
-  skills?: string[]
-  hooks?: string[]
-}
+# Phase 1: types
 
-export interface SubagentConfig {
-  name: string
-  description: string
-  prompt: string
-  // Claude Code 호환 optional 필드
-  model?: string
-  tools?: string
-  disallowedTools?: string
-  maxTurns?: number
-  permissionMode?: string
-}
+## 사전 준비
 
-export interface SkillConfig {
-  name: string
-  description: string
-  prompt: string
-  resources?: string[] // 보조 파일 상대경로 목록 (SKILL.md 기준)
-  // Claude Code 호환 optional 필드
-  model?: string
-  allowedTools?: string
-  context?: string
-  agent?: string
-  userInvocable?: boolean
-  disableModelInvocation?: boolean
-  argumentHint?: string
-}
+먼저 아래 문서들을 반드시 읽고 프로젝트의 전체 아키텍처와 설계 의도를 완전히 이해하라:
 
-export interface HookConfig {
-  name: string
-  description: string
-  config: Record<string, unknown>
-}
+- `/docs/spec.md`
+- `/docs/architecture.md`
+- `/docs/adr.md`
+- `/tasks/7-ticket-system/docs-diff.md` (이번 task의 문서 변경 기록)
 
-export interface RunLog {
-  id: string
-  agent: string
-  prompt: string | null
-  mode: 'interactive' | 'print'
-  startedAt: string
-  finishedAt: string
-  exitCode: number
-  flags: string[]
-  stdout: string
-  stderr: string
-}
+그리고 기존 타입 정의를 확인하라:
 
-export interface ProjectConfig {
-  version: string
-}
+- `/src/types/index.ts`
 
-export interface RunLogFilter {
-  agent?: string
-  fromDate?: string
-  toDate?: string
-  exitCode?: number
-}
+## 작업 내용
 
-export interface FlagBuilderInput {
-  agent: AgentConfig
-  promptFilePath: string
-  subagents?: SubagentConfig[]
-  settingsFilePath?: string
-  mcpConfigFilePath?: string
-  addDirPath?: string // --add-dir 경로 (skills 임시 디렉토리)
-  prompt?: string
-  passthroughFlags: string[]
-}
+Ticket 시스템에 필요한 타입 정의를 추가한다.
 
-export interface RunLogger {
-  log(
-    agent: string,
-    prompt: string | null,
-    mode: 'interactive' | 'print',
-    flags: string[],
-    result: { exitCode: number; stdout: string; stderr: string },
-    startedAt: Date,
-    finishedAt: Date
-  ): void
-}
+### 1. `src/types/index.ts` — Ticket 관련 타입 추가
 
+파일 끝에 다음 타입들을 추가:
+
+```typescript
 // ============================================
 // Ticket System Types
 // ============================================
@@ -144,7 +78,6 @@ export interface UpdateTicketInput {
   completedAt?: string
   cancelledAt?: string
   result?: TicketResult
-  ccReviewTicketIds?: string[]
   expectedVersion: number
 }
 
@@ -183,8 +116,49 @@ export interface TicketServerConfig {
   idleTimeoutMs: number
   heartbeatTimeoutMs: number
 }
+```
 
+### 2. `src/types/index.ts` — AgentConfig 확장
+
+기존 `AgentConfig` 인터페이스에 `can_delegate` 필드를 추가:
+
+```typescript
+export interface AgentConfig {
+  name: string
+  description: string
+  gh_user?: string
+  can_delegate?: boolean  // 추가
+  subagents?: string[]
+  skills?: string[]
+  hooks?: string[]
+}
+```
+
+### 3. `src/types/index.ts` — GlobalConfig 타입 추가 (없으면 생성)
+
+config.json을 위한 타입을 추가하거나 확장:
+
+```typescript
 export interface GlobalConfig {
   version: string
   ticketServer?: TicketServerConfig
 }
+```
+
+## Acceptance Criteria
+
+```bash
+npm run build  # 컴파일 에러 없음
+npm test       # 기존 테스트 모두 통과
+```
+
+## AC 검증 방법
+
+위 AC 커맨드를 실행하라. 모두 통과하면 `/tasks/7-ticket-system/index.json`의 phase 1 status를 `"completed"`로 변경하라.
+수정 3회 이상 시도해도 실패하면 status를 `"error"`로 변경하고, 에러 내용을 index.json의 해당 phase에 `"error_message"` 필드로 기록하라.
+
+## 주의사항
+
+- 타입 정의만 추가하라. 구현 코드는 건드리지 마라.
+- 기존 타입을 수정할 때 하위 호환성을 유지하라 (optional 필드 추가만).
+- 기존 테스트가 깨지지 않도록 주의하라.

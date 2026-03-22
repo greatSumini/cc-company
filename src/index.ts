@@ -6,6 +6,8 @@ import { registerAgentCommand } from './commands/agent.js'
 import { registerSubagentCommand } from './commands/subagent.js'
 import { registerSkillCommand } from './commands/skill.js'
 import { registerHookCommand } from './commands/hook.js'
+import { registerStartCommand } from './commands/start.js'
+import { registerTicketCommand } from './commands/ticket.js'
 
 const program = new Command()
 
@@ -20,5 +22,7 @@ registerAgentCommand(program)
 registerSubagentCommand(program)
 registerSkillCommand(program)
 registerHookCommand(program)
+registerStartCommand(program)
+registerTicketCommand(program)
 
-program.parse()
+program.parseAsync()

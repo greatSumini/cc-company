@@ -55,6 +55,14 @@
       "status": "completed",
       "created_at": "2026-03-22T16:33:00+0900",
       "completed_at": "2026-03-22T16:47:43+0900"
+    },
+    {
+      "id": 7,
+      "name": "ticket-system",
+      "dir": "7-ticket-system",
+      "status": "completed",
+      "created_at": "2026-03-22T21:30:00+0900",
+      "completed_at": "2026-03-22T18:14:29+0900"
     }
   ]
 }
