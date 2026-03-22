@@ -14,6 +14,7 @@ import json
 import sys
 from datetime import date, timedelta
 from pathlib import Path
+from typing import Optional
 
 import tomlkit
 
@@ -42,7 +43,7 @@ def save_toml(file_path: Path, doc: tomlkit.TOMLDocument) -> None:
     file_path.write_text(tomlkit.dumps(doc), encoding="utf-8")
 
 
-def find_entry_index(entries: list, entry_id: int) -> int | None:
+def find_entry_index(entries: list, entry_id: int) -> 'Optional[int]':
     """entries 리스트에서 id가 일치하는 항목의 인덱스 반환. 없으면 None."""
     for i, entry in enumerate(entries):
         if entry.get("id") == entry_id:

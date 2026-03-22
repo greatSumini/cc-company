@@ -7,7 +7,7 @@ content = """cc-company는 Claude Code를 "회사처럼" 운영하게 해주는 
 [[entries]]
 id = 2
 created_at = "2026-03-18"
-last_used_at = "2026-03-21"
+last_used_at = "2026-03-22"
 content = """핵심 가치제안: "CEO처럼 목표만 제시하면 AI agent가 알아서 실행". 대시보드로 진행상황 확인 + 피드백."""
 
 [[entries]]
@@ -57,3 +57,9 @@ id = 10
 created_at = "2026-03-22"
 last_used_at = "2026-03-22"
 content = "cc-company는 향후 원격 서버에 호스팅될 것을 전제로 설계한다. 따라서 파일시스템 직접 접근에 의존하지 않고, CLI 커맨드라는 인터페이스를 통해 모든 CRUD를 수행하도록 하여, IStore 추상화 교체 시 변경 범위를 최소화한다."
+
+[[entries]]
+id = 11
+created_at = "2026-03-22"
+last_used_at = "2026-03-22"
+content = "cc-company start로 Ticket Server + Agent workers 데몬 모드 실행. ticket 기반 작업 관리 시스템 도입 (ADR-017~019). agent 간 CC(참조) 기능, 상태 머신 기반 전이 검증, 낙관적 락 동시성 제어 포함."
