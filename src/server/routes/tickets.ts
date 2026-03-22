@@ -128,6 +128,25 @@ ticketsRouter.get('/:id/log', async (req, res, next) => {
 })
 
 /**
+ * PUT /tickets/:id/log
+ * Body: plain text
+ */
+ticketsRouter.put('/:id/log', async (req, res, next) => {
+  try {
+    // express.text() middleware가 없으므로 raw body를 수동으로 수집
+    let body = ''
+    req.setEncoding('utf-8')
+    for await (const chunk of req) {
+      body += chunk
+    }
+    await req.ticketService.saveLog(req.params.id, body)
+    res.json({ ok: true })
+  } catch (error) {
+    next(error)
+  }
+})
+
+/**
  * POST /tickets/:id/comments
  * Body: { author, content }
  */
