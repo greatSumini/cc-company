@@ -5,9 +5,27 @@
   "totalPhases": 4,
   "created_at": "2026-03-22T16:33:00+0900",
   "phases": [
-    { "phase": 0, "name": "docs-adr", "status": "pending" },
-    { "phase": 1, "name": "env-builder", "status": "pending" },
-    { "phase": 2, "name": "spawner-integration", "status": "pending" },
-    { "phase": 3, "name": "run-phases", "status": "pending" }
+    {
+      "phase": 0,
+      "name": "docs-adr",
+      "status": "completed",
+      "started_at": "2026-03-22T16:37:18+0900",
+      "completed_at": "2026-03-22T16:40:00+0900"
+    },
+    {
+      "phase": 1,
+      "name": "env-builder",
+      "status": "pending"
+    },
+    {
+      "phase": 2,
+      "name": "spawner-integration",
+      "status": "pending"
+    },
+    {
+      "phase": 3,
+      "name": "run-phases",
+      "status": "pending"
+    }
   ]
 }
