@@ -42,7 +42,7 @@
 
 - `status`는 모든 phase가 완료되면 `"completed"`, 하나라도 실패하면 `"error"`, 그 외 `"pending"`.
 - 타임스탬프: `created_at`은 task 생성 시, `completed_at`은 전체 완료 시, `failed_at`은 실패 시. ISO 8601 형식 (예: `2026-03-19T01:55:23+0900`).
-- `created_at`만 생성 시 기록. `completed_at`, `failed_at`은 `run-phases.py`가 자동 기록.
+- `created_at`만 생성 시 기록. `completed_at`, `failed_at`은 `scripts/run-phases.py`가 자동 기록.
 
 ### 2. `/tasks/{id}-{name}/index.json` (task-level phase index)
 
@@ -63,12 +63,12 @@
 - `prompt`: 사용자가 해당 task 논의를 요청할 때 최초로 입력한 프롬프트 원문. task의 맥락과 의도를 기록하기 위한 필드.
 - `name`은 kebab-case slug. 해당 phase의 핵심 모듈/작업을 한 단어~두 단어로 표현.
 - 모든 phase의 초기 status는 `"pending"`.
-- 타임스탬프: task-level `created_at`은 생성 시 기록. `completed_at`은 전체 완료 시 `run-phases.py`가 기록.
-- phase-level 타임스탬프(`started_at`, `completed_at`, `failed_at`)는 `run-phases.py`가 실행 시 자동 기록. 생성 시 넣지 않는다.
+- 타임스탬프: task-level `created_at`은 생성 시 기록. `completed_at`은 전체 완료 시 `scripts/run-phases.py`가 기록.
+- phase-level 타임스탬프(`started_at`, `completed_at`, `failed_at`)는 `scripts/run-phases.py`가 실행 시 자동 기록. 생성 시 넣지 않는다.
 
 ### 3. `/tasks/{id}-{name}/docs-diff.md` (문서 변경 기록)
 
-Phase 0 완료 후 `run-phases.py`가 `gen-docs-diff.py`를 자동 호출하여 생성한다.
+Phase 0 완료 후 `scripts/run-phases.py`가 `scripts/gen-docs-diff.py`를 자동 호출하여 생성한다.
 Phase 0 시작 전 HEAD를 baseline으로 기록하고, Phase 0 완료 후 `git diff {baseline} -- docs/`를 실행하여 실제 diff를 추출한다.
 
 **에이전트가 직접 작성하지 않는다.** Phase 0는 문서 업데이트만 수행하면 된다.
@@ -142,7 +142,7 @@ npm test # 모든 테스트 통과
 
 #### phase 파일 작성 원칙
 
-1. **Phase 0는 문서 업데이트**: 첫 번째 phase는 반드시 관련 문서(spec, architecture, ADR 등)를 업데이트한다. `docs-diff.md`는 Phase 0 완료 후 `gen-docs-diff.py`가 자동 생성하므로, 에이전트가 직접 작성하지 않는다.
+1. **Phase 0는 문서 업데이트**: 첫 번째 phase는 반드시 관련 문서(spec, architecture, ADR 등)를 업데이트한다. `docs-diff.md`는 Phase 0 완료 후 `scripts/gen-docs-diff.py`가 자동 생성하므로, 에이전트가 직접 작성하지 않는다.
 2. **자기완결성**: 각 phase 파일은 독립 session에서 실행된다. "이전 대화에서 논의한 바와 같이" 같은 참조 금지. 필요한 정보는 전부 파일 안에 적어라.
 3. **사전 준비 필수**: 관련 문서 경로 + `docs-diff.md` + 이전 phase 산출물 경로를 명시. session이 코드를 읽고 맥락을 파악한 뒤 작업하도록 강제.
 4. **시그니처 수준 지시**: 함수/클래스의 인터페이스만 제시. 내부 구현은 에이전트 재량. 단, 핵심 비즈니스 규칙(멱등성, 보안, 데이터 무결성 등)은 반드시 명시.
@@ -150,11 +150,11 @@ npm test # 모든 테스트 통과
 6. **scope 최소화**: 하나의 phase에서 하나의 레이어/모듈만 다룬다. 여러 모듈을 동시에 수정해야 하면 phase를 쪼개라.
 7. **주의사항은 구체적으로**: "조심해라" 대신 "X를 하지 마라. 이유: Y" 형식.
 
-### 5. `/run-phases.py` (runner script)
+### 5. `/scripts/run-phases.py` (runner script)
 
 이미 존재하면 덮어쓰지 않는다. 없으면 아래 동작을 하는 Python 스크립트를 생성:
 
-1. CLI 인자로 task 디렉토리명을 받는다 (예: `python3 run-phases.py 0-mvp`).
+1. CLI 인자로 task 디렉토리명을 받는다 (예: `python3 scripts/run-phases.py 0-mvp`).
 2. `tasks/{task-dir}/index.json`을 읽고, 다음 `"pending"` phase를 찾는다.
 3. 해당 `phase{N}.md`의 내용을 읽어 공통 프리앰블과 합쳐 프롬프트를 구성한다.
    - **프롬프트에 파일 경로를 넘기지 말고, 파일 내용 자체를 프롬프트에 임베딩한다.**
@@ -189,18 +189,18 @@ npm test # 모든 테스트 통과
 
 ```bash
 # 태스크 생성 후
-python3 run-phases.py 0-mvp
+python3 scripts/run-phases.py 0-mvp
 
 # 특정 phase에서 에러 발생 시: task의 index.json 수정 후 재실행
 # → error phase의 status를 "pending"으로 변경
-python3 run-phases.py 0-mvp
+python3 scripts/run-phases.py 0-mvp
 ```
 
-### run-phases.py 자동 동작
+### scripts/run-phases.py 자동 동작
 
 - `feat-{task-name}` 브랜치를 자동 생성/체크아웃 (이미 존재하면 resume)
 - 각 phase 완료 후 2단계 커밋:
   1. **Claude fallback 커밋**: `feat({task-name}): phase {N} — {phase-name}` — Claude가 직접 커밋하지 않은 코드 변경이 있을 때만 수행
   2. **Runner housekeeping 커밋**: `chore({task-name}): phase {N} output + timestamps` — phase-output.json 저장 및 index.json timestamp 업데이트를 별도 커밋
-  - 커밋 메시지 템플릿은 `run-phases.py`의 `COMMIT_MSG_TEMPLATE`, `RUNNER_COMMIT_MSG_TEMPLATE` 상수로 관리
+  - 커밋 메시지 템플릿은 `scripts/run-phases.py`의 `COMMIT_MSG_TEMPLATE`, `RUNNER_COMMIT_MSG_TEMPLATE` 상수로 관리
 - 스피너 + 진행상황 표시 (현재 phase / 전체 phase / 경과시간)

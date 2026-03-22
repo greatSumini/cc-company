@@ -18,7 +18,9 @@ from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from typing import Optional
 
-ROOT = Path(__file__).parent
+from _utils import find_project_root
+
+ROOT = find_project_root()
 TASKS_DIR = ROOT / "tasks"
 TOP_INDEX_FILE = TASKS_DIR / "index.json"
 
@@ -422,7 +424,7 @@ def main():
             # Generate docs-diff.md after phase 0 (docs update)
             if phase_num == 0:
                 subprocess.run(
-                    ["python3", "gen-docs-diff.py", str(task_dir), baseline],
+                    ["python3", str(ROOT / "scripts" / "gen-docs-diff.py"), str(task_dir), baseline],
                     cwd=str(ROOT),
                 )
 

@@ -13,7 +13,9 @@ import subprocess
 import sys
 from pathlib import Path
 
-ROOT = Path(__file__).parent
+from _utils import find_project_root
+
+ROOT = find_project_root()
 
 
 def git_diff(baseline: str, path: str = "docs/") -> str:
