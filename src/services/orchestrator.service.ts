@@ -1,6 +1,7 @@
 import { ChildProcess, fork } from 'child_process'
 import * as path from 'path'
 import * as fs from 'fs'
+import { fileURLToPath } from 'url'
 import * as http from 'http'
 import type { Express } from 'express'
 import { createApp } from '../server/index.js'
@@ -80,6 +81,8 @@ export class OrchestratorService {
   }
 
   private spawnWorker(agentName: string): void {
+    const __filename = fileURLToPath(import.meta.url)
+    const __dirname = path.dirname(__filename)
     const workerPath = path.resolve(__dirname, '..', 'agent-worker.js')
     const { basePath, ticketServerConfig } = this.config
 
