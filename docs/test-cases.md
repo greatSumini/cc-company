@@ -207,6 +207,11 @@ store는 in-memory fake 또는 실제 fs-store + 임시 디렉토리.
 ✓ updatePriority() task — 연결된 cc_review도 함께 변경
 ✓ cancelTicket() task with cc_review — 연결된 cc_review도 함께 취소
 
+[상태 전이 검증]
+✓ blocked → in_progress 직접 전이 시 에러
+✓ completed → ready 전이 시 에러
+✓ cancelled → in_progress 전이 시 에러
+
 [cc completion]
 ✓ checkCcCompletion() 일부 완료 — parent 상태 유지 (blocked)
 ✓ checkCcCompletion() 전체 완료 — parent status → ready, comments 복사

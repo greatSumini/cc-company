@@ -5,7 +5,7 @@ import * as path from 'path'
 import { TicketService } from '../../src/services/ticket.service'
 import { FsTicketStore } from '../../src/store/fs-ticket-store'
 import { FsStore } from '../../src/store/fs-store'
-import { DelegationPermissionError } from '../../src/store/ticket-store'
+import { DelegationPermissionError, InvalidStatusTransitionError } from '../../src/store/ticket-store'
 
 describe('TicketService', () => {
   let testDir: string
@@ -209,10 +209,11 @@ describe('TicketService', () => {
         createdBy: 'user',
       })
 
-      const ccReview1 = await service.getTicket(ticket.ccReviewTicketIds![0])
+      let ccReview1 = await service.getTicket(ticket.ccReviewTicketIds![0])
 
-      // 첫 번째 cc_review만 완료
-      await service.updateTicketStatus(ccReview1!.id, 'completed', ccReview1!.version)
+      // 첫 번째 cc_review만 완료 (ready → in_progress → completed)
+      ccReview1 = await service.updateTicketStatus(ccReview1!.id, 'in_progress', ccReview1!.version)
+      await service.updateTicketStatus(ccReview1.id, 'completed', ccReview1.version)
 
       // checkCcCompletion 호출
       const latestParent = await service.getTicket(ticket.id)
@@ -241,9 +242,10 @@ describe('TicketService', () => {
         content: 'Looks good to me!',
       })
 
-      // cc_review 완료
+      // cc_review 완료 (ready → in_progress → completed)
       ccReview = await service.getTicket(ccReviewId)
-      await service.updateTicketStatus(ccReview!.id, 'completed', ccReview!.version)
+      ccReview = await service.updateTicketStatus(ccReview!.id, 'in_progress', ccReview!.version)
+      await service.updateTicketStatus(ccReview.id, 'completed', ccReview.version)
 
       // checkCcCompletion 호출
       await service.checkCcCompletion(ticket.id)
@@ -322,6 +324,56 @@ describe('TicketService', () => {
       expect(updated.status).toBe('completed')
       expect(updated.completedAt).toBeDefined()
       expect(updated.result).toEqual({ exitCode: 0, logPath: '/path/to/log' })
+    })
+  })
+
+  describe('[status transition validation]', () => {
+    it('blocked → in_progress 직접 전이 시 에러', async () => {
+      const ticket = await service.createTicket({
+        title: 'Blocked Ticket',
+        prompt: 'Test',
+        assignee: 'developer',
+        cc: ['designer'],
+        createdBy: 'user',
+      })
+
+      const latestTicket = await service.getTicket(ticket.id)
+
+      await expect(
+        service.updateTicketStatus(latestTicket!.id, 'in_progress', latestTicket!.version)
+      ).rejects.toThrow(InvalidStatusTransitionError)
+    })
+
+    it('completed → ready 전이 시 에러', async () => {
+      const ticket = await service.createTicket({
+        title: 'Test',
+        prompt: 'Test',
+        assignee: 'developer',
+        createdBy: 'user',
+      })
+
+      let updated = await service.updateTicketStatus(ticket.id, 'in_progress', ticket.version)
+      updated = await service.updateTicketStatus(updated.id, 'completed', updated.version)
+
+      await expect(
+        service.updateTicketStatus(updated.id, 'ready', updated.version)
+      ).rejects.toThrow(InvalidStatusTransitionError)
+    })
+
+    it('cancelled → in_progress 전이 시 에러', async () => {
+      const ticket = await service.createTicket({
+        title: 'Test',
+        prompt: 'Test',
+        assignee: 'developer',
+        createdBy: 'user',
+      })
+
+      await service.cancelTicket(ticket.id, ticket.version)
+      const cancelled = await service.getTicket(ticket.id)
+
+      await expect(
+        service.updateTicketStatus(cancelled!.id, 'in_progress', cancelled!.version)
+      ).rejects.toThrow(InvalidStatusTransitionError)
     })
   })
 

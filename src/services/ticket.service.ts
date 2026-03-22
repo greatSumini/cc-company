@@ -1,5 +1,14 @@
-import { DelegationPermissionError } from '../store/ticket-store.js'
+import { DelegationPermissionError, InvalidStatusTransitionError } from '../store/ticket-store.js'
 import type { ITicketStore } from '../store/ticket-store.js'
+
+const VALID_TRANSITIONS: Record<string, string[]> = {
+  blocked: ['ready', 'cancelled'],
+  ready: ['in_progress', 'cancelled'],
+  in_progress: ['completed', 'failed'],
+  completed: [],
+  failed: [],
+  cancelled: [],
+}
 import type { IStore } from '../store/store.js'
 import type {
   Ticket,
@@ -107,6 +116,12 @@ export class TicketService {
     const ticket = await this.ticketStore.get(id)
     if (!ticket) {
       throw new Error(`Ticket not found: ${id}`)
+    }
+
+    // 상태 전이 검증
+    const allowed = VALID_TRANSITIONS[ticket.status]
+    if (!allowed || !allowed.includes(status)) {
+      throw new InvalidStatusTransitionError(ticket.status, status)
     }
 
     const now = new Date().toISOString()
