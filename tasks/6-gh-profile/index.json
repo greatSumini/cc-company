@@ -30,7 +30,8 @@
       "phase": 3,
       "name": "run-phases",
       "status": "completed",
-      "started_at": "2026-03-22T16:44:29+0900"
+      "started_at": "2026-03-22T16:44:29+0900",
+      "completed_at": "2026-03-22T16:47:43+0900"
     }
   ]
 }
