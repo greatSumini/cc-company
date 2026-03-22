@@ -2,6 +2,7 @@ export interface AgentConfig {
   name: string
   description: string
   gh_user?: string // gh CLI에 등록된 GitHub 계정명
+  can_delegate?: boolean // true이면 다른 agent에게 ticket 위임(생성) 가능
   subagents?: string[]
   skills?: string[]
   hooks?: string[]
@@ -85,4 +86,104 @@ export interface RunLogger {
     startedAt: Date,
     finishedAt: Date
   ): void
+}
+
+// ============================================
+// Ticket System Types
+// ============================================
+
+export type TicketStatus = 'blocked' | 'ready' | 'in_progress' | 'completed' | 'failed' | 'cancelled'
+export type TicketType = 'task' | 'cc_review'
+export type TicketPriority = 'low' | 'normal' | 'high' | 'urgent'
+
+export interface Comment {
+  id: string
+  author: string
+  content: string
+  createdAt: string
+}
+
+export interface TicketResult {
+  exitCode: number
+  logPath: string
+}
+
+export interface Ticket {
+  id: string
+  title: string
+  prompt: string
+  type: TicketType
+  parentTicketId?: string
+  ccReviewTicketIds?: string[]
+  assignee: string
+  priority: TicketPriority
+  status: TicketStatus
+  createdBy: string
+  createdAt: string
+  startedAt?: string
+  completedAt?: string
+  cancelledAt?: string
+  result?: TicketResult
+  comments: Comment[]
+  version: number
+}
+
+export interface CreateTicketInput {
+  title: string
+  prompt: string
+  assignee: string
+  cc?: string[]
+  priority?: TicketPriority
+  createdBy: string
+}
+
+export interface UpdateTicketInput {
+  status?: TicketStatus
+  priority?: TicketPriority
+  startedAt?: string
+  completedAt?: string
+  cancelledAt?: string
+  result?: TicketResult
+  expectedVersion: number
+}
+
+export interface TicketFilter {
+  status?: TicketStatus
+  assignee?: string
+  type?: TicketType
+}
+
+export interface CreateCommentInput {
+  author: string
+  content: string
+}
+
+// ============================================
+// Agent Status Types
+// ============================================
+
+export type AgentState = 'offline' | 'idle' | 'working'
+
+export interface AgentStatus {
+  name: string
+  state: AgentState
+  currentTicketId?: string
+  processStartedAt?: string
+  lastHeartbeatAt?: string
+}
+
+// ============================================
+// Ticket Server Config
+// ============================================
+
+export interface TicketServerConfig {
+  port: number
+  pollingIntervalMs: number
+  idleTimeoutMs: number
+  heartbeatTimeoutMs: number
+}
+
+export interface GlobalConfig {
+  version: string
+  ticketServer?: TicketServerConfig
 }
