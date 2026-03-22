@@ -1,0 +1,55 @@
+import * as path from 'path'
+import { AgentRunnerService } from './services/agent-runner.service.js'
+import { FsStore } from './store/fs-store.js'
+import { runClaude } from './claude-runner/run-claude.js'
+import type { TicketServerConfig } from './types/index.js'
+
+async function main() {
+  const agentName = process.env.CC_AGENT_NAME
+  const basePath = process.env.CC_BASE_PATH
+  const serverUrl = process.env.CC_SERVER_URL
+  const pollingIntervalMs = parseInt(process.env.CC_POLLING_INTERVAL_MS || '5000', 10)
+  const idleTimeoutMs = parseInt(process.env.CC_IDLE_TIMEOUT_MS || '180000', 10)
+
+  if (!agentName || !basePath || !serverUrl) {
+    console.error('Missing required environment variables')
+    process.exit(1)
+  }
+
+  // FsStore는 .cc-company 경로를 rootPath로 받음
+  const ccCompanyPath = path.join(basePath, '.cc-company')
+  const store = new FsStore(ccCompanyPath)
+  const agentConfig = store.getAgent(agentName)
+
+  if (!agentConfig) {
+    console.error(`Agent '${agentName}' not found`)
+    process.exit(1)
+  }
+
+  const config: TicketServerConfig = {
+    port: 0, // 사용되지 않음
+    pollingIntervalMs,
+    idleTimeoutMs,
+    heartbeatTimeoutMs: 30000,
+  }
+
+  const runner = new AgentRunnerService({
+    serverUrl,
+    config,
+    agentConfig,
+    runClaude: (prompt, ac) => runClaude(prompt, ac, { store, basePath: ccCompanyPath }),
+  })
+
+  // SIGTERM 핸들링
+  process.on('SIGTERM', () => {
+    console.log(`[${agentName}] Received SIGTERM, stopping...`)
+    runner.stop()
+  })
+
+  await runner.run()
+}
+
+main().catch((error) => {
+  console.error('Agent worker error:', error)
+  process.exit(1)
+})
