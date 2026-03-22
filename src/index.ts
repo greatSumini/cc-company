@@ -25,4 +25,4 @@ registerHookCommand(program)
 registerStartCommand(program)
 registerTicketCommand(program)
 
-program.parse()
+program.parseAsync()
