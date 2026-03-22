@@ -99,6 +99,7 @@ cc-company hook add|list|remove <name>
 {
   "name": "developer",
   "description": "소프트웨어 개발 전담 에이전트",
+  "gh_user": "dev-bot",
   "subagents": ["git-expert", "code-reviewer"],
   "skills": ["deploy"],
   "hooks": ["pre-commit"]
@@ -107,6 +108,7 @@ cc-company hook add|list|remove <name>
 
 - 모든 리소스 필드는 optional
 - 값은 공용 풀의 리소스 이름(식별자) 배열
+- `gh_user`: optional. gh CLI에 등록된 GitHub 계정명. 설정 시 해당 계정의 토큰과 Git identity로 commit/push/PR 수행. 미설정 시 현재 활성 계정 사용.
 
 ## Subagent MD 형식
 

@@ -144,3 +144,18 @@ store는 in-memory fake 또는 실제 fs-store + 임시 디렉토리.
 ✓ resources 있는 SkillConfig serialize → parse → 원본과 동일 (round-trip)
 ✓ resources가 undefined → 직렬화 시 resources 키 생략
 ```
+
+## env-builder (유닛, ~7개)
+
+```
+[buildEnvFromProfile — 순수 변환]
+✓ gh_user 없음 (undefined) → 빈 객체 반환
+✓ 정상 프로필 (token, name, email) → GH_TOKEN, GIT_AUTHOR_NAME, GIT_AUTHOR_EMAIL, GIT_COMMITTER_NAME, GIT_COMMITTER_EMAIL 모두 세팅
+✓ name/email이 빈 문자열 → 빈 문자열 키도 포함 (필터링하지 않음)
+
+[캐시 로직 — resolver 주입]
+✓ 캐시 미스 (첫 호출) → resolver 함수 1회 실행
+✓ 캐시 히트 (동일 ghUser, TTL 내) → resolver 함수 미실행, 캐시된 값 반환
+✓ 캐시 만료 (TTL 초과) → resolver 함수 재실행
+✓ ghUser 변경 → 이전 캐시 무효화, 새 resolver 실행
+```

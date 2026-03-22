@@ -1,6 +1,7 @@
 export interface AgentConfig {
   name: string
   description: string
+  gh_user?: string // gh CLI에 등록된 GitHub 계정명
   subagents?: string[]
   skills?: string[]
   hooks?: string[]

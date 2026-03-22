@@ -10,6 +10,7 @@ Example: python3 run-phases.py 0-mvp
 
 import itertools
 import json
+import os
 import subprocess
 import sys
 import threading
@@ -34,6 +35,76 @@ SPINNER_CHARS = "⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏"
 # ---------------------------------------------------------------------------
 # Utilities
 # ---------------------------------------------------------------------------
+
+_gh_cache: dict = {"gh_user": None, "token": None, "name": None, "email": None, "expires_at": 0}
+
+
+def resolve_gh_env(gh_user: Optional[str]) -> dict[str, str]:
+    """Resolve GitHub profile for gh_user and return environment variables."""
+    if gh_user is None:
+        return {}
+
+    global _gh_cache
+
+    # Check cache
+    if (
+        _gh_cache["gh_user"] == gh_user
+        and time.time() < _gh_cache["expires_at"]
+    ):
+        return {
+            "GH_TOKEN": _gh_cache["token"],
+            "GIT_AUTHOR_NAME": _gh_cache["name"],
+            "GIT_AUTHOR_EMAIL": _gh_cache["email"],
+            "GIT_COMMITTER_NAME": _gh_cache["name"],
+            "GIT_COMMITTER_EMAIL": _gh_cache["email"],
+        }
+
+    # Cache miss: resolve token
+    result = subprocess.run(
+        ["gh", "auth", "token", "--user", gh_user],
+        capture_output=True,
+        text=True,
+    )
+    if result.returncode != 0:
+        print(f"ERROR: gh auth token failed for user '{gh_user}'. Run 'gh auth login' first.")
+        sys.exit(1)
+    token = result.stdout.strip()
+
+    # Resolve name
+    result = subprocess.run(
+        ["gh", "api", "/user", "--jq", ".name"],
+        env={**os.environ, "GH_TOKEN": token},
+        capture_output=True,
+        text=True,
+    )
+    name = result.stdout.strip() if result.returncode == 0 else ""
+
+    # Resolve email
+    result = subprocess.run(
+        ["gh", "api", "/user", "--jq", ".email"],
+        env={**os.environ, "GH_TOKEN": token},
+        capture_output=True,
+        text=True,
+    )
+    email = result.stdout.strip() if result.returncode == 0 else ""
+
+    # Update cache
+    _gh_cache.update(
+        gh_user=gh_user,
+        token=token,
+        name=name,
+        email=email,
+        expires_at=time.time() + 900,
+    )
+
+    return {
+        "GH_TOKEN": token,
+        "GIT_AUTHOR_NAME": name,
+        "GIT_AUTHOR_EMAIL": email,
+        "GIT_COMMITTER_NAME": name,
+        "GIT_COMMITTER_EMAIL": email,
+    }
+
 
 def now_iso() -> str:
     return datetime.now(KST).strftime("%Y-%m-%dT%H:%M:%S%z")
@@ -88,9 +159,10 @@ def load_phase_prompt(task_dir: Path, phase_num: int) -> str:
 # Git helpers
 # ---------------------------------------------------------------------------
 
-def git_run(*args) -> subprocess.CompletedProcess:
+def git_run(*args, env: Optional[dict] = None) -> subprocess.CompletedProcess:
+    run_env = {**os.environ, **env} if env else None
     return subprocess.run(
-        ["git", *args], cwd=str(ROOT), capture_output=True, text=True
+        ["git", *args], cwd=str(ROOT), capture_output=True, text=True, env=run_env
     )
 
 
@@ -125,7 +197,7 @@ def git_ensure_branch(task_name: str):
     print(f"  Branch: {branch}")
 
 
-def git_commit_docs(task_name: str):
+def git_commit_docs(task_name: str, gh_env: dict[str, str]):
     """Commit task plan files (tasks/, docs/, prompts/) before phase execution."""
     git_run("add", "tasks/", "docs/", "prompts/")
 
@@ -133,18 +205,20 @@ def git_commit_docs(task_name: str):
         return
 
     msg = f"docs: create {task_name} plan"
-    r = git_run("commit", "-m", msg)
+    r = git_run("commit", "-m", msg, env=gh_env if gh_env else None)
     if r.returncode == 0:
         print(f"  ✓ {msg}")
     else:
         print(f"  WARN: docs commit failed: {r.stderr.strip()}")
 
 
-def git_commit_phase(task_name: str, task_dir_name: str, phase_num: int, phase_name: str) -> bool:
+def git_commit_phase(task_name: str, task_dir_name: str, phase_num: int, phase_name: str, gh_env: dict[str, str]) -> bool:
     """Two-step commit: Claude fallback (if needed) + runner housekeeping."""
     output_file = f"tasks/{task_dir_name}/phase{phase_num}-output.json"
     index_file = f"tasks/{task_dir_name}/index.json"
     top_index = "tasks/index.json"
+
+    commit_env = gh_env if gh_env else None
 
     # --- Step 1: Claude fallback commit (code changes Claude didn't commit) ---
     git_run("add", "-A")
@@ -158,7 +232,7 @@ def git_commit_phase(task_name: str, task_dir_name: str, phase_num: int, phase_n
         msg = COMMIT_MSG_TEMPLATE.format(
             task_name=task_name, phase_num=phase_num, phase_name=phase_name
         )
-        r = git_run("commit", "-m", msg)
+        r = git_run("commit", "-m", msg, env=commit_env)
         if r.returncode != 0:
             print(f"  WARN: fallback commit failed: {r.stderr.strip()}")
 
@@ -168,7 +242,7 @@ def git_commit_phase(task_name: str, task_dir_name: str, phase_num: int, phase_n
         msg = RUNNER_COMMIT_MSG_TEMPLATE.format(
             task_name=task_name, phase_num=phase_num
         )
-        r = git_run("commit", "-m", msg)
+        r = git_run("commit", "-m", msg, env=commit_env)
         if r.returncode != 0:
             print(f"  WARN: housekeeping commit failed: {r.stderr.strip()}")
             return False
@@ -236,7 +310,7 @@ def build_preamble(project_name: str, task_dir_name: str, task_name: str) -> str
 """
 
 
-def run_phase(task_dir: Path, phase: dict, preamble: str) -> dict:
+def run_phase(task_dir: Path, phase: dict, preamble: str, gh_env: dict[str, str]) -> dict:
     phase_num = phase["phase"]
     phase_name = phase["name"]
     prompt_content = load_phase_prompt(task_dir, phase_num)
@@ -259,6 +333,7 @@ def run_phase(task_dir: Path, phase: dict, preamble: str) -> dict:
         capture_output=True,
         text=True,
         timeout=600,  # 10 minutes per phase
+        env={**os.environ, **gh_env} if gh_env else None,
     )
 
     output_data = {
@@ -325,11 +400,15 @@ def main():
     task_name = index.get("task", task_dir_name)
     total_phases = index.get("totalPhases", len(index["phases"]))
     pending_count = sum(1 for p in index["phases"] if p["status"] == "pending")
+    gh_user = index.get("gh_user")  # Optional
+    gh_env = resolve_gh_env(gh_user)
 
     # --- Header ---
     print(f"\n{'='*60}")
     print(f"  cc-company Phase Runner")
     print(f"  Task: {task_name} | Phases: {total_phases} | Pending: {pending_count}")
+    if gh_user:
+        print(f"  GitHub: {gh_user}")
     print(f"{'='*60}")
 
     # --- Error check ---
@@ -343,7 +422,7 @@ def main():
 
     # --- Git branch + docs commit ---
     git_ensure_branch(task_name)
-    git_commit_docs(task_name)
+    git_commit_docs(task_name, gh_env)
 
     # --- Preamble ---
     preamble = build_preamble(project_name, task_dir_name, task_name)
@@ -385,7 +464,7 @@ def main():
 
         # Run with spinner
         with Spinner(f"Phase {phase_num}/{total_phases - 1} ({done_count} done): {phase_name}") as sp:
-            run_phase(task_dir, phase, preamble)
+            run_phase(task_dir, phase, preamble, gh_env)
             elapsed = int(sp.elapsed)
 
         # Re-read index.json to check what Claude did
@@ -428,7 +507,7 @@ def main():
                     cwd=str(ROOT),
                 )
 
-            git_commit_phase(task_name, task_dir_name, phase_num, phase_name)
+            git_commit_phase(task_name, task_dir_name, phase_num, phase_name, gh_env)
             print(f"  ✓ Phase {phase_num}: {phase_name} completed [{elapsed}s]")
         elif status == "pending":
             print(f"  ✗ Phase {phase_num}: {phase_name} — status still 'pending' after execution")
@@ -454,7 +533,7 @@ def main():
     git_run("add", "-A")
     if git_run("diff", "--cached", "--quiet").returncode != 0:
         msg = f"chore({task_name}): mark task completed"
-        r = git_run("commit", "-m", msg)
+        r = git_run("commit", "-m", msg, env=gh_env if gh_env else None)
         if r.returncode == 0:
             print(f"  ✓ {msg}")
         else:

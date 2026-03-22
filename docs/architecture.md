@@ -67,7 +67,8 @@ interface IStore {
 Claude CLI와의 인터페이스 전담.
 
 - **flag-builder.ts** — AgentConfig → claude CLI 플래그 배열 변환
-- **spawner.ts** — child_process.spawn + stdin/stdout/stderr 파이프 + 종료코드 전달
+- **env-builder.ts** — AgentConfig.gh_user → 환경변수 객체 변환 (GH_TOKEN, GIT_AUTHOR_*, GIT_COMMITTER_*). gh CLI로 토큰/identity resolve. 15분 in-memory 캐시.
+- **spawner.ts** — child_process.spawn + env 주입 + stdin/stdout/stderr 파이프 + 종료코드 전달
 
 ### Logger
 
@@ -94,6 +95,7 @@ src/
 │   └── fs-store.ts
 ├── claude-runner/
 │   ├── flag-builder.ts
+│   ├── env-builder.ts
 │   └── spawner.ts
 ├── logger/
 │   └── run-logger.ts
@@ -121,19 +123,24 @@ src/
    mode="interactive" 전달
         │
         ▼
-3. claude-runner/flag-builder.ts
+3. claude-runner/env-builder.ts
+   agent.gh_user → gh auth token → gh api /user → env 객체
+   gh_user 미설정 시 빈 env (시스템 기본값 사용)
+        │
+        ▼
+4. claude-runner/flag-builder.ts
    AgentConfig + SubagentConfig[] → claude CLI 플래그 배열
    prompt가 undefined이면 마지막 positional arg 생략
    ["--append-system-prompt-file", "...prompt.md",
     "--agents", '{"git-expert":{...}}']
         │
         ▼
-4. claude-runner/spawner.ts
-   child_process.spawn("claude", flags)
+5. claude-runner/spawner.ts
+   child_process.spawn("claude", flags, { env: { ...process.env, ...ghEnv } })
    stdio: 'inherit' → interactive TUI가 터미널에 표시됨
         │
         ▼
-5. logger/run-logger.ts
+6. logger/run-logger.ts
    RunLog JSON → .cc-company/runs/{timestamp}-{uuid}.json
    prompt: null, mode: "interactive"
 ```
@@ -154,7 +161,12 @@ src/
    store.getSkills(config.skills) → SkillConfig[]
         │
         ▼
-3. claude-runner/flag-builder.ts
+3. claude-runner/env-builder.ts
+   agent.gh_user → gh auth token → gh api /user → env 객체
+   gh_user 미설정 시 빈 env (시스템 기본값 사용)
+        │
+        ▼
+4. claude-runner/flag-builder.ts
    AgentConfig + SubagentConfig[] → claude CLI 플래그 배열
    prompt가 있으면 마지막 positional arg로 포함
    ["--append-system-prompt-file", "...prompt.md",
@@ -163,12 +175,12 @@ src/
     "버그 고쳐줘"]
         │
         ▼
-4. claude-runner/spawner.ts
-   child_process.spawn("claude", flags)
+5. claude-runner/spawner.ts
+   child_process.spawn("claude", flags, { env: { ...process.env, ...ghEnv } })
    stdout/stderr → 사용자에게 파이프 + 버퍼에 수집
         │
         ▼
-5. logger/run-logger.ts
+6. logger/run-logger.ts
    RunLog JSON → .cc-company/runs/{timestamp}-{uuid}.json
    prompt: "버그 고쳐줘", mode: "interactive"
 ```

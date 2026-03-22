@@ -223,3 +223,28 @@
 - 정수 ID는 삭제 후에도 기존 항목의 ID가 변하지 않아 안정적 참조 가능
 - UUID/해시는 이 규모에서 과잉. 파일 내 유니크면 충분
 - 새 항목 추가 시 `max(id) + 1`로 부여. AI가 파일을 읽고 직접 할당
+
+---
+
+## ADR-016: 에이전트별 GitHub 프로필 — gh CLI 멀티 계정 + 환경변수 주입
+
+**상태**: 확정 (2026-03-22)
+
+**맥락**: cc-company로 생성한 agent들이 commit/push/PR 시 서로 다른 GitHub 계정을 사용할 수 있어야 한다. GitHub에서 "누가 했는가"는 두 레이어로 나뉜다: Git commit identity (author/committer)와 GitHub API identity (push/PR 권한). 둘 다 에이전트별로 분리해야 한다.
+
+**결정**: gh CLI 멀티 계정 + 환경변수 주입
+
+**근거**:
+- gh CLI v2.40+는 네이티브 멀티 계정을 지원 (`gh auth login`으로 복수 계정 등록, `gh auth token --user X`로 토큰 추출)
+- `GH_TOKEN` 환경변수로 subprocess 단위 GitHub API 격리 가능 (병렬 실행 안전)
+- `GIT_AUTHOR_NAME`, `GIT_AUTHOR_EMAIL`, `GIT_COMMITTER_NAME`, `GIT_COMMITTER_EMAIL` 환경변수로 Git identity 격리
+- 별도 credential store나 SSH 키 관리 불필요 — gh CLI의 기존 인프라 활용
+- agent.json에 `gh_user` 필드만 추가하면 되므로 스키마 변경 최소
+- 프로필 정보(name, email)는 `gh api /user`로 동적 resolve하여 DRY 유지
+- 15분 in-memory 캐시로 반복 호출 절감
+
+**구현 위치**:
+- `src/claude-runner/env-builder.ts` (신규) — gh_user → env 변환 전담
+- `src/claude-runner/spawner.ts` — env 파라미터 추가
+- `src/services/run.service.ts` — env-builder 호출 → spawner 전달
+- `scripts/run-phases.py` — task index.json의 gh_user 필드 기반 동일 로직

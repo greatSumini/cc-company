@@ -4,6 +4,7 @@ import * as crypto from 'crypto'
 import type { IStore } from '../store/store.js'
 import type { RunLogger, SkillConfig } from '../types/index.js'
 import { buildFlags } from '../claude-runner/flag-builder.js'
+import { buildEnv } from '../claude-runner/env-builder.js'
 import { spawnClaude, type SpawnResult } from '../claude-runner/spawner.js'
 
 export class RunService {
@@ -78,10 +79,13 @@ export class RunService {
       passthroughFlags,
     })
 
+    // 5.5. buildEnv 호출
+    const env = buildEnv(agent.gh_user)
+
     // 6. spawnClaude 호출 (try/finally로 정리 보장)
     const startedAt = new Date()
     try {
-      const result = spawnClaude(flags)
+      const result = spawnClaude(flags, env)
       const finishedAt = new Date()
 
       // logger가 있으면 로그 저장
