@@ -57,7 +57,9 @@
     {
       "phase": 7,
       "name": "ticket-commands",
-      "status": "pending"
+      "status": "completed",
+      "started_at": "2026-03-22T18:12:19+0900",
+      "completed_at": "2026-03-22T18:14:30+0900"
     }
   ]
 }

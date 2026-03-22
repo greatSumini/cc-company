@@ -7,7 +7,8 @@ import { RunService } from '../services/run.service.js'
 import { RunLogger } from '../logger/run-logger.js'
 
 export interface CommandContext {
-  rootPath: string
+  basePath: string // process.cwd() - 프로젝트 루트
+  rootPath: string // .cc-company 디렉토리 경로
   store: FsStore
   agentService: AgentService
   resourceService: ResourceService
@@ -29,11 +30,13 @@ export function ensureInitialized(): void {
 export function createContext(): CommandContext {
   ensureInitialized()
 
+  const basePath = process.cwd()
   const rootPath = getRootPath()
   const store = new FsStore(rootPath)
   const logger = new RunLogger(path.join(rootPath, 'runs'))
 
   return {
+    basePath,
     rootPath,
     store,
     agentService: new AgentService(store),
