@@ -5,9 +5,27 @@
   "totalPhases": 4,
   "created_at": "2026-03-22T22:00:00+0900",
   "phases": [
-    { "phase": 0, "name": "docs-adr", "status": "pending" },
-    { "phase": 1, "name": "script-move", "status": "pending" },
-    { "phase": 2, "name": "soul-manager", "status": "pending" },
-    { "phase": 3, "name": "review-soul-prompt", "status": "pending" }
+    {
+      "phase": 0,
+      "name": "docs-adr",
+      "status": "completed",
+      "started_at": "2026-03-22T16:07:39+0900",
+      "completed_at": "2026-03-22T16:08:00+0900"
+    },
+    {
+      "phase": 1,
+      "name": "script-move",
+      "status": "pending"
+    },
+    {
+      "phase": 2,
+      "name": "soul-manager",
+      "status": "pending"
+    },
+    {
+      "phase": 3,
+      "name": "review-soul-prompt",
+      "status": "pending"
+    }
   ]
 }
