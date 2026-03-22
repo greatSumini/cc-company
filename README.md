@@ -154,3 +154,4 @@ cc-company translates your agent configuration into Claude Code CLI flags, then 
 ## License
 
 MIT
+
