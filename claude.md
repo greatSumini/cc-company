@@ -14,6 +14,7 @@ insights.toml / gotchas.toml 각각에 아래 형식의 TOML을 사용합니다:
 
 ```toml
 [[entries]]
+id = 1
 created_at = "2026-03-18"
 last_used_at = "2026-03-21"
 content = "주요 인사이트 또는 Gotcha 내용"
