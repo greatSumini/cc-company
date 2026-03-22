@@ -13,6 +13,10 @@ export function errorHandler(
 ): void {
   console.error('[Server Error]', err.message)
 
+  if (res.headersSent) {
+    return next(err)
+  }
+
   if (err instanceof OptimisticLockError) {
     res.status(409).json({ error: err.message })
     return
