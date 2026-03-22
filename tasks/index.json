@@ -60,8 +60,9 @@
       "id": 7,
       "name": "ticket-system",
       "dir": "7-ticket-system",
-      "status": "pending",
-      "created_at": "2026-03-22T21:30:00+0900"
+      "status": "completed",
+      "created_at": "2026-03-22T21:30:00+0900",
+      "completed_at": "2026-03-22T18:14:29+0900"
     }
   ]
 }
