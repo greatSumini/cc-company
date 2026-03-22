@@ -5,6 +5,7 @@ import * as path from 'path'
 import { TicketService } from '../../src/services/ticket.service'
 import { FsTicketStore } from '../../src/store/fs-ticket-store'
 import { FsStore } from '../../src/store/fs-store'
+import { DelegationPermissionError } from '../../src/store/ticket-store'
 
 describe('TicketService', () => {
   let testDir: string
@@ -141,7 +142,7 @@ describe('TicketService', () => {
           assignee: 'developer',
           createdBy: 'designer', // agent without delegation permission
         })
-      ).rejects.toThrow("Agent 'designer' does not have delegation permission")
+      ).rejects.toThrow(DelegationPermissionError)
     })
   })
 

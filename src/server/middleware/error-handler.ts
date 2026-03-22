@@ -3,6 +3,7 @@ import {
   OptimisticLockError,
   TicketNotFoundError,
   InvalidStatusTransitionError,
+  DelegationPermissionError,
 } from '../../store/ticket-store.js'
 
 export function errorHandler(
@@ -32,8 +33,7 @@ export function errorHandler(
     return
   }
 
-  // 위임 권한 에러
-  if (err.message.includes('does not have delegation permission')) {
+  if (err instanceof DelegationPermissionError) {
     res.status(403).json({ error: err.message })
     return
   }

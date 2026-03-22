@@ -46,3 +46,10 @@ export class InvalidStatusTransitionError extends Error {
     this.name = 'InvalidStatusTransitionError'
   }
 }
+
+export class DelegationPermissionError extends Error {
+  constructor(agentName: string) {
+    super(`Agent '${agentName}' does not have delegation permission`)
+    this.name = 'DelegationPermissionError'
+  }
+}

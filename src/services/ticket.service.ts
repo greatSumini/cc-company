@@ -1,3 +1,4 @@
+import { DelegationPermissionError } from '../store/ticket-store.js'
 import type { ITicketStore } from '../store/ticket-store.js'
 import type { IStore } from '../store/store.js'
 import type {
@@ -28,7 +29,7 @@ export class TicketService {
     if (input.createdBy !== 'user') {
       const agent = this.agentStore.getAgent(input.createdBy)
       if (!agent.can_delegate) {
-        throw new Error(`Agent '${input.createdBy}' does not have delegation permission`)
+        throw new DelegationPermissionError(input.createdBy)
       }
     }
 
