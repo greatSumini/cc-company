@@ -1,24 +1,29 @@
 [[entries]]
+id = 1
 created_at = "2026-03-18"
 last_used_at = "2026-03-21"
 content = "공동창업자. YC Batch 지원 목표. 속도를 최우선으로 둠 (2주 내 런칭)."
 
 [[entries]]
+id = 2
 created_at = "2026-03-18"
 last_used_at = "2026-03-21"
 content = "Claude Code 파워유저로 추정. subagent/skills/hooks 구조를 깊이 이해하고 있음."
 
 [[entries]]
+id = 3
 created_at = "2026-03-18"
 last_used_at = "2026-03-21"
 content = "아이디어맨 + 프로덕트 감각. 구체적 UX 비전이 있되, 우선순위를 조율할 의향 있음."
 
 [[entries]]
+id = 4
 created_at = "2026-03-19"
 last_used_at = "2026-03-21"
 content = "전환률/리텐션 최우선 사고방식. 시장 크기보다 좁은 타겟의 높은 전환률을 선호. TAM 확장은 후순위."
 
 [[entries]]
+id = 5
 created_at = "2026-03-19"
 last_used_at = "2026-03-21"
 content = "업계 레퍼런스(Claude Code 공식 인터페이스 등)를 적극 따르는 성향. 사용자가 기존 멘탈 모델로 기능과 내부 작동을 유추할 수 있어 학습 비용이 줄어든다는 판단. UI는 Google/Apple 가이드, React props는 HTML 스펙 네이밍을 따르는 것과 같은 원리."

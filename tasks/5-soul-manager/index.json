@@ -22,7 +22,9 @@
     {
       "phase": 2,
       "name": "soul-manager",
-      "status": "pending"
+      "status": "completed",
+      "started_at": "2026-03-22T16:12:55+0900",
+      "completed_at": "2026-03-22T16:16:31+0900"
     },
     {
       "phase": 3,
