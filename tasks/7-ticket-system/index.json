@@ -5,13 +5,47 @@
   "totalPhases": 8,
   "created_at": "2026-03-22T21:30:00+0900",
   "phases": [
-    { "phase": 0, "name": "docs", "status": "pending" },
-    { "phase": 1, "name": "types", "status": "pending" },
-    { "phase": 2, "name": "ticket-store", "status": "pending" },
-    { "phase": 3, "name": "ticket-service", "status": "pending" },
-    { "phase": 4, "name": "http-server", "status": "pending" },
-    { "phase": 5, "name": "agent-runner", "status": "pending" },
-    { "phase": 6, "name": "orchestrator", "status": "pending" },
-    { "phase": 7, "name": "ticket-commands", "status": "pending" }
+    {
+      "phase": 0,
+      "name": "docs",
+      "status": "completed",
+      "started_at": "2026-03-22T17:49:58+0900",
+      "completed_at": "2026-03-22T17:54:30+0900"
+    },
+    {
+      "phase": 1,
+      "name": "types",
+      "status": "pending"
+    },
+    {
+      "phase": 2,
+      "name": "ticket-store",
+      "status": "pending"
+    },
+    {
+      "phase": 3,
+      "name": "ticket-service",
+      "status": "pending"
+    },
+    {
+      "phase": 4,
+      "name": "http-server",
+      "status": "pending"
+    },
+    {
+      "phase": 5,
+      "name": "agent-runner",
+      "status": "pending"
+    },
+    {
+      "phase": 6,
+      "name": "orchestrator",
+      "status": "pending"
+    },
+    {
+      "phase": 7,
+      "name": "ticket-commands",
+      "status": "pending"
+    }
   ]
 }

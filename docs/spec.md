@@ -38,6 +38,32 @@ cc-company agent remove <name>    # agent 삭제
 cc-company agent <name> show      # agent 상세 조회 (할당된 리소스 포함)
 ```
 
+### 데몬 모드 실행
+
+```bash
+cc-company start          # Ticket Server + 모든 agent worker 시작
+```
+
+- Ticket Server를 시작하고 모든 등록된 agent의 worker 프로세스를 spawn
+- 각 agent worker는 자신에게 할당된 ticket을 polling하며 대기
+- 3분간 작업 없으면 해당 agent worker 자동 종료
+- 모든 agent 종료 후에도 서버는 유지 (Ctrl+C로 종료)
+- 기존 `cc-company run <agent>` 명령어는 1회성 실행으로 유지
+
+### Ticket 관리
+
+```bash
+cc-company ticket create --assignee <agent> [--cc <agents>] --title <title> --prompt <prompt> [--priority <p>]
+cc-company ticket list [--status <s>] [--assignee <a>]
+cc-company ticket show <id>
+cc-company ticket cancel <id>
+```
+
+- `--cc`: 쉼표로 구분된 agent 목록 (예: `--cc designer,hr`)
+- `--priority`: `low`, `normal`, `high`, `urgent` (기본값: `normal`)
+- cc가 있으면 원본 ticket은 `blocked` 상태로 생성되고, cc된 agent 수만큼 `cc_review` ticket이 함께 생성됨
+- `cc_review` ticket 완료 시 의견이 원본 ticket의 comments에 복사됨
+
 ### Agent 리소스 할당
 
 ```bash
@@ -100,6 +126,7 @@ cc-company hook add|list|remove <name>
   "name": "developer",
   "description": "소프트웨어 개발 전담 에이전트",
   "gh_user": "dev-bot",
+  "can_delegate": true,
   "subagents": ["git-expert", "code-reviewer"],
   "skills": ["deploy"],
   "hooks": ["pre-commit"]
@@ -109,6 +136,55 @@ cc-company hook add|list|remove <name>
 - 모든 리소스 필드는 optional
 - 값은 공용 풀의 리소스 이름(식별자) 배열
 - `gh_user`: optional. gh CLI에 등록된 GitHub 계정명. 설정 시 해당 계정의 토큰과 Git identity로 commit/push/PR 수행. 미설정 시 현재 활성 계정 사용.
+- `can_delegate`: optional. true이면 다른 agent에게 ticket 위임(생성) 가능. 기본값 false.
+
+## Ticket JSON 스키마
+
+```json
+{
+  "id": "uuid",
+  "title": "버그 수정",
+  "prompt": "로그인 버튼이 동작하지 않는 버그를 수정해주세요.",
+  "type": "task",
+  "parentTicketId": null,
+  "ccReviewTicketIds": ["cc-001", "cc-002"],
+  "assignee": "developer",
+  "priority": "normal",
+  "status": "ready",
+  "createdBy": "user",
+  "createdAt": "2026-03-22T10:00:00+0900",
+  "startedAt": null,
+  "completedAt": null,
+  "cancelledAt": null,
+  "result": null,
+  "comments": [],
+  "version": 1
+}
+```
+
+- `type`: `task` (실제 작업) 또는 `cc_review` (참조 확인 요청)
+- `parentTicketId`: `cc_review`인 경우 원본 ticket ID
+- `ccReviewTicketIds`: `task`인 경우 연결된 `cc_review` ticket ID 목록
+- `status`: `blocked`, `ready`, `in_progress`, `completed`, `failed`, `cancelled`
+- `priority`: `low`, `normal`, `high`, `urgent`. `cc_review`는 parent의 priority를 따름
+- `createdBy`: `user` 또는 agent name (위임 시)
+- `result`: 완료 시 `{ exitCode: number, logPath: string }`
+- `comments`: `[{ id, author, content, createdAt }]`
+- `version`: 낙관적 락용 버전 번호
+
+## config.json 확장
+
+```json
+{
+  "version": "1.0.0",
+  "ticketServer": {
+    "port": 3847,
+    "pollingIntervalMs": 5000,
+    "idleTimeoutMs": 180000,
+    "heartbeatTimeoutMs": 30000
+  }
+}
+```
 
 ## Subagent MD 형식
 

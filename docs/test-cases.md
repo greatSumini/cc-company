@@ -159,3 +159,55 @@ store는 in-memory fake 또는 실제 fs-store + 임시 디렉토리.
 ✓ 캐시 만료 (TTL 초과) → resolver 함수 재실행
 ✓ ghUser 변경 → 이전 캐시 무효화, 새 resolver 실행
 ```
+
+## fs-ticket-store (통합, ~15개)
+
+[CRUD 기본]
+✓ create() 기본 — ticket 생성 후 파일 존재, 필수 필드 확인
+✓ create() ID 자동 생성 — uuid 형식 검증
+✓ get() 존재하는 ticket — 정상 반환
+✓ get() 존재하지 않는 ticket — null 반환
+✓ list() 필터 없음 — 전체 목록 반환
+✓ list() status 필터 — 해당 status만 반환
+✓ list() assignee 필터 — 해당 assignee만 반환
+✓ list() 복합 필터 — status + assignee 동시 적용
+
+[update 및 낙관적 락]
+✓ update() 정상 — 필드 업데이트, version 증가
+✓ update() 낙관적 락 실패 — version 불일치 시 에러
+
+[cancel]
+✓ cancel() blocked 상태 — 정상 취소, cancelledAt 기록
+✓ cancel() ready 상태 — 정상 취소
+✓ cancel() in_progress 상태 — 에러 (취소 불가)
+
+[comments 및 log]
+✓ addComment() — comments 배열에 추가
+✓ saveLog() / getLog() — 로그 파일 저장/조회
+
+## agent-status-store (통합, ~6개)
+
+✓ updateHeartbeat() — lastHeartbeatAt 갱신
+✓ updateState() — state 변경 (idle → working)
+✓ getAll() — 전체 agent 상태 반환
+✓ get() 존재하는 agent — 정상 반환
+✓ get() 존재하지 않는 agent — null 반환
+✓ offline 판정 — heartbeatTimeout 초과 시 state=offline
+
+## ticket.service (유닛, ~10개)
+
+[createTicket]
+✓ cc 없음 — task ticket 생성, status=ready
+✓ cc 있음 — task(blocked) + cc_review(ready) 생성
+✓ cc_review priority — parent priority와 동일
+✓ 위임 (agent → agent) — can_delegate=true 확인
+✓ 위임 권한 없음 — can_delegate=false 시 에러
+
+[priority 및 cancel]
+✓ updatePriority() task — 연결된 cc_review도 함께 변경
+✓ cancelTicket() task with cc_review — 연결된 cc_review도 함께 취소
+
+[cc completion]
+✓ checkCcCompletion() 일부 완료 — parent 상태 유지 (blocked)
+✓ checkCcCompletion() 전체 완료 — parent status → ready, comments 복사
+✓ addComment() cc_review — parent ticket에도 comment 복사
