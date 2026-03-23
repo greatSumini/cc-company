@@ -36,7 +36,9 @@
     {
       "phase": 4,
       "name": "pr-event-service",
-      "status": "pending"
+      "status": "completed",
+      "started_at": "2026-03-23T19:43:34+0900",
+      "completed_at": "2026-03-23T19:45:30+0900"
     },
     {
       "phase": 5,
