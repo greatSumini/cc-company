@@ -1,0 +1,17 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 기본 스타일 */
+body {
+  @apply bg-gray-50 text-gray-900 antialiased;
+}
+
+/* 옅은 shadow 유틸리티 */
+.card {
+  @apply bg-white rounded-lg shadow-soft border border-gray-100;
+}
+
+.card-hover {
+  @apply hover:shadow-soft-md transition-shadow duration-200;
+}
