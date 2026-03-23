@@ -1,11 +1,11 @@
 # Configuration
 
-cc-company의 설정 파일 스키마.
+agentinc의 설정 파일 스키마.
 
 ## Directory Structure
 
 ```
-.cc-company/
+.agentinc/
 ├── config.json           # 프로젝트 설정
 ├── agents/
 │   └── <agent-name>/

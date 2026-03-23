@@ -1,4 +1,4 @@
-# cc-company Testing Strategy
+# agentinc Testing Strategy
 
 ## 원칙
 

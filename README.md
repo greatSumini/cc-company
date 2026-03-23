@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./assets/banner.png" alt="cc-company" width="100%" />
+  <img src="./assets/banner.png" alt="agentinc" width="100%" />
 </p>
 
 <p align="center">
@@ -7,8 +7,8 @@
 </p>
 
 <p align="center">
-  <a href="https://www.npmjs.com/package/cc-company"><img src="https://img.shields.io/npm/v/cc-company.svg" alt="npm version" /></a>
-  <a href="https://github.com/choesumin/cc-company/blob/main/LICENSE"><img src="https://img.shields.io/npm/l/cc-company.svg" alt="license" /></a>
+  <a href="https://www.npmjs.com/package/agentinc"><img src="https://img.shields.io/npm/v/agentinc.svg" alt="npm version" /></a>
+  <a href="https://github.com/greatSumini/agentinc/blob/main/LICENSE"><img src="https://img.shields.io/npm/l/agentinc.svg" alt="license" /></a>
 </p>
 
 ---
@@ -19,7 +19,7 @@ Claude Code supports subagents, skills, hooks, MCP, and settings.
 But there's **no way to bundle them per role.**
 
 A frontend developer needs a different setup than a backend developer.
-If you're manually combining CLI flags or copying configs every time — that's what cc-company solves.
+If you're manually combining CLI flags or copying configs every time — that's what agentinc solves.
 
 ## The Solution
 
@@ -27,25 +27,25 @@ If you're manually combining CLI flags or copying configs every time — that's 
 System prompt + subagents + skills + hooks + MCP — all in one unit.
 
 ```bash
-cc-company run backend-dev "Optimize the slow query"
+agentinc run backend-dev "Optimize the slow query"
 # → runs with db-expert subagent, deploy skill, backend-dev prompt
 ```
 
-`.cc-company/` is committed to git. Your entire team shares the same agent setup.
+`.agentinc/` is committed to git. Your entire team shares the same agent setup.
 
 ## Features
 
-- **Role-based execution**: `cc-company run <agent>` — one command switches everything
+- **Role-based execution**: `agentinc run <agent>` — one command switches everything
 - **Daemon mode**: Ticket-based async task processing with agent workers
 - **GitHub Webhook**: PR comment → auto ticket → agent handles it
-- **Team sharing**: Commit `.cc-company/` and sync the whole team
+- **Team sharing**: Commit `.agentinc/` and sync the whole team
 
 ## Quick Start
 
 ```bash
-npm install -g cc-company
-cc-company init
-cc-company run developer "Fix the login bug"
+npm install -g agentinc
+agentinc init
+agentinc run developer "Fix the login bug"
 ```
 
 > Requires [Claude Code](https://docs.anthropic.com/en/docs/claude-code) CLI installed and authenticated.

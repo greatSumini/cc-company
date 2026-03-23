@@ -35,11 +35,11 @@ GitHub PR event
 2. "Start a new channel" 클릭
 3. URL 복사 (예: `https://smee.io/abcd1234`)
 
-### 2. cc-company 설정
+### 2. agentinc 설정
 
 ```bash
-cc-company webhook setup https://smee.io/abcd1234
-cc-company webhook set-secret your-webhook-secret
+agentinc webhook setup https://smee.io/abcd1234
+agentinc webhook set-secret your-webhook-secret
 ```
 
 ### 3. GitHub Webhook 등록
@@ -55,7 +55,7 @@ Repository Settings → Webhooks → Add webhook:
 
 ### 4. Agent에 gh_user 설정
 
-`.cc-company/agents/developer/agent.json`:
+`.agentinc/agents/developer/agent.json`:
 
 ```json
 {
@@ -69,7 +69,7 @@ PR author가 `gh_user`와 일치하면 해당 agent에 ticket 할당.
 ### 5. 서버 시작
 
 ```bash
-cc-company start
+agentinc start
 ```
 
 ## Approve Condition
@@ -78,15 +78,15 @@ PR merge ticket 생성 조건:
 
 ```bash
 # 최소 1개 approve면 merge ticket 생성 (기본값)
-cc-company webhook set-approve-condition any
+agentinc webhook set-approve-condition any
 
 # 모든 requested reviewer가 approve해야 merge ticket 생성
-cc-company webhook set-approve-condition all
+agentinc webhook set-approve-condition all
 ```
 
 ## Configuration
 
-`.cc-company/config.json`:
+`.agentinc/config.json`:
 
 ```json
 {

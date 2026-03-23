@@ -1,4 +1,4 @@
-# cc-company Architecture
+# agentinc Architecture
 
 ## 기술 스택
 
@@ -128,7 +128,7 @@ Claude CLI와의 인터페이스 전담.
 
 ### Logger
 
-- **run-logger.ts** — 실행 메타데이터 + stdout/stderr를 `.cc-company/runs/`에 JSON으로 저장
+- **run-logger.ts** — 실행 메타데이터 + stdout/stderr를 `.agentinc/runs/`에 JSON으로 저장
 
 ## 소스 디렉토리 구조
 
@@ -184,7 +184,7 @@ src/
 
 ## 데이터 흐름
 
-### Interactive Mode 예시: `cc-company run developer`
+### Interactive Mode 예시: `agentinc run developer`
 
 ```
 1. commands/run.ts
@@ -217,11 +217,11 @@ src/
         │
         ▼
 6. logger/run-logger.ts
-   RunLog JSON → .cc-company/runs/{timestamp}-{uuid}.json
+   RunLog JSON → .agentinc/runs/{timestamp}-{uuid}.json
    prompt: null, mode: "interactive"
 ```
 
-### Interactive Mode with Prompt 예시: `cc-company run developer "버그 고쳐줘" --model opus`
+### Interactive Mode with Prompt 예시: `agentinc run developer "버그 고쳐줘" --model opus`
 
 ```
 1. commands/run.ts
@@ -257,7 +257,7 @@ src/
         │
         ▼
 6. logger/run-logger.ts
-   RunLog JSON → .cc-company/runs/{timestamp}-{uuid}.json
+   RunLog JSON → .agentinc/runs/{timestamp}-{uuid}.json
    prompt: "버그 고쳐줘", mode: "interactive"
 ```
 
@@ -267,16 +267,16 @@ run.service에서 skills resolve 후:
 
 ```
 1. stale temp 정리
-   .cc-company/.tmp/run-* 중 1시간 이상 경과한 디렉토리 자동 삭제
+   .agentinc/.tmp/run-* 중 1시간 이상 경과한 디렉토리 자동 삭제
 
 2. 임시 디렉토리 생성
-   .cc-company/.tmp/run-{uuid}/.claude/skills/ 생성
+   .agentinc/.tmp/run-{uuid}/.claude/skills/ 생성
 
 3. skill 디렉토리 복사
    할당된 skill 디렉토리 전체를 임시 경로로 복사
 
 4. flag-builder
-   addDirPath: ".cc-company/.tmp/run-{uuid}" → --add-dir 플래그 생성
+   addDirPath: ".agentinc/.tmp/run-{uuid}" → --add-dir 플래그 생성
 
 5. spawner
    child_process.spawn("claude", [...flags, "--add-dir", addDirPath])
@@ -299,7 +299,7 @@ interface FlagBuilderInput {
 }
 ```
 
-### 데몬 모드 예시: `cc-company start`
+### 데몬 모드 예시: `agentinc start`
 
 ```
 1. commands/start.ts
@@ -334,7 +334,7 @@ interface FlagBuilderInput {
 ### Ticket 생성 → 처리 흐름 (cc 포함)
 
 ```
-1. cc-company ticket create --assignee developer --cc designer
+1. agentinc ticket create --assignee developer --cc designer
         │
         ▼
 2. HTTP POST /tickets
@@ -365,7 +365,7 @@ interface FlagBuilderInput {
 1. GitHub에서 PR review comment 작성
         │
         ▼
-2. Webhook 발송 → smee.io (로컬) 또는 cc-company 서버 (원격)
+2. Webhook 발송 → smee.io (로컬) 또는 agentinc 서버 (원격)
         │
         ▼
 3. SmeeReceiver / SseReceiver가 이벤트 수신

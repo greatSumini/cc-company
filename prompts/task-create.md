@@ -84,8 +84,8 @@ Baseline: `a1b2c3d`
 
 \`\`\`diff
 @@ -45,6 +45,18 @@
- ### `cc-company agent list`
-+### `cc-company run <agent-name>`
+ ### `agentinc agent list`
++### `agentinc run <agent-name>`
 +...
 \`\`\`
 ```
