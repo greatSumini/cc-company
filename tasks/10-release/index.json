@@ -16,7 +16,8 @@
       "phase": 1,
       "name": "release-script",
       "status": "completed",
-      "started_at": "2026-03-23T20:42:11+0900"
+      "started_at": "2026-03-23T20:42:11+0900",
+      "completed_at": "2026-03-23T20:43:53+0900"
     },
     {
       "phase": 2,
