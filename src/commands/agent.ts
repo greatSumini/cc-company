@@ -8,7 +8,7 @@ export function registerAgentCommand(program: Command): void {
     .allowUnknownOption()
     .allowExcessArguments()
 
-  // agent-inc agent create <name>
+  // agentinc agent create <name>
   agentCmd
     .command('create <name>')
     .description('Create a new agent')
@@ -24,7 +24,7 @@ export function registerAgentCommand(program: Command): void {
       }
     })
 
-  // agent-inc agent list
+  // agentinc agent list
   agentCmd
     .command('list')
     .description('List all agents')
@@ -43,7 +43,7 @@ export function registerAgentCommand(program: Command): void {
       }
     })
 
-  // agent-inc agent remove <name>
+  // agentinc agent remove <name>
   agentCmd
     .command('remove <name>')
     .description('Remove an agent')
@@ -58,7 +58,7 @@ export function registerAgentCommand(program: Command): void {
       }
     })
 
-  // agent-inc agent show <name>
+  // agentinc agent show <name>
   agentCmd
     .command('show <name>')
     .description('Show agent details')
@@ -78,7 +78,7 @@ export function registerAgentCommand(program: Command): void {
       }
     })
 
-  // agent-inc agent add <agent-name> <resource-type> <resource-name>
+  // agentinc agent add <agent-name> <resource-type> <resource-name>
   agentCmd
     .command('add <agent-name> <resource-type> <resource-name>')
     .description('Add a resource to an agent')
@@ -108,7 +108,7 @@ export function registerAgentCommand(program: Command): void {
       }
     })
 
-  // agent-inc agent unassign <agent-name> <resource-type> <resource-name>
+  // agentinc agent unassign <agent-name> <resource-type> <resource-name>
   agentCmd
     .command('unassign <agent-name> <resource-type> <resource-name>')
     .description('Remove a resource from an agent')

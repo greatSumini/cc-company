@@ -22,7 +22,7 @@ export function getRootPath(): string {
 export function ensureInitialized(): void {
   const rootPath = getRootPath()
   if (!fs.existsSync(rootPath)) {
-    console.error('agent-inc가 초기화되지 않았습니다. `agent-inc init`을 먼저 실행하세요.')
+    console.error('agentinc가 초기화되지 않았습니다. `agentinc init`을 먼저 실행하세요.')
     process.exit(1)
   }
 }

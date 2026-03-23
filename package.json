@@ -1,10 +1,10 @@
 {
-  "name": "agent-inc",
+  "name": "@greatsumini/agentinc",
   "version": "0.2.0",
   "description": "Run Claude Code like a company — organize AI agents by role, run them with one command",
   "main": "dist/index.js",
   "bin": {
-    "agent-inc": "dist/index.js"
+    "agentinc": "dist/index.js"
   },
   "scripts": {
     "build": "tsc",

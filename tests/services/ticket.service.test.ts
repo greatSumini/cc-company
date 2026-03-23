@@ -24,7 +24,7 @@ describe('TicketService', () => {
     ticketStore = new FsTicketStore(testDir)
 
     // FsStore는 rootPath를 받아 agents/ 등에 접근
-    // .agent-inc 내부 구조 생성
+    // .agentinc 내부 구조 생성
     fs.mkdirSync(path.join(ccCompanyDir, 'agents'), { recursive: true })
     fs.writeFileSync(
       path.join(ccCompanyDir, 'config.json'),

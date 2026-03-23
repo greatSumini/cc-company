@@ -6,7 +6,7 @@ export function registerSubagentCommand(program: Command): void {
     .command('subagent')
     .description('Manage shared subagents')
 
-  // agent-inc subagent add <name>
+  // agentinc subagent add <name>
   subagentCmd
     .command('add <name>')
     .description('Add a new subagent to the shared pool')
@@ -23,7 +23,7 @@ export function registerSubagentCommand(program: Command): void {
       }
     })
 
-  // agent-inc subagent list
+  // agentinc subagent list
   subagentCmd
     .command('list')
     .description('List all shared subagents')
@@ -42,7 +42,7 @@ export function registerSubagentCommand(program: Command): void {
       }
     })
 
-  // agent-inc subagent remove <name>
+  // agentinc subagent remove <name>
   subagentCmd
     .command('remove <name>')
     .description('Remove a subagent from the shared pool')

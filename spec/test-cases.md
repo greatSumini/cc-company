@@ -1,4 +1,4 @@
-# agent-inc Test Cases
+# agentinc Test Cases
 
 ## flag-builder (유닛, ~15개)
 

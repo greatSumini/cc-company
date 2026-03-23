@@ -1,6 +1,6 @@
 # Getting Started
 
-agent-inc를 설치하고 첫 agent를 실행하는 방법.
+agentinc를 설치하고 첫 agent를 실행하는 방법.
 
 ## Prerequisites
 
@@ -10,7 +10,7 @@ agent-inc를 설치하고 첫 agent를 실행하는 방법.
 ## Installation
 
 ```bash
-npm install -g agent-inc
+npm install -g @greatsumini/agentinc
 ```
 
 ## Initialize
@@ -18,7 +18,7 @@ npm install -g agent-inc
 프로젝트 루트에서:
 
 ```bash
-agent-inc init
+agentinc init
 ```
 
 `.agentinc/` 디렉토리가 생성되며, 기본 agent 3개가 포함됨:
@@ -30,19 +30,19 @@ agent-inc init
 
 ```bash
 # Interactive TUI
-agent-inc run developer
+agentinc run developer
 
 # Interactive + initial prompt
-agent-inc run developer "Fix the login bug"
+agentinc run developer "Fix the login bug"
 
 # Headless print mode (for scripts/CI)
-agent-inc run developer -p "Run all tests"
+agentinc run developer -p "Run all tests"
 ```
 
 ## Create Custom Agent
 
 ```bash
-agent-inc agent create backend-dev
+agentinc agent create backend-dev
 ```
 
 생성된 agent 디렉토리:
@@ -58,10 +58,10 @@ agent-inc agent create backend-dev
 
 ```bash
 # Add subagent
-agent-inc agent backend-dev add subagent db-expert
+agentinc agent backend-dev add subagent db-expert
 
 # Add skill
-agent-inc agent backend-dev add skill deploy
+agentinc agent backend-dev add skill deploy
 ```
 
 ## Team Sharing
@@ -70,7 +70,7 @@ agent-inc agent backend-dev add skill deploy
 
 ```bash
 git add .agentinc/
-git commit -m "Add agent-inc agents"
+git commit -m "Add agentinc agents"
 ```
 
 ## Next Steps

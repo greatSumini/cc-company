@@ -1,5 +1,5 @@
 """
-Shared utilities for agent-inc scripts.
+Shared utilities for agentinc scripts.
 """
 
 import os

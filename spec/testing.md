@@ -1,4 +1,4 @@
-# agent-inc Testing Strategy
+# agentinc Testing Strategy
 
 ## 원칙
 

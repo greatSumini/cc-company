@@ -1,4 +1,4 @@
-# agent-inc Architecture
+# agentinc Architecture
 
 ## 기술 스택
 
@@ -184,7 +184,7 @@ src/
 
 ## 데이터 흐름
 
-### Interactive Mode 예시: `agent-inc run developer`
+### Interactive Mode 예시: `agentinc run developer`
 
 ```
 1. commands/run.ts
@@ -221,7 +221,7 @@ src/
    prompt: null, mode: "interactive"
 ```
 
-### Interactive Mode with Prompt 예시: `agent-inc run developer "버그 고쳐줘" --model opus`
+### Interactive Mode with Prompt 예시: `agentinc run developer "버그 고쳐줘" --model opus`
 
 ```
 1. commands/run.ts
@@ -299,7 +299,7 @@ interface FlagBuilderInput {
 }
 ```
 
-### 데몬 모드 예시: `agent-inc start`
+### 데몬 모드 예시: `agentinc start`
 
 ```
 1. commands/start.ts
@@ -334,7 +334,7 @@ interface FlagBuilderInput {
 ### Ticket 생성 → 처리 흐름 (cc 포함)
 
 ```
-1. agent-inc ticket create --assignee developer --cc designer
+1. agentinc ticket create --assignee developer --cc designer
         │
         ▼
 2. HTTP POST /tickets
@@ -365,7 +365,7 @@ interface FlagBuilderInput {
 1. GitHub에서 PR review comment 작성
         │
         ▼
-2. Webhook 발송 → smee.io (로컬) 또는 agent-inc 서버 (원격)
+2. Webhook 발송 → smee.io (로컬) 또는 agentinc 서버 (원격)
         │
         ▼
 3. SmeeReceiver / SseReceiver가 이벤트 수신

@@ -13,9 +13,9 @@ import { registerWebhookCommand } from './commands/webhook.js'
 const program = new Command()
 
 program
-  .name('agent-inc')
+  .name('agentinc')
   .description('Run Claude Code like a company')
-  .version('0.1.0')
+  .version('0.2.0')
 
 registerInitCommand(program)
 registerRunCommand(program)
