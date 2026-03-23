@@ -3,11 +3,11 @@
 ## 사전 준비
 
 먼저 아래 문서들을 반드시 읽고 프로젝트의 전체 아키텍처와 설계 의도를 완전히 이해하라:
-- `/docs/spec.md` — Claude Code 플래그 매핑 테이블
-- `/docs/architecture.md` — claude-runner 모듈의 역할, 데이터 흐름
-- `/docs/adr.md` — ADR-001 (child_process spawn), ADR-003 (플래그 패스스루)
-- `/docs/testing.md` — 테스트 전략
-- `/docs/test-cases.md` — flag-builder 테스트 케이스
+- `/spec/spec.md` — Claude Code 플래그 매핑 테이블
+- `/spec/architecture.md` — claude-runner 모듈의 역할, 데이터 흐름
+- `/spec/adr.md` — ADR-001 (child_process spawn), ADR-003 (플래그 패스스루)
+- `/spec/testing.md` — 테스트 전략
+- `/spec/test-cases.md` — flag-builder 테스트 케이스
 
 그리고 이전 phase의 작업물을 반드시 확인하라:
 - `src/types/index.ts` — AgentConfig, SubagentConfig 등
@@ -91,7 +91,7 @@ export function spawnClaude(flags: string[]): SpawnResult
 
 `tests/claude-runner/flag-builder.test.ts`
 
-`/docs/test-cases.md`의 flag-builder 섹션에 정의된 케이스를 구현하라:
+`/spec/test-cases.md`의 flag-builder 섹션에 정의된 케이스를 구현하라:
 
 ```
 [기본]

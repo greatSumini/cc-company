@@ -4,12 +4,12 @@
 
 먼저 아래 문서들을 반드시 읽고 프로젝트의 전체 아키텍처와 설계 의도를 완전히 이해하라:
 
-- `/docs/spec.md`
-- `/docs/architecture.md`
-- `/docs/adr.md`
-- `/docs/testing.md`
-- `/docs/test-cases.md`
-- `/tasks/2-frontmatter-md/docs-diff.md` (이번 task의 문서 변경 기록)
+- `/spec/spec.md`
+- `/spec/architecture.md`
+- `/spec/adr.md`
+- `/spec/testing.md`
+- `/spec/test-cases.md`
+- `/tasks/2-frontmatter-md/spec-diff.md` (이번 task의 문서 변경 기록)
 
 그리고 아래 기존 코드를 반드시 읽어라:
 
@@ -97,7 +97,7 @@ export function serializeSkillMd(config: SkillConfig): string
 
 ### 4. `/tests/utils/frontmatter.test.ts` 생성
 
-`/docs/test-cases.md`에 정의된 테스트 케이스를 구현하라:
+`/spec/test-cases.md`에 정의된 테스트 케이스를 구현하라:
 
 ```
 [파싱 - subagent]

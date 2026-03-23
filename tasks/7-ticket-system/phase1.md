@@ -4,10 +4,10 @@
 
 먼저 아래 문서들을 반드시 읽고 프로젝트의 전체 아키텍처와 설계 의도를 완전히 이해하라:
 
-- `/docs/spec.md`
-- `/docs/architecture.md`
-- `/docs/adr.md`
-- `/tasks/7-ticket-system/docs-diff.md` (이번 task의 문서 변경 기록)
+- `/spec/spec.md`
+- `/spec/architecture.md`
+- `/spec/adr.md`
+- `/tasks/7-ticket-system/spec-diff.md` (이번 task의 문서 변경 기록)
 
 그리고 기존 타입 정의를 확인하라:
 

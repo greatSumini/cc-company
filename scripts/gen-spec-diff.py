@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """
-Generate docs-diff.md from git diff against a baseline commit.
+Generate spec-diff.md from git diff against a baseline commit.
 
-Usage: python3 gen-docs-diff.py <task-dir> <baseline-commit>
-Example: python3 gen-docs-diff.py tasks/1-run-cmd a1b2c3d
+Usage: python3 gen-spec-diff.py <task-dir> <baseline-commit>
+Example: python3 gen-spec-diff.py tasks/1-run-cmd a1b2c3d
 
-Compares the current state of docs/ against the baseline commit
-and writes a formatted markdown file to <task-dir>/docs-diff.md.
+Compares the current state of spec/ against the baseline commit
+and writes a formatted markdown file to <task-dir>/spec-diff.md.
 """
 
 import subprocess
@@ -18,7 +18,7 @@ from _utils import find_project_root
 ROOT = find_project_root()
 
 
-def git_diff(baseline: str, path: str = "docs/") -> str:
+def git_diff(baseline: str, path: str = "spec/") -> str:
     r = subprocess.run(
         ["git", "diff", baseline, "--", path],
         cwd=str(ROOT), capture_output=True, text=True,
@@ -28,7 +28,7 @@ def git_diff(baseline: str, path: str = "docs/") -> str:
 
 def git_diff_names(baseline: str) -> list[str]:
     r = subprocess.run(
-        ["git", "diff", baseline, "--name-only", "--", "docs/"],
+        ["git", "diff", baseline, "--name-only", "--", "spec/"],
         cwd=str(ROOT), capture_output=True, text=True,
     )
     return [f for f in r.stdout.strip().splitlines() if f]
@@ -46,13 +46,13 @@ def main():
     changed_files = git_diff_names(baseline)
 
     if not changed_files:
-        (task_dir / "docs-diff.md").write_text(
-            f"# docs-diff: {task_name}\n\nNo documentation changes.\n"
+        (task_dir / "spec-diff.md").write_text(
+            f"# spec-diff: {task_name}\n\nNo documentation changes.\n"
         )
-        print(f"  docs-diff.md: no changes")
+        print(f"  spec-diff.md: no changes")
         return
 
-    lines = [f"# docs-diff: {task_name}\n"]
+    lines = [f"# spec-diff: {task_name}\n"]
     lines.append(f"Baseline: `{baseline[:7]}`\n")
 
     for fpath in changed_files:
@@ -60,8 +60,8 @@ def main():
         lines.append(f"## `{fpath}`\n")
         lines.append(f"```diff\n{diff}```\n")
 
-    (task_dir / "docs-diff.md").write_text("\n".join(lines))
-    print(f"  docs-diff.md: {len(changed_files)} file(s)")
+    (task_dir / "spec-diff.md").write_text("\n".join(lines))
+    print(f"  spec-diff.md: {len(changed_files)} file(s)")
 
 
 if __name__ == "__main__":

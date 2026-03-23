@@ -4,11 +4,11 @@
 
 먼저 아래 문서들을 반드시 읽고 프로젝트의 전체 아키텍처와 설계 의도를 완전히 이해하라:
 
-- `/docs/spec.md`
-- `/docs/architecture.md`
-- `/docs/adr.md`
-- `/docs/test-cases.md`
-- `/docs/testing.md`
+- `/spec/spec.md`
+- `/spec/architecture.md`
+- `/spec/adr.md`
+- `/spec/test-cases.md`
+- `/spec/testing.md`
 
 ## 작업 내용
 

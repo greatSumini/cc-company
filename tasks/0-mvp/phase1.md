@@ -3,9 +3,9 @@
 ## 사전 준비
 
 먼저 아래 문서들을 반드시 읽고 프로젝트의 전체 아키텍처와 설계 의도를 완전히 이해하라:
-- `/docs/spec.md` — CLI 스펙, 디렉토리 구조, 스키마
-- `/docs/architecture.md` — 레이어 구조, 소스 디렉토리, 데이터 흐름
-- `/docs/adr.md` — 아키텍처 결정 사항
+- `/spec/spec.md` — CLI 스펙, 디렉토리 구조, 스키마
+- `/spec/architecture.md` — 레이어 구조, 소스 디렉토리, 데이터 흐름
+- `/spec/adr.md` — 아키텍처 결정 사항
 
 그리고 이전 phase의 작업물을 확인하라:
 - `src/index.ts` — CLI 엔트리포인트 구조
@@ -17,7 +17,7 @@
 
 ### src/types/index.ts
 
-프로젝트 전체에서 사용할 타입을 정의한다. `/docs/spec.md`의 스키마 정의를 정확히 반영하라.
+프로젝트 전체에서 사용할 타입을 정의한다. `/spec/spec.md`의 스키마 정의를 정확히 반영하라.
 
 #### AgentConfig
 
@@ -94,7 +94,7 @@ npm run build             # 타입 에러 없이 컴파일 성공
 ```
 
 - 모든 타입이 `src/types/index.ts`에서 export되어야 한다.
-- `/docs/spec.md`의 스키마와 1:1 대응되어야 한다.
+- `/spec/spec.md`의 스키마와 1:1 대응되어야 한다.
 
 ## AC 검증 방법
 

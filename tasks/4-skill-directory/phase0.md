@@ -4,12 +4,12 @@
 
 먼저 아래 문서들을 반드시 읽고 프로젝트의 전체 아키텍처와 설계 의도를 완전히 이해하라:
 
-- `/docs/spec.md`
-- `/docs/architecture.md`
-- `/docs/adr.md`
-- `/docs/testing.md`
-- `/docs/test-cases.md`
-- `/docs/external/claude-skills-framework.md`
+- `/spec/spec.md`
+- `/spec/architecture.md`
+- `/spec/adr.md`
+- `/spec/testing.md`
+- `/spec/test-cases.md`
+- `/spec/external/claude-skills-framework.md`
 
 ## 작업 내용
 
@@ -17,7 +17,7 @@
 
 아래 문서들을 업데이트하라. 기존 내용의 맥락과 톤을 유지하되, 변경되는 부분만 정확히 반영하라.
 
-### 1. `/docs/adr.md` — ADR 2개 추가
+### 1. `/spec/adr.md` — ADR 2개 추가
 
 **ADR-013: Skill 저장 형식을 단일 MD에서 디렉토리로 전환**
 
@@ -31,7 +31,7 @@
 - 결정: `--add-dir`을 cc-company 내부 전용으로 사용. 사용자가 passthrough로 전달하면 에러. `--add-dir` 차단 검증은 run.service(서비스 레이어)에서 수행 — command 레이어가 아닌 서비스 레이어에서 검증해야 테스트 가능.
 - 임시 디렉토리: `.cc-company/.tmp/run-{uuid}/.claude/skills/`에 skill 디렉토리 복사. `try/finally`로 정리 + 다음 run 시 1시간 이상 stale 디렉토리 자동 삭제.
 
-### 2. `/docs/spec.md` — 변경 사항
+### 2. `/spec/spec.md` — 변경 사항
 
 **Skill 섹션 전체 교체:**
 
@@ -118,7 +118,7 @@ skills 부분을 디렉토리 형식으로 변경하고, `.tmp/` 경로 추가:
 cc-company skill show <name>    # 메타데이터 + 파일 목록 + resources 불일치 경고
 ```
 
-### 3. `/docs/architecture.md` — 변경 사항
+### 3. `/spec/architecture.md` — 변경 사항
 
 **IStore 인터페이스에 신규 메서드 추가:**
 
@@ -144,11 +144,11 @@ run.service에서 skills resolve 후:
 
 `pluginDirPath` → `addDirPath` 교체 설명.
 
-### 4. `/docs/testing.md` — 변경 사항
+### 4. `/spec/testing.md` — 변경 사항
 
 테스트 범위 테이블의 store (fs-store) 행 설명에 "skill 디렉토리 CRUD, 파일 CRUD, 마이그레이션" 추가.
 
-### 5. `/docs/test-cases.md` — 변경 사항
+### 5. `/spec/test-cases.md` — 변경 사항
 
 아래 테스트 케이스들을 추가/변경하라:
 

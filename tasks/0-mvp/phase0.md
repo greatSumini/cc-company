@@ -3,11 +3,11 @@
 ## 사전 준비
 
 먼저 아래 문서들을 반드시 읽고 프로젝트의 전체 아키텍처와 설계 의도를 완전히 이해하라:
-- `/docs/spec.md` — CLI 스펙, 디렉토리 구조, 스키마
-- `/docs/architecture.md` — 레이어 구조, 소스 디렉토리, 데이터 흐름
-- `/docs/adr.md` — 아키텍처 결정 사항
-- `/docs/testing.md` — 테스트 전략
-- `/docs/test-cases.md` — 테스트 케이스
+- `/spec/spec.md` — CLI 스펙, 디렉토리 구조, 스키마
+- `/spec/architecture.md` — 레이어 구조, 소스 디렉토리, 데이터 흐름
+- `/spec/adr.md` — 아키텍처 결정 사항
+- `/spec/testing.md` — 테스트 전략
+- `/spec/test-cases.md` — 테스트 케이스
 
 이 phase는 전체 프로젝트의 기반을 만드는 단계다. 이후 모든 phase가 이 구조 위에서 동작하므로, 빈틈없이 설정하라.
 

@@ -3,9 +3,9 @@
 ## 사전 준비
 
 먼저 아래 문서들을 반드시 읽고 프로젝트의 전체 아키텍처와 설계 의도를 완전히 이해하라:
-- `/docs/spec.md` — 기본 agent 템플릿, .cc-company/ 구조
-- `/docs/architecture.md` — 전체 구조
-- `/docs/adr.md` — ADR-004 (공용 풀 + 참조)
+- `/spec/spec.md` — 기본 agent 템플릿, .cc-company/ 구조
+- `/spec/architecture.md` — 전체 구조
+- `/spec/adr.md` — ADR-004 (공용 풀 + 참조)
 
 그리고 이전 phase의 작업물을 반드시 확인하라:
 - `src/commands/init.ts` — 현재 init 로직 (빈 구조 생성)

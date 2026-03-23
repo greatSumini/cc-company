@@ -66,10 +66,10 @@
 - 타임스탬프: task-level `created_at`은 생성 시 기록. `completed_at`은 전체 완료 시 `scripts/run-phases.py`가 기록.
 - phase-level 타임스탬프(`started_at`, `completed_at`, `failed_at`)는 `scripts/run-phases.py`가 실행 시 자동 기록. 생성 시 넣지 않는다.
 
-### 3. `/tasks/{id}-{name}/docs-diff.md` (문서 변경 기록)
+### 3. `/tasks/{id}-{name}/spec-diff.md` (문서 변경 기록)
 
-Phase 0 완료 후 `scripts/run-phases.py`가 `scripts/gen-docs-diff.py`를 자동 호출하여 생성한다.
-Phase 0 시작 전 HEAD를 baseline으로 기록하고, Phase 0 완료 후 `git diff {baseline} -- docs/`를 실행하여 실제 diff를 추출한다.
+Phase 0 완료 후 `scripts/run-phases.py`가 `scripts/gen-spec-diff.py`를 자동 호출하여 생성한다.
+Phase 0 시작 전 HEAD를 baseline으로 기록하고, Phase 0 완료 후 `git diff {baseline} -- spec/`를 실행하여 실제 diff를 추출한다.
 
 **에이전트가 직접 작성하지 않는다.** Phase 0는 문서 업데이트만 수행하면 된다.
 
@@ -80,7 +80,7 @@ Phase 0 시작 전 HEAD를 baseline으로 기록하고, Phase 0 완료 후 `git 
 
 Baseline: `a1b2c3d`
 
-## `docs/spec.md`
+## `spec/spec.md`
 
 \`\`\`diff
 @@ -45,6 +45,18 @@
@@ -107,7 +107,7 @@ phase 실행은 별도의 claude session이 진행한다는 점을 명심하라.
 먼저 아래 문서들을 반드시 읽고 프로젝트의 전체 아키텍처와 설계 의도를 완전히 이해하라:
 
 - {관련 문서 경로 나열 — spec, architecture, ADR 등}
-- `/tasks/{id}-{name}/docs-diff.md` (이번 task의 문서 변경 기록)
+- `/tasks/{id}-{name}/spec-diff.md` (이번 task의 문서 변경 기록)
 
 그리고 이전 phase의 작업물을 반드시 확인하라:
 

@@ -1,14 +1,14 @@
-# docs-diff: soul-manager
+# spec-diff: soul-manager
 
 Baseline: `588b045`
 
 ## `docs/adr.md`
 
 ```diff
-diff --git a/docs/adr.md b/docs/adr.md
+diff --git a/spec/adr.md b/spec/adr.md
 index 33aebcc..bfa380c 100644
---- a/docs/adr.md
-+++ b/docs/adr.md
+--- a/spec/adr.md
++++ b/spec/adr.md
 @@ -207,3 +207,19 @@
  **결정**: `--add-dir`을 cc-company 내부 전용으로 사용. 사용자가 passthrough로 전달하면 에러. `--add-dir` 차단 검증은 run.service(서비스 레이어)에서 수행 — command 레이어가 아닌 서비스 레이어에서 검증해야 테스트 가능.
  

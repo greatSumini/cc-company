@@ -4,9 +4,9 @@
 
 먼저 아래 문서들을 반드시 읽고 프로젝트의 전체 아키텍처와 설계 의도를 완전히 이해하라:
 
-- `/docs/spec.md`
-- `/docs/architecture.md`
-- `/docs/adr.md`
+- `/spec/spec.md`
+- `/spec/architecture.md`
+- `/spec/adr.md`
 
 그리고 현재 구현된 코드도 확인하라:
 
@@ -107,9 +107,9 @@ cc-company run developer
 - prompt optional화로 `cc-company run developer`라는 최소 입력으로 agent를 실행할 수 있어 DX 향상.
 ```
 
-### 4. `tasks/1-interactive-run/docs-diff.md` 생성
+### 4. `tasks/1-interactive-run/spec-diff.md` 생성
 
-위 세 문서의 변경 내용을 요약한 `docs-diff.md`를 생성하라. 형식:
+위 세 문서의 변경 내용을 요약한 `spec-diff.md`를 생성하라. 형식:
 
 ```markdown
 # docs-diff: interactive-run
@@ -138,7 +138,7 @@ cc-company run developer
 
 ```bash
 # 문서 파일들이 정상적으로 존재하고, 마크다운 문법 오류 없음
-cat docs/spec.md docs/architecture.md docs/adr.md tasks/1-interactive-run/docs-diff.md > /dev/null
+cat docs/spec.md docs/architecture.md docs/adr.md tasks/1-interactive-run/spec-diff.md > /dev/null
 echo $?  # 0이어야 함
 ```
 
@@ -152,4 +152,4 @@ echo $?  # 0이어야 함
 - 코드를 수정하지 마라. 이 phase는 문서만 수정한다.
 - 기존 문서의 다른 섹션을 삭제하거나 변경하지 마라. 추가/수정 대상 섹션만 건드려라.
 - ADR-011의 번호와 형식을 기존 ADR들과 동일하게 맞춰라.
-- `docs-diff.md`는 `/tasks/1-interactive-run/` 디렉토리에 생성하라.
+- `spec-diff.md`는 `/tasks/1-interactive-run/` 디렉토리에 생성하라.

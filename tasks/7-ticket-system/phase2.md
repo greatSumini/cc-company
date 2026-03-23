@@ -4,12 +4,12 @@
 
 먼저 아래 문서들을 반드시 읽고 프로젝트의 전체 아키텍처와 설계 의도를 완전히 이해하라:
 
-- `/docs/spec.md`
-- `/docs/architecture.md`
-- `/docs/adr.md`
-- `/docs/testing.md`
-- `/docs/test-cases.md`
-- `/tasks/7-ticket-system/docs-diff.md` (이번 task의 문서 변경 기록)
+- `/spec/spec.md`
+- `/spec/architecture.md`
+- `/spec/adr.md`
+- `/spec/testing.md`
+- `/spec/test-cases.md`
+- `/tasks/7-ticket-system/spec-diff.md` (이번 task의 문서 변경 기록)
 
 그리고 이전 phase의 작업물을 반드시 확인하라:
 
@@ -162,7 +162,7 @@ export class AgentStatusStore implements IAgentStatusStore {
 
 #### `src/store/__tests__/fs-ticket-store.test.ts`
 
-`/docs/test-cases.md`의 `fs-ticket-store` 섹션에 명시된 테스트 케이스를 구현하라.
+`/spec/test-cases.md`의 `fs-ticket-store` 섹션에 명시된 테스트 케이스를 구현하라.
 
 테스트 setup/teardown:
 
@@ -192,7 +192,7 @@ describe('FsTicketStore', () => {
 
 #### `src/store/__tests__/agent-status-store.test.ts`
 
-`/docs/test-cases.md`의 `agent-status-store` 섹션에 명시된 테스트 케이스를 구현하라.
+`/spec/test-cases.md`의 `agent-status-store` 섹션에 명시된 테스트 케이스를 구현하라.
 
 ## Acceptance Criteria
 

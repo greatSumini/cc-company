@@ -1,14 +1,14 @@
-# docs-diff: frontmatter-md
+# spec-diff: frontmatter-md
 
 Baseline: `9fb8d41`
 
 ## `docs/adr.md`
 
 ```diff
-diff --git a/docs/adr.md b/docs/adr.md
+diff --git a/spec/adr.md b/spec/adr.md
 index fb112db..911d92a 100644
---- a/docs/adr.md
-+++ b/docs/adr.md
+--- a/spec/adr.md
++++ b/spec/adr.md
 @@ -165,3 +165,21 @@
  - ADR-003에서 "패스스루 전략"을 확정했지만, `-p`는 cc-company 자체의 동작 분기에 필요한 유일한 flag. 패스스루 원칙을 깨는 것이 아니라, "인식 + 전달"의 하이브리드 접근.
  - interactive mode는 Claude Code의 핵심 UX. 이를 지원하지 않으면 cc-company의 가치가 print mode에만 한정됨.
@@ -36,10 +36,10 @@ index fb112db..911d92a 100644
 ## `docs/architecture.md`
 
 ```diff
-diff --git a/docs/architecture.md b/docs/architecture.md
+diff --git a/spec/architecture.md b/spec/architecture.md
 index 9b6866c..98b5100 100644
---- a/docs/architecture.md
-+++ b/docs/architecture.md
+--- a/spec/architecture.md
++++ b/spec/architecture.md
 @@ -6,6 +6,7 @@
  - **Language**: TypeScript
  - **CLI Parser**: commander
@@ -71,10 +71,10 @@ index 9b6866c..98b5100 100644
 ## `docs/spec.md`
 
 ```diff
-diff --git a/docs/spec.md b/docs/spec.md
+diff --git a/spec/spec.md b/spec/spec.md
 index 09e5147..5dbf1c6 100644
---- a/docs/spec.md
-+++ b/docs/spec.md
+--- a/spec/spec.md
++++ b/spec/spec.md
 @@ -101,6 +101,49 @@ cc-company hook add|list|remove <name>
  - 모든 리소스 필드는 optional
  - 값은 공용 풀의 리소스 이름(식별자) 배열
@@ -130,10 +130,10 @@ index 09e5147..5dbf1c6 100644
 ## `docs/test-cases.md`
 
 ```diff
-diff --git a/docs/test-cases.md b/docs/test-cases.md
+diff --git a/spec/test-cases.md b/spec/test-cases.md
 index fd81635..ac6b34f 100644
---- a/docs/test-cases.md
-+++ b/docs/test-cases.md
+--- a/spec/test-cases.md
++++ b/spec/test-cases.md
 @@ -78,3 +78,21 @@ store는 in-memory fake 또는 실제 fs-store + 임시 디렉토리.
  ✓ spawner exitCode 0 → 로그에 정상 기록
  ✓ spawner exitCode 1 → 로그에 실패 기록 + exitCode 전파
@@ -161,10 +161,10 @@ index fd81635..ac6b34f 100644
 ## `docs/testing.md`
 
 ```diff
-diff --git a/docs/testing.md b/docs/testing.md
+diff --git a/spec/testing.md b/spec/testing.md
 index 234d6e2..1d49b4c 100644
---- a/docs/testing.md
-+++ b/docs/testing.md
+--- a/spec/testing.md
++++ b/spec/testing.md
 @@ -15,6 +15,7 @@
  | 모듈 | 테스트 유형 | 수준 | 이유 |
  |---|---|---|---|

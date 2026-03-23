@@ -4,15 +4,15 @@
 
 먼저 아래 문서들을 반드시 읽고 프로젝트의 전체 아키텍처와 설계 의도를 완전히 이해하라:
 
-- `/docs/spec.md`
-- `/docs/architecture.md`
-- `/docs/adr.md`
-- `/docs/testing.md`
-- `/docs/test-cases.md`
+- `/spec/spec.md`
+- `/spec/architecture.md`
+- `/spec/adr.md`
+- `/spec/testing.md`
+- `/spec/test-cases.md`
 
 ## 작업 내용
 
-### 1. `/docs/adr.md` — ADR-012 추가
+### 1. `/spec/adr.md` — ADR-012 추가
 
 아래 ADR을 기존 ADR 목록 끝에 추가하라:
 
@@ -29,7 +29,7 @@
 - **영향**: `.cc-company/subagents/*.json` → `*.md`, `.cc-company/skills/*.json` → `*.md`. 런타임 인터페이스(SubagentConfig, SkillConfig) 유지.
 ```
 
-### 2. `/docs/spec.md` — 디렉토리 구조 및 스키마 업데이트
+### 2. `/spec/spec.md` — 디렉토리 구조 및 스키마 업데이트
 
 spec.md에서 `.cc-company/` 디렉토리 구조를 설명하는 부분을 찾아 다음을 반영하라:
 
@@ -69,7 +69,7 @@ Manages deployment processes...
 Subagent frontmatter optional 필드: `model`, `tools`, `disallowedTools`, `maxTurns`, `permissionMode`
 Skill frontmatter optional 필드: `model`, `allowedTools`, `context`, `agent`, `userInvocable`, `disableModelInvocation`, `argumentHint`
 
-### 3. `/docs/architecture.md` — frontmatter 파싱 레이어 추가
+### 3. `/spec/architecture.md` — frontmatter 파싱 레이어 추가
 
 architecture.md의 기술 스택 또는 레이어 설명 부분에 다음을 추가하라:
 
@@ -77,13 +77,13 @@ architecture.md의 기술 스택 또는 레이어 설명 부분에 다음을 추
 - **유틸 모듈**: `src/utils/frontmatter.ts` — subagent/skill MD 파일의 파싱(`parse*Md`)과 직렬화(`serialize*Md`)를 담당. fs-store에서 호출.
 - Store 레이어 설명에서: subagent/skill은 `.md` 파일을 `gray-matter`로 파싱하여 frontmatter → 메타데이터, body → prompt로 분리
 
-### 4. `/docs/testing.md` — frontmatter 유틸 테스트 범위 추가
+### 4. `/spec/testing.md` — frontmatter 유틸 테스트 범위 추가
 
 테스트 범위 표에 다음 행을 추가하라:
 
 | frontmatter (utils) | 유닛 | 철저히 | 파싱이 틀리면 prompt가 통째로 날아감 |
 
-### 5. `/docs/test-cases.md` — frontmatter 유닛 테스트 케이스 추가
+### 5. `/spec/test-cases.md` — frontmatter 유닛 테스트 케이스 추가
 
 기존 테스트 케이스 목록에 다음 섹션을 추가하라:
 
@@ -121,4 +121,4 @@ npm test # 모든 테스트 통과
 
 - 코드를 수정하지 마라. 이 phase는 문서만 업데이트한다.
 - 기존 문서의 다른 부분을 삭제하거나 훼손하지 마라. 추가/수정만 한다.
-- `docs-diff.md`는 직접 작성하지 마라. `run-phases.py`가 자동 생성한다.
+- `spec-diff.md`는 직접 작성하지 마라. `run-phases.py`가 자동 생성한다.

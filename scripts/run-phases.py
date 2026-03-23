@@ -129,7 +129,7 @@ def git_ensure_branch(task_name: str):
 
 def git_commit_docs(task_name: str, gh_env: dict[str, str]):
     """Commit task plan files (tasks/, docs/, prompts/) before phase execution."""
-    git_run("add", "tasks/", "docs/", "prompts/")
+    git_run("add", "tasks/", "spec/", "prompts/")
 
     if git_run("diff", "--cached", "--quiet").returncode == 0:
         return
@@ -433,7 +433,7 @@ def main():
             # Generate docs-diff.md after phase 0 (docs update)
             if phase_num == 0:
                 subprocess.run(
-                    ["python3", str(ROOT / "scripts" / "gen-docs-diff.py"), str(task_dir), baseline],
+                    ["python3", str(ROOT / "scripts" / "gen-spec-diff.py"), str(task_dir), baseline],
                     cwd=str(ROOT),
                 )
 
