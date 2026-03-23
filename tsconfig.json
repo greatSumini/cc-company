@@ -1,15 +1,21 @@
 {
   "compilerOptions": {
-    "target": "ES2022",
-    "module": "Node16",
-    "moduleResolution": "Node16",
-    "outDir": "dist",
-    "rootDir": "src",
+    "composite": true,
+    "declaration": true,
+    "declarationMap": true,
+    "incremental": true,
+    "skipLibCheck": true,
     "strict": true,
     "esModuleInterop": true,
-    "declaration": true,
-    "skipLibCheck": true
+    "module": "Node16",
+    "moduleResolution": "Node16",
+    "target": "ES2022",
+    "resolveJsonModule": true
   },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist"]
+  "references": [
+    { "path": "./packages/core" },
+    { "path": "./packages/cli" },
+    { "path": "./packages/server" }
+  ],
+  "files": []
 }
