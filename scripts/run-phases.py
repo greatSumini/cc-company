@@ -102,7 +102,8 @@ def git_ensure_branch(task_name: str):
     # Current branch
     r = git_run("rev-parse", "--abbrev-ref", "HEAD")
     if r.returncode != 0:
-        print(f"ERROR: git not available or not a git repo.\n{r.stderr.strip()}")
+        print(
+            f"ERROR: git not available or not a git repo.\n{r.stderr.strip()}")
         sys.exit(1)
     current = r.stdout.strip()
 
@@ -262,7 +263,7 @@ def run_phase(task_dir: Path, phase: dict, preamble: str, gh_env: dict[str, str]
         cwd=str(ROOT),
         capture_output=True,
         text=True,
-        timeout=600,  # 10 minutes per phase
+        timeout=1800,  # 30 minutes per phase
         env={**os.environ, **gh_env} if gh_env else None,
     )
 
@@ -336,7 +337,8 @@ def main():
     # --- Header ---
     print(f"\n{'='*60}")
     print(f"  agentinc Phase Runner")
-    print(f"  Task: {task_name} | Phases: {total_phases} | Pending: {pending_count}")
+    print(
+        f"  Task: {task_name} | Phases: {total_phases} | Pending: {pending_count}")
     if gh_user:
         print(f"  GitHub: {gh_user}")
     print(f"{'='*60}")
@@ -347,7 +349,8 @@ def main():
         print(f"\n  ✗ Phase {last['phase']} ({last['name']}) failed.")
         if "error_message" in last:
             print(f"  Error: {last['error_message']}")
-        print(f"  Fix the issue and reset status to 'pending' in {index_file} to retry.")
+        print(
+            f"  Fix the issue and reset status to 'pending' in {index_file} to retry.")
         sys.exit(1)
 
     # --- Git branch + docs commit ---
@@ -382,7 +385,8 @@ def main():
 
         phase_num = phase["phase"]
         phase_name = phase["name"]
-        done_count = sum(1 for p in index["phases"] if p["status"] == "completed")
+        done_count = sum(
+            1 for p in index["phases"] if p["status"] == "completed")
 
         # Record phase started_at (= execution start)
         ts_start = now_iso()
@@ -419,7 +423,8 @@ def main():
                 if p["phase"] == phase_num and "error_message" in p:
                     print(f"    Error: {p['error_message']}")
                     break
-            print(f"  Fix the issue and reset status to 'pending' in {index_file} to retry.")
+            print(
+                f"  Fix the issue and reset status to 'pending' in {index_file} to retry.")
             update_top_index_status(task_dir_name, "error")
             sys.exit(1)
 
@@ -433,14 +438,18 @@ def main():
             # Generate docs-diff.md after phase 0 (docs update)
             if phase_num == 0:
                 subprocess.run(
-                    ["python3", str(ROOT / "scripts" / "gen-spec-diff.py"), str(task_dir), baseline],
+                    ["python3", str(
+                        ROOT / "scripts" / "gen-spec-diff.py"), str(task_dir), baseline],
                     cwd=str(ROOT),
                 )
 
-            git_commit_phase(task_name, task_dir_name, phase_num, phase_name, gh_env)
-            print(f"  ✓ Phase {phase_num}: {phase_name} completed [{elapsed}s]")
+            git_commit_phase(task_name, task_dir_name,
+                             phase_num, phase_name, gh_env)
+            print(
+                f"  ✓ Phase {phase_num}: {phase_name} completed [{elapsed}s]")
         elif status == "pending":
-            print(f"  ✗ Phase {phase_num}: {phase_name} — status still 'pending' after execution")
+            print(
+                f"  ✗ Phase {phase_num}: {phase_name} — status still 'pending' after execution")
             print("    Claude did not update index.json. Marking as error.")
 
             for p in fresh_index["phases"]:
