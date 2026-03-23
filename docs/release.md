@@ -109,8 +109,8 @@ python3 scripts/release.py patch
 # npm 배포
 npm publish
 
-# GitHub Release 생성
-gh release create vX.Y.Z --notes "Release notes here"
+# GitHub Release 생성 (release notes를 파일로 전달)
+gh release create vX.Y.Z --notes-file RELEASE_NOTES.md
 
 # 배포 검증
 npm view cc-company version

@@ -94,8 +94,11 @@ npm publish
 
 2단계에서 확정한 GitHub Release 본문으로 릴리스를 생성한다.
 
+1. Release notes를 임시 파일에 저장한다.
+2. `--notes-file` 옵션으로 릴리스를 생성한다:
+
 ```bash
-gh release create v{version} --title "v{version}" --notes "{release-notes-body}"
+gh release create v{version} --title "v{version}" --notes-file /tmp/release-notes.md
 ```
 
 ---
