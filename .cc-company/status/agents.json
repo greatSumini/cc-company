@@ -1,0 +1,26 @@
+{
+  "hr": {
+    "name": "hr",
+    "state": "idle",
+    "processStartedAt": "2026-03-22T10:23:12.360Z",
+    "lastHeartbeatAt": "2026-03-22T10:23:22.393Z"
+  },
+  "developer": {
+    "name": "developer",
+    "state": "idle",
+    "processStartedAt": "2026-03-22T10:23:12.364Z",
+    "lastHeartbeatAt": "2026-03-22T10:23:22.390Z"
+  },
+  "dave": {
+    "name": "dave",
+    "state": "idle",
+    "processStartedAt": "2026-03-22T10:23:12.365Z",
+    "lastHeartbeatAt": "2026-03-22T10:23:22.394Z"
+  },
+  "designer": {
+    "name": "designer",
+    "state": "idle",
+    "processStartedAt": "2026-03-22T10:23:12.365Z",
+    "lastHeartbeatAt": "2026-03-22T10:23:22.392Z"
+  }
+}

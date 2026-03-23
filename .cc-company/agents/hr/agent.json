@@ -1,0 +1,10 @@
+{
+  "name": "hr",
+  "description": "인사/조직 관리 전담 에이전트",
+  "subagents": [
+    "recruiter"
+  ],
+  "skills": [
+    "onboarding"
+  ]
+}
