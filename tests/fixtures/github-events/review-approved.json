@@ -1,0 +1,62 @@
+{
+  "action": "submitted",
+  "review": {
+    "id": 67890,
+    "user": {
+      "login": "reviewer1",
+      "id": 1001,
+      "avatar_url": "https://avatars.githubusercontent.com/u/1001",
+      "type": "User"
+    },
+    "body": "LGTM!",
+    "state": "approved",
+    "submitted_at": "2026-03-23T11:00:00Z",
+    "html_url": "https://github.com/test-org/test-repo/pull/42#pullrequestreview-67890"
+  },
+  "pull_request": {
+    "number": 42,
+    "title": "feat: add new feature",
+    "html_url": "https://github.com/test-org/test-repo/pull/42",
+    "state": "open",
+    "user": {
+      "login": "dev-bot",
+      "id": 2001,
+      "avatar_url": "https://avatars.githubusercontent.com/u/2001",
+      "type": "User"
+    },
+    "base": {
+      "ref": "main",
+      "repo": {
+        "id": 1,
+        "name": "test-repo",
+        "full_name": "test-org/test-repo",
+        "private": false,
+        "html_url": "https://github.com/test-org/test-repo"
+      }
+    },
+    "head": {
+      "ref": "feature/new-feature",
+      "repo": {
+        "id": 1,
+        "name": "test-repo",
+        "full_name": "test-org/test-repo",
+        "private": false,
+        "html_url": "https://github.com/test-org/test-repo"
+      }
+    },
+    "requested_reviewers": []
+  },
+  "repository": {
+    "id": 1,
+    "name": "test-repo",
+    "full_name": "test-org/test-repo",
+    "private": false,
+    "html_url": "https://github.com/test-org/test-repo"
+  },
+  "sender": {
+    "login": "reviewer1",
+    "id": 1001,
+    "avatar_url": "https://avatars.githubusercontent.com/u/1001",
+    "type": "User"
+  }
+}

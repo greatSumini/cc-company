@@ -57,7 +57,9 @@
     {
       "phase": 7,
       "name": "tests-guide",
-      "status": "pending"
+      "status": "completed",
+      "started_at": "2026-03-23T19:52:38+0900",
+      "completed_at": "2026-03-23T19:55:30+0900"
     }
   ]
 }
