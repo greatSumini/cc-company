@@ -8,7 +8,16 @@ $ARGUMENTS
 4. 구현계획이 확정되었다면, 마지막으로 어떤 테스트케이스가 필요할지 논의한다. 테스트 전략은 `/docs/testing.md`를 참고한다. 추가/수정해야할 모듈별 테스트케이스와, 논의점을 포함하여 사용자에게 피드백을 요청한다.
 5. 사용자가 충분히 논의했다고 판단 후 task 생성을 지시하면, `/prompts/task-create.md`의 형식과 절차에 맞게 task와 phase 파일들을 생성한다.
 6. `scripts/run-phases.py`를 실행해서 각 phase를 순차적으로 실행한다.
-7. `scripts/run-phases.py` 완료 후 PR을 생성한다. `gh pr create`를 사용하되, 다음 원칙을 지켜라:
+7. `scripts/run-phases.py` 완료 후 PR을 생성한다. `python3 scripts/create-pr.py`를 사용하되, 다음 원칙을 지켜라:
    - 본문이 한눈에 이해 가능한가: 의도, 변경 플로우, 아키텍처, 핵심 파일
    - 장황해서 핵심 파악이 어려운 것은 금물
    - commit history + message만으로 작업 흐름을 가늠할 수 있는가
+
+   사용법:
+   ```bash
+   python3 scripts/create-pr.py <task-dir> --title "PR 제목" --body "PR 본문"
+   ```
+
+   스크립트가 자동으로:
+   - gh_user 설정이 있으면 해당 계정으로 PR 생성
+   - `/tasks/index.json`에 repositoryUrl, pr_number, pr_url 기록
