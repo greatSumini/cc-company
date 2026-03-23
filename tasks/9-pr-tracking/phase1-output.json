@@ -1,0 +1,7 @@
+{
+  "phase": 1,
+  "name": "gh-utils",
+  "exitCode": 0,
+  "stdout": "{\"type\":\"result\",\"subtype\":\"success\",\"is_error\":false,\"duration_ms\":100437,\"duration_api_ms\":113878,\"num_turns\":26,\"result\":\"Phase 1 완료.\\n\\n**작업 요약:**\\n1. `scripts/_utils.py`에 `resolve_gh_env` 함수와 `_gh_cache` 전역 변수를 추가함\\n2. `scripts/run-phases.py`에서 `resolve_gh_env`를 `_utils`에서 import하도록 변경함\\n3. `run-phases.py`에서 로컬 `_gh_cache`와 `resolve_gh_env` 정의를 삭제함\\n4. 모든 AC 검증 통과 확인\\n5. `index.json` 업데이트 및 커밋 완료\",\"session_id\":\"90b38c34-77b6-47a6-8675-b43856e019ce\",\"total_cost_usd\":0.7071645000000002,\"usage\":{\"input_tokens\":2,\"cache_creation_input_tokens\":32448,\"cache_read_input_tokens\":687443,\"output_tokens\":5299,\"server_tool_use\":{\"web_search_requests\":0,\"web_fetch_requests\":0},\"service_tier\":\"standard\",\"cache_creation\":{\"ephemeral_1h_input_tokens\":0,\"ephemeral_5m_input_tokens\":32448}},\"modelUsage\":{\"claude-opus-4-5-20251101\":{\"inputTokens\":3228,\"outputTokens\":5325,\"cacheReadInputTokens\":687443,\"cacheCreationInputTokens\":32448,\"webSearchRequests\":0,\"costUSD\":0.6957865,\"contextWindow\":200000},\"claude-haiku-4-5-20251001\":{\"inputTokens\":8493,\"outputTokens\":577,\"cacheReadInputTokens\":0,\"cacheCreationInputTokens\":0,\"webSearchRequests\":0,\"costUSD\":0.011377999999999997,\"contextWindow\":200000}},\"permission_denials\":[],\"uuid\":\"5bffab3d-893d-4901-b3ae-734f80df20fb\"}\n",
+  "stderr": ""
+}

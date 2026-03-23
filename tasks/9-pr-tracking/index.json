@@ -16,7 +16,8 @@
       "phase": 1,
       "name": "gh-utils",
       "status": "completed",
-      "started_at": "2026-03-23T20:22:29+0900"
+      "started_at": "2026-03-23T20:22:29+0900",
+      "completed_at": "2026-03-23T20:24:12+0900"
     },
     {
       "phase": 2,
