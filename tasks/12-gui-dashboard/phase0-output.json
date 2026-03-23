@@ -1,0 +1,7 @@
+{
+  "phase": 0,
+  "name": "docs-update",
+  "exitCode": 0,
+  "stdout": "{\"type\":\"result\",\"subtype\":\"success\",\"is_error\":false,\"duration_ms\":107549,\"duration_api_ms\":118939,\"num_turns\":16,\"result\":\"Phase 0 완료.\\n\\n**변경 내역:**\\n- `spec/architecture.md`: Monorepo 구조 섹션 + GUI 대시보드 아키텍처 섹션 추가\\n- `spec/adr.md`: ADR-022(Monorepo 전환), ADR-023(Vite+React), ADR-024(SSE), ADR-025(React Query+Zustand) 추가\\n- `tasks/12-gui-dashboard/index.json`: phase 0 status → completed\\n\\n커밋: `ba80328 feat(gui-dashboard): phase 0 — docs-update`\",\"session_id\":\"5d58e823-50a1-4b3b-9d76-960dfa82f291\",\"total_cost_usd\":0.6377890000000002,\"usage\":{\"input_tokens\":131,\"cache_creation_input_tokens\":42498,\"cache_read_input_tokens\":465179,\"output_tokens\":4599,\"server_tool_use\":{\"web_search_requests\":0,\"web_fetch_requests\":0},\"service_tier\":\"standard\",\"cache_creation\":{\"ephemeral_1h_input_tokens\":0,\"ephemeral_5m_input_tokens\":42498}},\"modelUsage\":{\"claude-opus-4-5-20251101\":{\"inputTokens\":3385,\"outputTokens\":4626,\"cacheReadInputTokens\":465179,\"cacheCreationInputTokens\":42498,\"webSearchRequests\":0,\"costUSD\":0.6307770000000001,\"contextWindow\":200000},\"claude-haiku-4-5-20251001\":{\"inputTokens\":4907,\"outputTokens\":421,\"cacheReadInputTokens\":0,\"cacheCreationInputTokens\":0,\"webSearchRequests\":0,\"costUSD\":0.007012,\"contextWindow\":200000}},\"permission_denials\":[],\"uuid\":\"41c80a3d-e994-4275-a501-983d6c50c5d8\"}\n",
+  "stderr": ""
+}
