@@ -23,7 +23,8 @@
       "phase": 2,
       "name": "create-pr-script",
       "status": "completed",
-      "started_at": "2026-03-23T20:24:12+0900"
+      "started_at": "2026-03-23T20:24:12+0900",
+      "completed_at": "2026-03-23T20:25:20+0900"
     }
   ]
 }
