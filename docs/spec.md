@@ -59,6 +59,14 @@ cc-company ticket show <id>
 cc-company ticket cancel <id>
 ```
 
+### Webhook 관리
+
+```bash
+cc-company webhook setup <smee-url>  # smeeUrl을 config에 저장, enabled=true
+cc-company webhook status            # 현재 webhook 설정 표시
+cc-company webhook disable           # webhook.enabled = false
+```
+
 - `--cc`: 쉼표로 구분된 agent 목록 (예: `--cc designer,hr`)
 - `--priority`: `low`, `normal`, `high`, `urgent` (기본값: `normal`)
 - cc가 있으면 원본 ticket은 `blocked` 상태로 생성되고, cc된 agent 수만큼 `cc_review` ticket이 함께 생성됨
@@ -158,6 +166,17 @@ cc-company hook add|list|remove <name>
   "cancelledAt": null,
   "result": null,
   "comments": [],
+  "metadata": {
+    "source": "webhook",
+    "github": {
+      "repo": "owner/repo",
+      "prNumber": 42,
+      "prUrl": "https://github.com/owner/repo/pull/42",
+      "commentIds": ["c1", "c2"],
+      "eventType": "review_comment",
+      "reviewers": ["reviewer1"]
+    }
+  },
   "version": 1
 }
 ```
@@ -170,6 +189,10 @@ cc-company hook add|list|remove <name>
 - `createdBy`: `user` 또는 agent name (위임 시)
 - `result`: 완료 시 `{ exitCode: number, logPath: string }`
 - `comments`: `[{ id, author, content, createdAt }]`
+- `metadata`: 선택적 필드. ticket 생성 출처 및 관련 정보
+- `metadata.source`: `'user'` | `'webhook'` | `'agent'`
+- `metadata.github`: GitHub PR 관련 정보 (webhook으로 생성된 경우)
+- `metadata.github.eventType`: `'review_comment'` | `'review_approved'` | `'conflict_resolve'`
 - `version`: 낙관적 락용 버전 번호
 
 ## config.json 확장
@@ -182,9 +205,21 @@ cc-company hook add|list|remove <name>
     "pollingIntervalMs": 5000,
     "idleTimeoutMs": 180000,
     "heartbeatTimeoutMs": 30000
+  },
+  "webhook": {
+    "enabled": true,
+    "secret": "github-webhook-secret",
+    "smeeUrl": "https://smee.io/xxx",
+    "approveCondition": "any"
   }
 }
 ```
+
+필드 설명:
+- `webhook.enabled`: webhook 수신 활성화 여부
+- `webhook.secret`: GitHub webhook secret (signature 검증용, 선택)
+- `webhook.smeeUrl`: smee.io 채널 URL (로컬 개발용, 선택)
+- `webhook.approveCondition`: `'any'` (기본, 최소 1개 approve) | `'all'` (모든 requested reviewer approve)
 
 ## Subagent MD 형식
 

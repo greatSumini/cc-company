@@ -308,3 +308,56 @@
 - `src/services/orchestrator.service.ts` — 전체 시스템 부트스트랩
 - `src/services/agent-runner.service.ts` — 개별 agent polling loop
 - `src/agent-worker.ts` — fork용 엔트리포인트
+
+---
+
+## ADR-020: Webhook 기반 PR 이벤트 연동
+
+**상태**: 확정 (2026-03-23)
+
+**맥락**: agent가 작성한 PR에 review comment나 approve가 달리면 자동으로 ticket을 생성하여 agent가 대응할 수 있게 해야 한다. GitHub App vs repo-level webhook, 로컬 개발 환경에서의 webhook 수신 방법을 결정해야 한다.
+
+**결정**: Repo-level webhook + smee.io (로컬) / 자체 SSE (원격)
+
+**근거**:
+- GitHub App은 설치 복잡도가 높고, MVP 단계에서 과잉
+- Repo-level webhook은 설정이 단순하고 필요한 기능 충분
+- 로컬 환경은 퍼블릭 IP가 없으므로 smee.io 프록시 사용
+- 향후 원격 서버 모드에서는 자체 SSE 엔드포인트로 대체 (smee 노출 없이)
+- IWebhookReceiver 인터페이스로 추상화하여 전환 비용 최소화
+
+**구현 위치**:
+- `src/webhook-receiver/` — 수신 추상화
+- `src/server/routes/webhooks.ts` — HTTP 엔드포인트
+- `src/services/pr-event.service.ts` — 이벤트 처리
+
+---
+
+## ADR-021: Ticket metadata 범용 필드
+
+**상태**: 확정 (2026-03-23)
+
+**맥락**: webhook으로 생성된 ticket은 PR 번호, comment ID 등 추가 정보가 필요하다. 중복 ticket 방지, merge 시 PR 정보 참조 등에 사용된다. ticket 스키마에 어떻게 추가할 것인가.
+
+**결정**: `metadata` 필드 (범용 JSON 객체)
+
+**근거**:
+- `prNumber` 같은 단일 필드보다 확장성 있음
+- 향후 Jira, Slack 등 다른 소스 연동 시 해당 키만 추가
+- `metadata.source`로 생성 출처 추적 (user/webhook/agent)
+- `metadata.github`로 GitHub 관련 정보 묶음
+
+**스키마**:
+```typescript
+interface TicketMetadata {
+  source?: 'user' | 'webhook' | 'agent'
+  github?: {
+    repo: string
+    prNumber: number
+    prUrl: string
+    commentIds?: string[]
+    eventType?: 'review_comment' | 'review_approved' | 'conflict_resolve'
+    reviewers?: string[]
+  }
+}
+```

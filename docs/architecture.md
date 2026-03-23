@@ -15,6 +15,10 @@
 Commands (CLI 파싱) → Services (비즈니스 로직) → Store (데이터 접근) / Claude Runner (실행)
 ```
 
+```
+Webhook Receiver (이벤트 수신) → PR Event Service (이벤트 처리) → Ticket Service (티켓 생성)
+```
+
 ### Commands
 
 CLI arg 파싱만 수행하고 service를 호출한다. 로직 없음.
@@ -37,6 +41,35 @@ HTTP API를 제공하는 Ticket Server.
 - **server/index.ts** — Express 앱 생성 및 미들웨어 설정
 - **server/routes/tickets.ts** — /tickets API 라우트
 - **server/routes/agents.ts** — /agents/status API 라우트
+
+### Webhook Receiver
+
+GitHub webhook 이벤트를 수신하는 추상화 레이어.
+
+- **webhook-receiver/index.ts** — IWebhookReceiver 인터페이스
+- **webhook-receiver/smee-receiver.ts** — smee-client 기반 로컬 수신 (개발용)
+- **webhook-receiver/sse-receiver.ts** — SSE 기반 원격 수신 (향후 원격 서버용, stub)
+
+```typescript
+interface IWebhookReceiver {
+  start(): Promise<void>
+  stop(): Promise<void>
+  onEvent(handler: (event: WebhookEvent) => void): void
+}
+```
+
+### PR Event Service
+
+GitHub PR 이벤트를 ticket으로 변환.
+
+- **services/pr-event.service.ts** — review comment, approve 이벤트 처리
+- **services/merge.service.ts** — PR merge 실행, conflict 감지
+
+### GH Client
+
+gh CLI 명령어 래퍼.
+
+- **gh-client/index.ts** — IGhClient 인터페이스 + 구현체
 
 ### Ticket Store
 
@@ -112,7 +145,9 @@ src/
 ├── services/
 │   ├── agent.service.ts
 │   ├── resource.service.ts
-│   └── run.service.ts
+│   ├── run.service.ts
+│   ├── pr-event.service.ts   # PR 이벤트 → ticket 변환
+│   └── merge.service.ts      # PR merge 실행
 ├── server/
 │   ├── index.ts
 │   ├── routes/
@@ -120,6 +155,12 @@ src/
 │   │   └── agents.ts
 │   └── middleware/
 │       └── error-handler.ts
+├── webhook-receiver/
+│   ├── index.ts              # IWebhookReceiver 인터페이스
+│   ├── smee-receiver.ts      # smee-client 래퍼 (로컬용)
+│   └── sse-receiver.ts       # SSE 클라이언트 (원격용, stub)
+├── gh-client/
+│   └── index.ts              # IGhClient 인터페이스 + 구현
 ├── store/
 │   ├── store.ts              # 기존 IStore
 │   ├── fs-store.ts           # 기존
@@ -135,7 +176,8 @@ src/
 ├── utils/
 │   └── frontmatter.ts        # subagent/skill MD 파일의 파싱(parse*Md)과 직렬화(serialize*Md)
 ├── types/
-│   └── index.ts
+│   ├── index.ts
+│   └── github-events.ts      # GitHub webhook payload 타입
 ├── agent-worker.ts           # fork용 엔트리포인트
 └── templates/                # init 시 복사할 기본 agent 템플릿
 ```
@@ -313,4 +355,51 @@ interface FlagBuilderInput {
         ▼
 5. Developer Worker
    task ticket 발견 → 처리 → completed
+```
+
+### Webhook 이벤트 처리 흐름
+
+#### Review Comment → Ticket
+
+```
+1. GitHub에서 PR review comment 작성
+        │
+        ▼
+2. Webhook 발송 → smee.io (로컬) 또는 cc-company 서버 (원격)
+        │
+        ▼
+3. SmeeReceiver / SseReceiver가 이벤트 수신
+        │
+        ▼
+4. POST /webhooks/github → webhook-signature 검증
+        │
+        ▼
+5. PrEventService.handleReviewComment()
+   - PR author의 gh_user로 agent 매칭
+   - 기존 ticket 검색 (같은 PR, ready/blocked 상태)
+   - 있으면 업데이트, 없으면 새 ticket 생성
+        │
+        ▼
+6. Agent worker가 ticket 처리
+```
+
+#### Approve → Merge
+
+```
+1. GitHub에서 PR approve
+        │
+        ▼
+2. Webhook → PrEventService.handleReviewApproved()
+   - approveCondition 체크 ('any' 또는 'all')
+   - 조건 충족 시 merge ticket 생성
+        │
+        ▼
+3. Agent worker가 merge ticket 처리
+   - MergeService.executeMerge() 호출
+   - gh pr merge --auto 실행
+        │
+        ├── 성공 → ticket completed
+        │
+        └── conflict → git rebase --abort
+                     → conflict_resolve ticket 생성
 ```
