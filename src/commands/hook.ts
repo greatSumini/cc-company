@@ -6,7 +6,7 @@ export function registerHookCommand(program: Command): void {
     .command('hook')
     .description('Manage shared hooks')
 
-  // agentinc hook add <name>
+  // agent-inc hook add <name>
   hookCmd
     .command('add <name>')
     .description('Add a new hook to the shared pool')
@@ -22,7 +22,7 @@ export function registerHookCommand(program: Command): void {
       }
     })
 
-  // agentinc hook list
+  // agent-inc hook list
   hookCmd
     .command('list')
     .description('List all shared hooks')
@@ -41,7 +41,7 @@ export function registerHookCommand(program: Command): void {
       }
     })
 
-  // agentinc hook remove <name>
+  // agent-inc hook remove <name>
   hookCmd
     .command('remove <name>')
     .description('Remove a hook from the shared pool')

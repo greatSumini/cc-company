@@ -2,7 +2,7 @@
 id = 1
 created_at = "2026-03-18"
 last_used_at = "2026-03-21"
-content = """agentinc는 Claude Code를 "회사처럼" 운영하게 해주는 오픈소스. 핵심 추상화는 `agent`(직무 단위), subagent/skills/hooks를 agent별로 묶는 구조."""
+content = """agent-inc는 Claude Code를 "회사처럼" 운영하게 해주는 오픈소스. 핵심 추상화는 `agent`(직무 단위), subagent/skills/hooks를 agent별로 묶는 구조."""
 
 [[entries]]
 id = 2
@@ -56,10 +56,10 @@ content = "subagent/skill 저장 형식을 JSON → frontmatter MD로 전환 결
 id = 10
 created_at = "2026-03-22"
 last_used_at = "2026-03-22"
-content = "agentinc는 향후 원격 서버에 호스팅될 것을 전제로 설계한다. 따라서 파일시스템 직접 접근에 의존하지 않고, CLI 커맨드라는 인터페이스를 통해 모든 CRUD를 수행하도록 하여, IStore 추상화 교체 시 변경 범위를 최소화한다."
+content = "agent-inc는 향후 원격 서버에 호스팅될 것을 전제로 설계한다. 따라서 파일시스템 직접 접근에 의존하지 않고, CLI 커맨드라는 인터페이스를 통해 모든 CRUD를 수행하도록 하여, IStore 추상화 교체 시 변경 범위를 최소화한다."
 
 [[entries]]
 id = 11
 created_at = "2026-03-22"
 last_used_at = "2026-03-22"
-content = "agentinc start로 Ticket Server + Agent workers 데몬 모드 실행. ticket 기반 작업 관리 시스템 도입 (ADR-017~019). agent 간 CC(참조) 기능, 상태 머신 기반 전이 검증, 낙관적 락 동시성 제어 포함."
+content = "agent-inc start로 Ticket Server + Agent workers 데몬 모드 실행. ticket 기반 작업 관리 시스템 도입 (ADR-017~019). agent 간 CC(참조) 기능, 상태 머신 기반 전이 검증, 낙관적 락 동시성 제어 포함."

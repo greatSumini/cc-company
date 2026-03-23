@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-agentinc phase runner.
+agent-inc phase runner.
 Reads tasks/{task-dir}/index.json, finds the next pending phase,
 spawns a Claude Code session with the phase prompt, and updates status.
 
@@ -326,7 +326,7 @@ def main():
         sys.exit(1)
 
     index = load_index(index_file)
-    project_name = index.get("project", "agentinc")
+    project_name = index.get("project", "agent-inc")
     task_name = index.get("task", task_dir_name)
     total_phases = index.get("totalPhases", len(index["phases"]))
     pending_count = sum(1 for p in index["phases"] if p["status"] == "pending")
@@ -335,7 +335,7 @@ def main():
 
     # --- Header ---
     print(f"\n{'='*60}")
-    print(f"  agentinc Phase Runner")
+    print(f"  agent-inc Phase Runner")
     print(f"  Task: {task_name} | Phases: {total_phases} | Pending: {pending_count}")
     if gh_user:
         print(f"  GitHub: {gh_user}")

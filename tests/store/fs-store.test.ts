@@ -16,7 +16,7 @@ describe('FsStore', () => {
   let store: FsStore
 
   beforeEach(() => {
-    tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'agentinc-test-'))
+    tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'agent-inc-test-'))
     // 기본 디렉토리 구조 생성
     fs.mkdirSync(path.join(tmpDir, 'agents'), { recursive: true })
     fs.mkdirSync(path.join(tmpDir, 'subagents'), { recursive: true })

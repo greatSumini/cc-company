@@ -8,7 +8,7 @@ export function registerTicketCommand(program: Command): void {
     .command('ticket')
     .description('Manage tickets')
 
-  // agentinc ticket create
+  // agent-inc ticket create
   ticket
     .command('create')
     .description('Create a new ticket')
@@ -56,7 +56,7 @@ export function registerTicketCommand(program: Command): void {
         }
       } catch (error: any) {
         if (error.cause?.code === 'ECONNREFUSED') {
-          console.error('Error: Ticket Server is not running. Run `agentinc start` first.')
+          console.error('Error: Ticket Server is not running. Run `agent-inc start` first.')
         } else {
           console.error(`Error: ${error.message}`)
         }
@@ -64,7 +64,7 @@ export function registerTicketCommand(program: Command): void {
       }
     })
 
-  // agentinc ticket list
+  // agent-inc ticket list
   ticket
     .command('list')
     .description('List tickets')
@@ -111,7 +111,7 @@ export function registerTicketCommand(program: Command): void {
         }
       } catch (error: any) {
         if (error.cause?.code === 'ECONNREFUSED') {
-          console.error('Error: Ticket Server is not running. Run `agentinc start` first.')
+          console.error('Error: Ticket Server is not running. Run `agent-inc start` first.')
         } else {
           console.error(`Error: ${error.message}`)
         }
@@ -119,7 +119,7 @@ export function registerTicketCommand(program: Command): void {
       }
     })
 
-  // agentinc ticket show <id>
+  // agent-inc ticket show <id>
   ticket
     .command('show <id>')
     .description('Show ticket details')
@@ -180,7 +180,7 @@ export function registerTicketCommand(program: Command): void {
         console.log(t.prompt || '(no prompt - cc_review ticket)')
       } catch (error: any) {
         if (error.cause?.code === 'ECONNREFUSED') {
-          console.error('Error: Ticket Server is not running. Run `agentinc start` first.')
+          console.error('Error: Ticket Server is not running. Run `agent-inc start` first.')
         } else {
           console.error(`Error: ${error.message}`)
         }
@@ -188,7 +188,7 @@ export function registerTicketCommand(program: Command): void {
       }
     })
 
-  // agentinc ticket cancel <id>
+  // agent-inc ticket cancel <id>
   ticket
     .command('cancel <id>')
     .description('Cancel a ticket')
@@ -232,7 +232,7 @@ export function registerTicketCommand(program: Command): void {
         console.log(`  Cancelled At: ${cancelled.cancelledAt}`)
       } catch (error: any) {
         if (error.cause?.code === 'ECONNREFUSED') {
-          console.error('Error: Ticket Server is not running. Run `agentinc start` first.')
+          console.error('Error: Ticket Server is not running. Run `agent-inc start` first.')
         } else {
           console.error(`Error: ${error.message}`)
         }

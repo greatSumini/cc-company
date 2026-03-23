@@ -8,7 +8,7 @@ import { serializeSubagentMd, serializeSkillMd } from '../utils/frontmatter.js'
 export function registerInitCommand(program: Command): void {
   program
     .command('init')
-    .description('Initialize agentinc in current directory')
+    .description('Initialize agent-inc in current directory')
     .option('--force', 'Overwrite existing .agentinc directory')
     .action((options: { force?: boolean }) => {
       const rootPath = getRootPath()
@@ -71,6 +71,6 @@ export function registerInitCommand(program: Command): void {
         )
       }
 
-      console.log('agentinc가 초기화되었습니다.')
+      console.log('agent-inc가 초기화되었습니다.')
     })
 }

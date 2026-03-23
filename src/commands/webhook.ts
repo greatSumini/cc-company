@@ -33,7 +33,7 @@ export function registerWebhookCommand(program: Command): void {
       console.log(`2. Payload URL: ${smeeUrl}`)
       console.log('3. Content type: application/json')
       console.log('4. Events: Pull request reviews, Pull request review comments')
-      console.log('5. agentinc start로 서버 시작')
+      console.log('5. agent-inc start로 서버 시작')
     })
 
   webhook
@@ -47,7 +47,7 @@ export function registerWebhookCommand(program: Command): void {
 
       if (!webhookConfig) {
         console.log('Webhook이 설정되지 않았습니다.')
-        console.log('agentinc webhook setup <smee-url>로 설정하세요.')
+        console.log('agent-inc webhook setup <smee-url>로 설정하세요.')
         return
       }
 

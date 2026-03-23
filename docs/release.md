@@ -1,4 +1,4 @@
-# agentinc Release Process
+# agent-inc Release Process
 
 ## 1. 개요
 
@@ -113,7 +113,7 @@ npm publish
 gh release create vX.Y.Z --notes-file RELEASE_NOTES.md
 
 # 배포 검증
-npm view agentinc version
+npm view agent-inc version
 gh release view vX.Y.Z
 ```
 
@@ -139,6 +139,6 @@ gh release view vX.Y.Z
 - [ ] CHANGELOG.md 업데이트했는가?
 
 배포 후:
-- [ ] npm에서 새 버전 확인 (`npm view agentinc version`)
+- [ ] npm에서 새 버전 확인 (`npm view agent-inc version`)
 - [ ] GitHub Release 확인 (`gh release view vX.Y.Z`)
-- [ ] 새 버전 설치 테스트 (`npm install -g agentinc@X.Y.Z`)
+- [ ] 새 버전 설치 테스트 (`npm install -g agent-inc@X.Y.Z`)

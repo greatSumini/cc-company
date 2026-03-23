@@ -43,10 +43,11 @@
     {
       "phase": 5,
       "name": "npm-publish",
-      "status": "pending",
+      "status": "error",
       "started_at": "2026-03-24T00:46:21+0900",
       "error": "npm 로그인이 필요합니다. `npm login` 후 다시 실행하세요.",
-      "failed_at": "2026-03-24T00:46:55+0900"
+      "failed_at": "2026-03-24T00:53:06+0900",
+      "error_message": "Claude did not update index.json status"
     }
   ]
 }

@@ -32,7 +32,7 @@ describe('RunService', () => {
     // dry-run 모드 설정
     process.env.CC_DRY_RUN = '1'
 
-    tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'agentinc-test-'))
+    tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'agent-inc-test-'))
     fs.mkdirSync(path.join(tmpDir, 'agents'), { recursive: true })
     fs.mkdirSync(path.join(tmpDir, 'subagents'), { recursive: true })
     fs.mkdirSync(path.join(tmpDir, 'skills'), { recursive: true })
@@ -227,7 +227,7 @@ describe('RunService', () => {
 
       expect(() =>
         runService.run('developer', 'test', 'print', ['--add-dir', '/some/path'])
-      ).toThrow('--add-dir is managed internally by agentinc. Do not pass it directly.')
+      ).toThrow('--add-dir is managed internally by agent-inc. Do not pass it directly.')
     })
   })
 

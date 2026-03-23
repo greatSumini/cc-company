@@ -4,7 +4,7 @@
 
 ## Overview
 
-`agentinc start`로 데몬 모드를 시작하면:
+`agent-inc start`로 데몬 모드를 시작하면:
 1. **Ticket Server** — HTTP API로 ticket CRUD 제공
 2. **Agent Workers** — 각 agent별로 worker 프로세스 spawn, ticket polling
 
@@ -24,7 +24,7 @@
 ## Start
 
 ```bash
-agentinc start
+agent-inc start
 ```
 
 - 모든 등록된 agent의 worker가 자동 spawn
@@ -46,7 +46,7 @@ blocked → ready → in_progress → completed
 ## Create Ticket
 
 ```bash
-agentinc ticket create \
+agent-inc ticket create \
   --assignee developer \
   --title "Fix login bug" \
   --prompt "로그인 버튼이 작동하지 않는 문제를 수정해주세요."
@@ -57,7 +57,7 @@ agentinc ticket create \
 다른 agent의 의견을 먼저 받고 싶을 때:
 
 ```bash
-agentinc ticket create \
+agent-inc ticket create \
   --assignee developer \
   --cc designer,hr \
   --title "New feature review" \

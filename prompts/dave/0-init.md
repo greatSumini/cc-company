@@ -1,4 +1,4 @@
-agentinc cli를 사용해서 `dave`라는 이름의 agent를 만들고, 이 agent를 해당
+agent-inc cli를 사용해서 `dave`라는 이름의 agent를 만들고, 이 agent를 해당
 PR을 리뷰하고 피드백하는데 최적화된 인물로서 만들고싶다.
 
 그가 가져야할 핵심 가치관은 다음과 같다:

@@ -13,7 +13,7 @@ describe('ResourceService', () => {
   let agentService: AgentService
 
   beforeEach(() => {
-    tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'agentinc-test-'))
+    tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'agent-inc-test-'))
     fs.mkdirSync(path.join(tmpDir, 'agents'), { recursive: true })
     fs.mkdirSync(path.join(tmpDir, 'subagents'), { recursive: true })
     fs.mkdirSync(path.join(tmpDir, 'skills'), { recursive: true })

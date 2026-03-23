@@ -1,6 +1,6 @@
 # Configuration
 
-agentinc의 설정 파일 스키마.
+agent-inc의 설정 파일 스키마.
 
 ## Directory Structure
 

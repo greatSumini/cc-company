@@ -15,9 +15,9 @@ export class RunService {
   ) {}
 
   run(agentName: string, prompt: string | null, mode: 'interactive' | 'print', passthroughFlags: string[]): SpawnResult {
-    // ADR-014: --add-dir는 agentinc 내부 전용
+    // ADR-014: --add-dir는 agent-inc 내부 전용
     if (passthroughFlags.includes('--add-dir')) {
-      throw new Error('--add-dir is managed internally by agentinc. Do not pass it directly.')
+      throw new Error('--add-dir is managed internally by agent-inc. Do not pass it directly.')
     }
 
     // stale 임시 디렉토리 정리
