@@ -36,7 +36,7 @@ describe('FsTicketStore', () => {
       })
 
       // 파일 존재 확인
-      const ticketPath = path.join(testDir, '.cc-company', 'tickets', `${ticket.id}.json`)
+      const ticketPath = path.join(testDir, '.agentinc', 'tickets', `${ticket.id}.json`)
       expect(fs.existsSync(ticketPath)).toBe(true)
 
       // 필수 필드 확인
@@ -483,7 +483,7 @@ describe('FsTicketStore', () => {
       expect(retrievedLog).toBe(logContent)
 
       // 로그 파일 존재 확인
-      const logPath = path.join(testDir, '.cc-company', 'tickets', created.id, 'execution.log')
+      const logPath = path.join(testDir, '.agentinc', 'tickets', created.id, 'execution.log')
       expect(fs.existsSync(logPath)).toBe(true)
     })
 

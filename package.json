@@ -1,10 +1,10 @@
 {
-  "name": "cc-company",
+  "name": "@greatsumini/agentinc",
   "version": "0.2.0",
   "description": "Run Claude Code like a company — organize AI agents by role, run them with one command",
   "main": "dist/index.js",
   "bin": {
-    "cc-company": "dist/index.js"
+    "agentinc": "dist/index.js"
   },
   "scripts": {
     "build": "tsc",
@@ -28,9 +28,9 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/choesumin/cc-company.git"
+    "url": "https://github.com/greatSumini/agentinc.git"
   },
-  "homepage": "https://github.com/choesumin/cc-company#readme",
+  "homepage": "https://github.com/greatSumini/agentinc#readme",
   "engines": {
     "node": ">=18.0.0"
   },

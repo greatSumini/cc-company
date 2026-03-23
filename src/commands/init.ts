@@ -8,14 +8,14 @@ import { serializeSubagentMd, serializeSkillMd } from '../utils/frontmatter.js'
 export function registerInitCommand(program: Command): void {
   program
     .command('init')
-    .description('Initialize cc-company in current directory')
-    .option('--force', 'Overwrite existing .cc-company directory')
+    .description('Initialize agentinc in current directory')
+    .option('--force', 'Overwrite existing .agentinc directory')
     .action((options: { force?: boolean }) => {
       const rootPath = getRootPath()
 
       if (fs.existsSync(rootPath)) {
         if (!options.force) {
-          console.error('.cc-company 디렉토리가 이미 존재합니다. --force 옵션을 사용하여 덮어쓸 수 있습니다.')
+          console.error('.agentinc 디렉토리가 이미 존재합니다. --force 옵션을 사용하여 덮어쓸 수 있습니다.')
           process.exit(1)
         }
         fs.rmSync(rootPath, { recursive: true })
@@ -71,6 +71,6 @@ export function registerInitCommand(program: Command): void {
         )
       }
 
-      console.log('cc-company가 초기화되었습니다.')
+      console.log('agentinc가 초기화되었습니다.')
     })
 }

@@ -8,7 +8,7 @@ import { RunLogger } from '../logger/run-logger.js'
 
 export interface CommandContext {
   basePath: string // process.cwd() - 프로젝트 루트
-  rootPath: string // .cc-company 디렉토리 경로
+  rootPath: string // .agentinc 디렉토리 경로
   store: FsStore
   agentService: AgentService
   resourceService: ResourceService
@@ -16,13 +16,13 @@ export interface CommandContext {
 }
 
 export function getRootPath(): string {
-  return path.join(process.cwd(), '.cc-company')
+  return path.join(process.cwd(), '.agentinc')
 }
 
 export function ensureInitialized(): void {
   const rootPath = getRootPath()
   if (!fs.existsSync(rootPath)) {
-    console.error('cc-company가 초기화되지 않았습니다. `cc-company init`을 먼저 실행하세요.')
+    console.error('agentinc가 초기화되지 않았습니다. `agentinc init`을 먼저 실행하세요.')
     process.exit(1)
   }
 }

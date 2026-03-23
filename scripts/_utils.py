@@ -1,5 +1,5 @@
 """
-Shared utilities for cc-company scripts.
+Shared utilities for agentinc scripts.
 """
 
 import os

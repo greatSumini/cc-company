@@ -27,7 +27,7 @@ export class FsTicketStore implements ITicketStore {
   constructor(private basePath: string) {}
 
   private get ticketsDir(): string {
-    return path.join(this.basePath, '.cc-company', 'tickets')
+    return path.join(this.basePath, '.agentinc', 'tickets')
   }
 
   private ticketPath(id: string): string {

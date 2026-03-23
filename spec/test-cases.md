@@ -1,4 +1,4 @@
-# cc-company Test Cases
+# agentinc Test Cases
 
 ## flag-builder (유닛, ~15개)
 
@@ -45,7 +45,7 @@
 ✓ 존재하지 않는 agent getAgent → 에러
 
 [공용 리소스 CRUD]
-✓ createSubagent → .cc-company/subagents/ 에 파일 생성
+✓ createSubagent → .agentinc/subagents/ 에 파일 생성
 ✓ listSubagents → 전체 목록
 ✓ removeSubagent → 파일 삭제
 ✓ 존재하지 않는 리소스 get → 에러

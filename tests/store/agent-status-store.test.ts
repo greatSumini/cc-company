@@ -168,7 +168,7 @@ describe('AgentStatusStore', () => {
       expect(status?.state).toBe('offline')
 
       // 파일을 직접 읽어서 원본 state 확인
-      const statusPath = path.join(testDir, '.cc-company', 'status', 'agents.json')
+      const statusPath = path.join(testDir, '.agentinc', 'status', 'agents.json')
       const raw = JSON.parse(fs.readFileSync(statusPath, 'utf-8'))
       expect(raw['developer'].state).toBe('working') // 파일에는 원본 상태 유지
     })
@@ -178,7 +178,7 @@ describe('AgentStatusStore', () => {
     it('상태 파일이 올바른 경로에 생성됨', async () => {
       await store.updateState('developer', 'idle')
 
-      const statusPath = path.join(testDir, '.cc-company', 'status', 'agents.json')
+      const statusPath = path.join(testDir, '.agentinc', 'status', 'agents.json')
       expect(fs.existsSync(statusPath)).toBe(true)
 
       const content = JSON.parse(fs.readFileSync(statusPath, 'utf-8'))
@@ -191,7 +191,7 @@ describe('AgentStatusStore', () => {
       await store.updateState('designer', 'working', 'ticket-1')
       await store.updateState('hr', 'idle')
 
-      const statusPath = path.join(testDir, '.cc-company', 'status', 'agents.json')
+      const statusPath = path.join(testDir, '.agentinc', 'status', 'agents.json')
       const content = JSON.parse(fs.readFileSync(statusPath, 'utf-8'))
 
       expect(Object.keys(content)).toHaveLength(3)

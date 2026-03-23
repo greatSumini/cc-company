@@ -17,7 +17,7 @@ export class AgentStatusStore implements IAgentStatusStore {
   ) {}
 
   private get statusPath(): string {
-    return path.join(this.basePath, '.cc-company', 'status', 'agents.json')
+    return path.join(this.basePath, '.agentinc', 'status', 'agents.json')
   }
 
   private ensureStatusDir(): void {

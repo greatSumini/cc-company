@@ -16,45 +16,45 @@ describe('TicketService', () => {
   beforeEach(() => {
     testDir = fs.mkdtempSync(path.join(os.tmpdir(), 'cc-ticket-svc-test-'))
 
-    // .cc-company 디렉토리 구조 생성 (FsStore는 .cc-company 없이 동작)
-    const ccCompanyDir = path.join(testDir, '.cc-company')
-    fs.mkdirSync(ccCompanyDir, { recursive: true })
+    // .agentinc 디렉토리 구조 생성 (FsStore는 .agentinc 없이 동작)
+    const agentincDir = path.join(testDir, '.agentinc')
+    fs.mkdirSync(agentincDir, { recursive: true })
 
-    // FsTicketStore는 basePath를 받아 .cc-company/tickets/에 저장
+    // FsTicketStore는 basePath를 받아 .agentinc/tickets/에 저장
     ticketStore = new FsTicketStore(testDir)
 
     // FsStore는 rootPath를 받아 agents/ 등에 접근
-    // .cc-company 내부 구조 생성
-    fs.mkdirSync(path.join(ccCompanyDir, 'agents'), { recursive: true })
+    // .agentinc 내부 구조 생성
+    fs.mkdirSync(path.join(agentincDir, 'agents'), { recursive: true })
     fs.writeFileSync(
-      path.join(ccCompanyDir, 'config.json'),
+      path.join(agentincDir, 'config.json'),
       JSON.stringify({ version: '1.0.0' })
     )
-    agentStore = new FsStore(ccCompanyDir)
+    agentStore = new FsStore(agentincDir)
 
     service = new TicketService(ticketStore, agentStore)
 
     // 테스트용 agent 생성
-    fs.mkdirSync(path.join(ccCompanyDir, 'agents', 'developer'), { recursive: true })
+    fs.mkdirSync(path.join(agentincDir, 'agents', 'developer'), { recursive: true })
     fs.writeFileSync(
-      path.join(ccCompanyDir, 'agents', 'developer', 'agent.json'),
+      path.join(agentincDir, 'agents', 'developer', 'agent.json'),
       JSON.stringify({ name: 'developer', description: 'test', can_delegate: true })
     )
-    fs.writeFileSync(path.join(ccCompanyDir, 'agents', 'developer', 'prompt.md'), '')
+    fs.writeFileSync(path.join(agentincDir, 'agents', 'developer', 'prompt.md'), '')
 
-    fs.mkdirSync(path.join(ccCompanyDir, 'agents', 'designer'), { recursive: true })
+    fs.mkdirSync(path.join(agentincDir, 'agents', 'designer'), { recursive: true })
     fs.writeFileSync(
-      path.join(ccCompanyDir, 'agents', 'designer', 'agent.json'),
+      path.join(agentincDir, 'agents', 'designer', 'agent.json'),
       JSON.stringify({ name: 'designer', description: 'test', can_delegate: false })
     )
-    fs.writeFileSync(path.join(ccCompanyDir, 'agents', 'designer', 'prompt.md'), '')
+    fs.writeFileSync(path.join(agentincDir, 'agents', 'designer', 'prompt.md'), '')
 
-    fs.mkdirSync(path.join(ccCompanyDir, 'agents', 'hr'), { recursive: true })
+    fs.mkdirSync(path.join(agentincDir, 'agents', 'hr'), { recursive: true })
     fs.writeFileSync(
-      path.join(ccCompanyDir, 'agents', 'hr', 'agent.json'),
+      path.join(agentincDir, 'agents', 'hr', 'agent.json'),
       JSON.stringify({ name: 'hr', description: 'test', can_delegate: false })
     )
-    fs.writeFileSync(path.join(ccCompanyDir, 'agents', 'hr', 'prompt.md'), '')
+    fs.writeFileSync(path.join(agentincDir, 'agents', 'hr', 'prompt.md'), '')
   })
 
   afterEach(() => {

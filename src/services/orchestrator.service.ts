@@ -46,9 +46,9 @@ export class OrchestratorService {
     const { basePath, ticketServerConfig } = this.config
 
     // 1. Store 초기화
-    // FsStore는 .cc-company 경로 자체를 rootPath로 받음
-    const ccCompanyPath = path.join(basePath, '.cc-company')
-    const store = new FsStore(ccCompanyPath)
+    // FsStore는 .agentinc 경로 자체를 rootPath로 받음
+    const agentincPath = path.join(basePath, '.agentinc')
+    const store = new FsStore(agentincPath)
     // FsTicketStore와 AgentStatusStore는 basePath (process.cwd() 수준)를 받음
     const ticketStore = new FsTicketStore(basePath)
     const agentStatusStore = new AgentStatusStore(basePath, ticketServerConfig.heartbeatTimeoutMs)
@@ -208,7 +208,7 @@ export class OrchestratorService {
  * config.json에서 ticketServer 설정 로드
  */
 export function loadTicketServerConfig(basePath: string): TicketServerConfig {
-  const configPath = path.join(basePath, '.cc-company', 'config.json')
+  const configPath = path.join(basePath, '.agentinc', 'config.json')
   try {
     const configStr = fs.readFileSync(configPath, 'utf-8')
     const config: GlobalConfig = JSON.parse(configStr)

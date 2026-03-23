@@ -115,7 +115,7 @@ Progressive disclosure 패턴으로 구성:
 5. **Cross-references** — 관련 스킬 간 모듈화
 6. **Edge case documentation** — 명시적 gotchas 및 경고
 
-## cc-company 적용 시 핵심 시사점
+## agentinc 적용 시 핵심 시사점
 
 1. **SKILL.md 중심 구조**: 단일 진입점(SKILL.md) + 보조 리소스(scripts/, references/, assets/)
 2. **Description의 중요성**: 트리거 메커니즘으로서의 description — Claude가 자동 호출할지 결정하는 핵심
