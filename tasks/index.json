@@ -88,16 +88,12 @@
     {
       "id": 10,
       "name": "release",
-<<<<<<< HEAD
       "dir": "10-release",
-      "status": "pending",
-      "created_at": "2026-03-23T12:00:00+0900"
-=======
-      "dir": "8-release",
       "status": "completed",
       "created_at": "2026-03-23T12:00:00+0900",
-      "completed_at": "2026-03-23T20:45:43+0900"
->>>>>>> f888a7e (chore(release): mark task completed)
+      "completed_at": "2026-03-23T20:45:43+0900",
+      "pr_number": 12,
+      "pr_url": "https://github.com/greatSumini/cc-company/pull/12"
     }
   ]
 }
