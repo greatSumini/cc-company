@@ -60,7 +60,7 @@ declare global {
     interface Request {
       ticketService: TicketService
       agentStatusStore: IAgentStatusStore
-      prEventService: IPrEventService
+      prEventService?: IPrEventService
     }
   }
 }

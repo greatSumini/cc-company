@@ -24,6 +24,11 @@ webhooksRouter.post('/github', async (req, res, next) => {
       return res.status(400).json({ error: 'Missing X-GitHub-Event header' })
     }
 
+    // prEventService 미설정 시 503 반환
+    if (!req.prEventService) {
+      return res.status(503).json({ error: 'Webhook service not configured' })
+    }
+
     // 이벤트 타입별 처리
     switch (eventType) {
       case 'pull_request_review_comment': {
