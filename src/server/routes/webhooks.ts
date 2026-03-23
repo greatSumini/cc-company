@@ -43,7 +43,7 @@ webhooksRouter.post('/github', async (req, res, next) => {
       case 'pull_request_review': {
         const payload = req.body as PullRequestReviewEvent
         // action: submitted + state: approved만 처리
-        if (payload.action === 'submitted' && payload.review.state === 'approved') {
+        if (payload.action === 'submitted' && payload.review?.state === 'approved') {
           await req.prEventService.handleReviewApproved(payload)
         }
         break
