@@ -182,6 +182,85 @@ src/
 └── templates/                # init 시 복사할 기본 agent 템플릿
 ```
 
+## Monorepo 구조
+
+pnpm workspace 기반 monorepo로 구성된다.
+
+```
+packages/
+├── core/           # 공유 로직 + 타입
+│   ├── src/
+│   │   ├── types/           # 도메인 타입 (Agent, Ticket, etc)
+│   │   ├── store/           # IStore, ITicketStore + 구현체
+│   │   ├── services/        # 비즈니스 로직
+│   │   └── utils/           # frontmatter 파싱 등
+│   └── package.json
+│
+├── cli/            # CLI 전용
+│   ├── src/
+│   │   ├── commands/        # commander 핸들러
+│   │   ├── claude-runner/   # spawn 로직
+│   │   ├── gh-client/       # gh CLI 래퍼
+│   │   └── logger/          # 실행 로그
+│   └── package.json
+│
+├── server/         # HTTP API 서버
+│   ├── src/
+│   │   ├── routes/          # /tickets, /agents, /events
+│   │   ├── middleware/      # auth, webhook-signature
+│   │   ├── events/          # SSE EventBus
+│   │   └── webhook-receiver/
+│   └── package.json
+│
+└── web/            # GUI 대시보드
+    ├── src/
+    │   ├── components/      # React 컴포넌트
+    │   ├── pages/           # 페이지
+    │   ├── hooks/           # useSSE, useTickets 등
+    │   └── stores/          # Zustand 스토어
+    └── package.json
+```
+
+### 패키지 의존성
+
+```
+@agentinc/core ← @agentinc/cli
+             ← @agentinc/server
+             ← @agentinc/web (타입만)
+```
+
+## GUI 대시보드
+
+### 기술 스택
+
+- **프레임워크**: Vite + React + TypeScript
+- **스타일링**: Tailwind CSS + shadcn/ui
+- **상태 관리**: React Query (서버 상태) + Zustand (클라이언트 상태)
+- **실시간**: SSE (Server-Sent Events)
+
+### 실행 모드
+
+**개발 모드**:
+- `agentinc start` — API 서버 (포트 3847)
+- `pnpm --filter @agentinc/web dev` — Vite dev server (포트 3848, HMR)
+- Vite proxy로 API 요청을 3847로 전달
+
+**프로덕션 모드**:
+- `agentinc start` — API 서버 + 정적 파일 서빙
+- 빌드된 web 패키지가 server/public/에 배치됨
+
+### SSE 실시간 업데이트
+
+```
+GET /events
+Content-Type: text/event-stream
+
+이벤트:
+- ticket:created — 새 티켓 생성
+- ticket:updated — 티켓 상태/내용 변경
+- agent:status — Agent idle/working 상태 변경
+```
+
 ## 데이터 흐름
 
 ### Interactive Mode 예시: `agentinc run developer`
