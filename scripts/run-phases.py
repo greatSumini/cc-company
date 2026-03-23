@@ -19,7 +19,7 @@ from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from typing import Optional
 
-from _utils import find_project_root
+from _utils import find_project_root, resolve_gh_env
 
 ROOT = find_project_root()
 TASKS_DIR = ROOT / "tasks"
@@ -35,76 +35,6 @@ SPINNER_CHARS = "⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏"
 # ---------------------------------------------------------------------------
 # Utilities
 # ---------------------------------------------------------------------------
-
-_gh_cache: dict = {"gh_user": None, "token": None, "name": None, "email": None, "expires_at": 0}
-
-
-def resolve_gh_env(gh_user: Optional[str]) -> dict[str, str]:
-    """Resolve GitHub profile for gh_user and return environment variables."""
-    if gh_user is None:
-        return {}
-
-    global _gh_cache
-
-    # Check cache
-    if (
-        _gh_cache["gh_user"] == gh_user
-        and time.time() < _gh_cache["expires_at"]
-    ):
-        return {
-            "GH_TOKEN": _gh_cache["token"],
-            "GIT_AUTHOR_NAME": _gh_cache["name"],
-            "GIT_AUTHOR_EMAIL": _gh_cache["email"],
-            "GIT_COMMITTER_NAME": _gh_cache["name"],
-            "GIT_COMMITTER_EMAIL": _gh_cache["email"],
-        }
-
-    # Cache miss: resolve token
-    result = subprocess.run(
-        ["gh", "auth", "token", "--user", gh_user],
-        capture_output=True,
-        text=True,
-    )
-    if result.returncode != 0:
-        print(f"ERROR: gh auth token failed for user '{gh_user}'. Run 'gh auth login' first.")
-        sys.exit(1)
-    token = result.stdout.strip()
-
-    # Resolve name
-    result = subprocess.run(
-        ["gh", "api", "/user", "--jq", ".name"],
-        env={**os.environ, "GH_TOKEN": token},
-        capture_output=True,
-        text=True,
-    )
-    name = result.stdout.strip() if result.returncode == 0 else ""
-
-    # Resolve email
-    result = subprocess.run(
-        ["gh", "api", "/user", "--jq", ".email"],
-        env={**os.environ, "GH_TOKEN": token},
-        capture_output=True,
-        text=True,
-    )
-    email = result.stdout.strip() if result.returncode == 0 else ""
-
-    # Update cache
-    _gh_cache.update(
-        gh_user=gh_user,
-        token=token,
-        name=name,
-        email=email,
-        expires_at=time.time() + 900,
-    )
-
-    return {
-        "GH_TOKEN": token,
-        "GIT_AUTHOR_NAME": name,
-        "GIT_AUTHOR_EMAIL": email,
-        "GIT_COMMITTER_NAME": name,
-        "GIT_COMMITTER_EMAIL": email,
-    }
-
 
 def now_iso() -> str:
     return datetime.now(KST).strftime("%Y-%m-%dT%H:%M:%S%z")
