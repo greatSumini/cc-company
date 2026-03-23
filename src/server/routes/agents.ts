@@ -50,6 +50,10 @@ agentsRouter.patch('/:name/heartbeat', async (req, res, next) => {
 agentsRouter.patch('/:name/state', async (req, res, next) => {
   try {
     const { state, currentTicketId } = req.body
+    const validStates: AgentState[] = ['idle', 'working', 'offline']
+    if (!state || !validStates.includes(state)) {
+      return res.status(400).json({ error: 'Invalid or missing state' })
+    }
     await req.agentStatusStore.updateState(req.params.name, state as AgentState, currentTicketId)
     res.json({ ok: true })
   } catch (error) {
