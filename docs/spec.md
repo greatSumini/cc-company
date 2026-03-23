@@ -184,7 +184,7 @@ cc-company hook add|list|remove <name>
 - `type`: `task` (실제 작업) 또는 `cc_review` (참조 확인 요청)
 - `parentTicketId`: `cc_review`인 경우 원본 ticket ID
 - `ccReviewTicketIds`: `task`인 경우 연결된 `cc_review` ticket ID 목록
-- `status`: `blocked`, `ready`, `in_progress`, `completed`, `failed`, `cancelled`. 허용 전이: `blocked→ready|cancelled`, `ready→in_progress|cancelled`, `in_progress→completed|failed`. 터미널 상태(`completed`, `failed`, `cancelled`)에서는 전이 불가.
+- `status`: `blocked`, `ready`, `in_progress`, `completed`, `failed`, `cancelled`. 허용 전이: `blocked→ready|cancelled`, `ready→in_progress|cancelled`, `in_progress→completed|failed`. 터미널 상태(`completed`, `failed`, `cancelled`)에서는 전이 불가. **취소 제약**: task ticket 취소 시 in_progress인 cc_review가 있으면 취소 불가.
 - `priority`: `low`, `normal`, `high`, `urgent`. `cc_review`는 parent의 priority를 따름
 - `createdBy`: `user` 또는 agent name (위임 시)
 - `result`: 완료 시 `{ exitCode: number, logPath: string }`

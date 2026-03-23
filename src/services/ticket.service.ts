@@ -196,6 +196,7 @@ export class TicketService {
    * Ticket 취소
    * - blocked, ready 상태에서만 가능
    * - task ticket인 경우 연결된 cc_review tickets도 함께 취소
+   * - in_progress인 cc_review가 있으면 취소 불가
    */
   async cancelTicket(id: string, expectedVersion: number): Promise<Ticket> {
     const ticket = await this.ticketStore.get(id)
@@ -205,6 +206,15 @@ export class TicketService {
 
     // task ticket이고 cc_review가 있으면 연결된 ticket들도 취소
     if (ticket.type === 'task' && ticket.ccReviewTicketIds && ticket.ccReviewTicketIds.length > 0) {
+      // in_progress인 cc_review가 있으면 취소 불가
+      for (const ccReviewId of ticket.ccReviewTicketIds) {
+        const ccReview = await this.ticketStore.get(ccReviewId)
+        if (ccReview && ccReview.status === 'in_progress') {
+          throw new Error(`Cannot cancel: cc_review ${ccReviewId} is in progress`)
+        }
+      }
+
+      // blocked, ready 상태의 cc_review만 취소
       for (const ccReviewId of ticket.ccReviewTicketIds) {
         const ccReview = await this.ticketStore.get(ccReviewId)
         if (ccReview && (ccReview.status === 'blocked' || ccReview.status === 'ready')) {

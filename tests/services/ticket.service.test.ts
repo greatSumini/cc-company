@@ -196,6 +196,27 @@ describe('TicketService', () => {
       const ccReview = await service.getTicket(ticket.ccReviewTicketIds![0])
       expect(ccReview!.status).toBe('cancelled')
     })
+
+    it('cancelTicket() task with in_progress cc_review — 에러', async () => {
+      const ticket = await service.createTicket({
+        title: 'Task with Active Review',
+        prompt: 'This has an in_progress review',
+        assignee: 'developer',
+        cc: ['designer'],
+        createdBy: 'user',
+      })
+
+      // cc_review를 in_progress로 변경
+      const ccReviewId = ticket.ccReviewTicketIds![0]
+      let ccReview = await service.getTicket(ccReviewId)
+      await service.updateTicketStatus(ccReviewId, 'in_progress', ccReview!.version)
+
+      // parent ticket cancel 시도 — 에러 예상
+      const latestTicket = await service.getTicket(ticket.id)
+      await expect(
+        service.cancelTicket(ticket.id, latestTicket!.version)
+      ).rejects.toThrow('Cannot cancel: cc_review')
+    })
   })
 
   describe('[cc completion]', () => {
