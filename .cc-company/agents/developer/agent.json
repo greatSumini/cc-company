@@ -1,7 +1,0 @@
-{
-  "name": "developer",
-  "description": "소프트웨어 개발 전담 에이전트",
-  "gh_user": "matfia",
-  "subagents": ["git-expert", "code-reviewer"],
-  "skills": ["deploy"]
-}
