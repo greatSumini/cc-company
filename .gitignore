@@ -5,4 +5,4 @@ dist/
 .DS_Store
 __pycache__/
 
-.cc-company
+.agentinc

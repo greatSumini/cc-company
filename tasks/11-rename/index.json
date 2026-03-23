@@ -15,7 +15,9 @@
     {
       "phase": 1,
       "name": "package-config",
-      "status": "pending"
+      "status": "completed",
+      "started_at": "2026-03-24T00:36:22+0900",
+      "completed_at": "2026-03-24T00:37:53+0900"
     },
     {
       "phase": 2,
