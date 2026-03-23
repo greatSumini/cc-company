@@ -16,15 +16,15 @@ describe('TicketService', () => {
   beforeEach(() => {
     testDir = fs.mkdtempSync(path.join(os.tmpdir(), 'cc-ticket-svc-test-'))
 
-    // .cc-company 디렉토리 구조 생성 (FsStore는 .cc-company 없이 동작)
-    const ccCompanyDir = path.join(testDir, '.cc-company')
+    // .agentinc 디렉토리 구조 생성 (FsStore는 .agentinc 없이 동작)
+    const ccCompanyDir = path.join(testDir, '.agentinc')
     fs.mkdirSync(ccCompanyDir, { recursive: true })
 
-    // FsTicketStore는 basePath를 받아 .cc-company/tickets/에 저장
+    // FsTicketStore는 basePath를 받아 .agentinc/tickets/에 저장
     ticketStore = new FsTicketStore(testDir)
 
     // FsStore는 rootPath를 받아 agents/ 등에 접근
-    // .cc-company 내부 구조 생성
+    // .agentinc 내부 구조 생성
     fs.mkdirSync(path.join(ccCompanyDir, 'agents'), { recursive: true })
     fs.writeFileSync(
       path.join(ccCompanyDir, 'config.json'),

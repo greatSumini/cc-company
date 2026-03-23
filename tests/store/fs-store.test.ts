@@ -16,7 +16,7 @@ describe('FsStore', () => {
   let store: FsStore
 
   beforeEach(() => {
-    tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'cc-company-test-'))
+    tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'agentinc-test-'))
     // 기본 디렉토리 구조 생성
     fs.mkdirSync(path.join(tmpDir, 'agents'), { recursive: true })
     fs.mkdirSync(path.join(tmpDir, 'subagents'), { recursive: true })
@@ -116,7 +116,7 @@ describe('FsStore', () => {
   })
 
   describe('공용 리소스 CRUD - Subagent', () => {
-    it('createSubagent → .cc-company/subagents/ 에 .md 파일 생성', () => {
+    it('createSubagent → .agentinc/subagents/ 에 .md 파일 생성', () => {
       const config: SubagentConfig = {
         name: 'git-expert',
         description: 'Git 전문가',

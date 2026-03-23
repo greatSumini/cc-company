@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-cc-company release script.
+agentinc release script.
 Bumps version, builds, tests, commits, and tags.
 
 Usage: python3 scripts/release.py <patch|minor|major>
