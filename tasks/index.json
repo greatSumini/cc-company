@@ -81,7 +81,9 @@
       "dir": "9-pr-tracking",
       "status": "completed",
       "created_at": "2026-03-23T20:19:36+0900",
-      "completed_at": "2026-03-23T20:25:20+0900"
+      "completed_at": "2026-03-23T20:25:20+0900",
+      "pr_number": 11,
+      "pr_url": "https://github.com/greatSumini/cc-company/pull/11"
     }
   ]
 }
