@@ -1,0 +1,7 @@
+{
+  "phase": 0,
+  "name": "docs",
+  "exitCode": 0,
+  "stdout": "{\"type\":\"result\",\"subtype\":\"success\",\"is_error\":false,\"duration_ms\":83935,\"duration_api_ms\":104152,\"num_turns\":18,\"result\":\"Phase 0 완료.\\n\\n**요약**:\\n- `docs/release.md` 생성 완료 (배포 프로세스 문서)\\n- AC 통과: `test -f docs/release.md && echo \\\"OK: docs/release.md exists\\\"` → OK\\n- `tasks/8-release/index.json` phase 0 status를 `completed`로 업데이트\\n- 커밋 완료: `feat(release): phase 0 — docs`\",\"session_id\":\"49b2b1ed-474f-49ff-85b5-596738fc053c\",\"total_cost_usd\":0.6239567500000001,\"usage\":{\"input_tokens\":2,\"cache_creation_input_tokens\":43255,\"cache_read_input_tokens\":436662,\"output_tokens\":4049,\"server_tool_use\":{\"web_search_requests\":0,\"web_fetch_requests\":0},\"service_tier\":\"standard\",\"cache_creation\":{\"ephemeral_1h_input_tokens\":0,\"ephemeral_5m_input_tokens\":43255}},\"modelUsage\":{\"claude-haiku-4-5-20251001\":{\"inputTokens\":10652,\"outputTokens\":461,\"cacheReadInputTokens\":0,\"cacheCreationInputTokens\":0,\"webSearchRequests\":0,\"costUSD\":0.012956999999999996,\"contextWindow\":200000},\"claude-opus-4-5-20251101\":{\"inputTokens\":3280,\"outputTokens\":4237,\"cacheReadInputTokens\":436662,\"cacheCreationInputTokens\":43255,\"webSearchRequests\":0,\"costUSD\":0.61099975,\"contextWindow\":200000}},\"permission_denials\":[],\"uuid\":\"fbe0f62c-10e1-4437-a2f9-13e6bce4cd17\"}\n",
+  "stderr": ""
+}

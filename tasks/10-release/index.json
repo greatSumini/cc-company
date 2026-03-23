@@ -9,7 +9,8 @@
       "phase": 0,
       "name": "docs",
       "status": "completed",
-      "started_at": "2026-03-23T20:40:45+0900"
+      "started_at": "2026-03-23T20:40:45+0900",
+      "completed_at": "2026-03-23T20:42:11+0900"
     },
     {
       "phase": 1,
