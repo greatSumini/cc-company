@@ -1,0 +1,15 @@
+{
+  "project": "agentinc",
+  "task": "rename",
+  "prompt": "프로젝트 이름을 cc-company에서 Agent Inc.로 변경. display name은 Agent Inc., CLI 명령어와 npm 패키지명은 agentinc, 설정 디렉토리는 .agentinc",
+  "totalPhases": 6,
+  "created_at": "2026-03-24T00:26:01+0900",
+  "phases": [
+    { "phase": 0, "name": "docs-update", "status": "pending" },
+    { "phase": 1, "name": "package-config", "status": "pending" },
+    { "phase": 2, "name": "source-code", "status": "pending" },
+    { "phase": 3, "name": "tests-scripts", "status": "pending" },
+    { "phase": 4, "name": "verify-rename", "status": "pending" },
+    { "phase": 5, "name": "npm-publish", "status": "pending" }
+  ]
+}
