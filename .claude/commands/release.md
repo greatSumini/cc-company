@@ -1,7 +1,12 @@
 $ARGUMENTS
 
 위 인자를 버전 bump 타입(patch/minor/major)으로 사용한다.
-인자가 없으면 `git log $(git describe --tags --abbrev=0 2>/dev/null || echo "")..HEAD --oneline`을 실행하여 변경 내역을 분석하고, patch 또는 minor 중 적절한 것을 추천한 뒤 사용자에게 확인을 받는다.
+인자가 없으면 이전 태그 이후의 변경 내역을 분석하고, patch 또는 minor 중 적절한 것을 추천한 뒤 사용자에게 확인을 받는다.
+
+변경 내역 조회 방법:
+```bash
+LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null) && git log "${LAST_TAG}..HEAD" --oneline || git log --oneline
+```
 
 ---
 
@@ -14,7 +19,10 @@ $ARGUMENTS
 1. `git rev-parse --abbrev-ref HEAD` — main 브랜치인지 확인
 2. `git status --porcelain` — working tree가 clean한지 확인
 3. `npm whoami` — npm 인증 상태 확인
-4. `git log $(git describe --tags --abbrev=0 2>/dev/null || echo "")..HEAD --oneline` — 이전 태그 대비 변경사항이 존재하는지 확인. 변경사항이 없으면 릴리스할 것이 없다고 알리고 중단.
+4. 이전 태그 대비 변경사항이 존재하는지 확인. 변경사항이 없으면 릴리스할 것이 없다고 알리고 중단.
+   ```bash
+   LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null) && git log "${LAST_TAG}..HEAD" --oneline || git log --oneline
+   ```
 
 ### 경고 항목 (결과를 보여주되 계속 진행)
 
@@ -38,7 +46,10 @@ $ARGUMENTS
 
 `/prompts/release-notes.md`를 읽고 해당 지침을 따른다.
 
-1. `git log $(git describe --tags --abbrev=0 2>/dev/null || echo "")..HEAD --oneline`으로 변경 내역을 가져온다.
+1. 변경 내역을 가져온다:
+   ```bash
+   LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null) && git log "${LAST_TAG}..HEAD" --oneline || git log --oneline
+   ```
 2. 필요시 개별 커밋의 상세 내용을 `git show --stat {hash}`로 확인한다.
 3. CHANGELOG.md 엔트리 초안을 작성한다.
 4. GitHub Release 본문 초안을 작성한다.

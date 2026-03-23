@@ -33,7 +33,7 @@ Pre-flight → Release Notes 생성 → scripts/release.py → npm publish → g
 | main 브랜치 확인 | 차단 | `git rev-parse --abbrev-ref HEAD` |
 | working tree clean | 차단 | `git status --porcelain` |
 | npm 인증 상태 | 차단 | `npm whoami` |
-| 이전 태그 대비 변경사항 | 차단 | `git log $(git describe --tags --abbrev=0)..HEAD --oneline` |
+| 이전 태그 대비 변경사항 | 차단 | `LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null) && git log "${LAST_TAG}..HEAD" --oneline \|\| git log --oneline` |
 | npm audit | 경고 | `npm audit --omit=dev` |
 | npm pack 확인 | 경고 | `npm pack --dry-run` |
 
