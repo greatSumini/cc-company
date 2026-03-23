@@ -11,8 +11,8 @@ export function registerWebhookCommand(program: Command): void {
     .command('setup <smee-url>')
     .description('smee.io URL 설정 및 webhook 활성화')
     .action((smeeUrl: string) => {
-      const ccCompanyPath = path.join(process.cwd(), '.cc-company')
-      const store = new FsStore(ccCompanyPath)
+      const agentincPath = path.join(process.cwd(), '.agentinc')
+      const store = new FsStore(agentincPath)
       const config = store.getGlobalConfig()
 
       store.updateGlobalConfig({
@@ -33,21 +33,21 @@ export function registerWebhookCommand(program: Command): void {
       console.log(`2. Payload URL: ${smeeUrl}`)
       console.log('3. Content type: application/json')
       console.log('4. Events: Pull request reviews, Pull request review comments')
-      console.log('5. cc-company start로 서버 시작')
+      console.log('5. agentinc start로 서버 시작')
     })
 
   webhook
     .command('status')
     .description('현재 webhook 설정 표시')
     .action(() => {
-      const ccCompanyPath = path.join(process.cwd(), '.cc-company')
-      const store = new FsStore(ccCompanyPath)
+      const agentincPath = path.join(process.cwd(), '.agentinc')
+      const store = new FsStore(agentincPath)
       const config = store.getGlobalConfig()
       const webhookConfig = config.webhook
 
       if (!webhookConfig) {
         console.log('Webhook이 설정되지 않았습니다.')
-        console.log('cc-company webhook setup <smee-url>로 설정하세요.')
+        console.log('agentinc webhook setup <smee-url>로 설정하세요.')
         return
       }
 
@@ -62,8 +62,8 @@ export function registerWebhookCommand(program: Command): void {
     .command('disable')
     .description('Webhook 비활성화')
     .action(() => {
-      const ccCompanyPath = path.join(process.cwd(), '.cc-company')
-      const store = new FsStore(ccCompanyPath)
+      const agentincPath = path.join(process.cwd(), '.agentinc')
+      const store = new FsStore(agentincPath)
       const config = store.getGlobalConfig()
 
       store.updateGlobalConfig({
@@ -81,8 +81,8 @@ export function registerWebhookCommand(program: Command): void {
     .command('set-secret <secret>')
     .description('GitHub webhook secret 설정')
     .action((secret: string) => {
-      const ccCompanyPath = path.join(process.cwd(), '.cc-company')
-      const store = new FsStore(ccCompanyPath)
+      const agentincPath = path.join(process.cwd(), '.agentinc')
+      const store = new FsStore(agentincPath)
       const config = store.getGlobalConfig()
 
       store.updateGlobalConfig({
@@ -106,8 +106,8 @@ export function registerWebhookCommand(program: Command): void {
         process.exit(1)
       }
 
-      const ccCompanyPath = path.join(process.cwd(), '.cc-company')
-      const store = new FsStore(ccCompanyPath)
+      const agentincPath = path.join(process.cwd(), '.agentinc')
+      const store = new FsStore(agentincPath)
       const config = store.getGlobalConfig()
 
       store.updateGlobalConfig({

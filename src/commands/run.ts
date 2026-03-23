@@ -35,7 +35,7 @@ export function registerRunCommand(program: Command): void {
       while (i < allArgs.length) {
         const arg = allArgs[i]
 
-        // ADR-011: -p는 cc-company가 mode 결정에 사용하면서 동시에 Claude CLI에도 전달한다.
+        // ADR-011: -p는 agentinc가 mode 결정에 사용하면서 동시에 Claude CLI에도 전달한다.
         // 여기서 skip하고, 아래에서 printMode일 때 수동 추가한다.
         if (arg === '-p' || arg === '--print') {
           i++

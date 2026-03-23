@@ -16,9 +16,9 @@ async function main() {
     process.exit(1)
   }
 
-  // FsStore는 .cc-company 경로를 rootPath로 받음
-  const ccCompanyPath = path.join(basePath, '.cc-company')
-  const store = new FsStore(ccCompanyPath)
+  // FsStore는 .agentinc 경로를 rootPath로 받음
+  const agentincPath = path.join(basePath, '.agentinc')
+  const store = new FsStore(agentincPath)
   const agentConfig = store.getAgent(agentName)
 
   if (!agentConfig) {
@@ -38,7 +38,7 @@ async function main() {
     config,
     agentConfig,
     workingDir: basePath,  // project root (process.cwd())
-    runClaude: (prompt, ac) => runClaude(prompt, ac, { store, basePath: ccCompanyPath }),
+    runClaude: (prompt, ac) => runClaude(prompt, ac, { store, basePath: agentincPath }),
   })
 
   // SIGTERM 핸들링

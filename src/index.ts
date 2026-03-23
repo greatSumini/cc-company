@@ -13,7 +13,7 @@ import { registerWebhookCommand } from './commands/webhook.js'
 const program = new Command()
 
 program
-  .name('cc-company')
+  .name('agentinc')
   .description('Run Claude Code like a company')
   .version('0.1.0')
 

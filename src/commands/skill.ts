@@ -16,7 +16,7 @@ export function registerSkillCommand(program: Command): void {
     .command('skill')
     .description('Manage shared skills')
 
-  // cc-company skill add <name>
+  // agentinc skill add <name>
   skillCmd
     .command('add <name>')
     .description('Add a new skill to the shared pool')
@@ -33,7 +33,7 @@ export function registerSkillCommand(program: Command): void {
       }
     })
 
-  // cc-company skill list
+  // agentinc skill list
   skillCmd
     .command('list')
     .description('List all shared skills')
@@ -52,7 +52,7 @@ export function registerSkillCommand(program: Command): void {
       }
     })
 
-  // cc-company skill remove <name>
+  // agentinc skill remove <name>
   skillCmd
     .command('remove <name>')
     .description('Remove a skill from the shared pool')
@@ -67,7 +67,7 @@ export function registerSkillCommand(program: Command): void {
       }
     })
 
-  // cc-company skill show <name>
+  // agentinc skill show <name>
   skillCmd
     .command('show <name>')
     .description('Show skill details with file listing')
@@ -107,7 +107,7 @@ export function registerSkillCommand(program: Command): void {
       }
     })
 
-  // cc-company skill add-file <skill-name> <file-path>
+  // agentinc skill add-file <skill-name> <file-path>
   skillCmd
     .command('add-file <skill-name> <file-path>')
     .description('Add a file to a skill')
@@ -125,7 +125,7 @@ export function registerSkillCommand(program: Command): void {
       }
     })
 
-  // cc-company skill edit-file <skill-name> <file-path>
+  // agentinc skill edit-file <skill-name> <file-path>
   skillCmd
     .command('edit-file <skill-name> <file-path>')
     .description('Edit a file in a skill')
@@ -143,7 +143,7 @@ export function registerSkillCommand(program: Command): void {
       }
     })
 
-  // cc-company skill remove-file <skill-name> <file-path>
+  // agentinc skill remove-file <skill-name> <file-path>
   skillCmd
     .command('remove-file <skill-name> <file-path>')
     .description('Remove a file from a skill')

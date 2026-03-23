@@ -3,7 +3,7 @@ import type { IWebhookReceiver, WebhookEventHandler } from './index.js'
 /**
  * SSE 기반 원격 webhook 수신기 (향후 구현)
  *
- * 원격 서버 모드에서 cc-company 서버의 SSE 엔드포인트를 구독하여
+ * 원격 서버 모드에서 agentinc 서버의 SSE 엔드포인트를 구독하여
  * GitHub webhook 이벤트를 수신한다.
  */
 export class SseReceiver implements IWebhookReceiver {
