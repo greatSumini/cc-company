@@ -1,4 +1,4 @@
-import { execSync } from 'child_process'
+import { spawnSync } from 'child_process'
 
 /**
  * gh CLI 래퍼 인터페이스
@@ -44,31 +44,43 @@ export interface PrReviewInfo {
 export class GhClient implements IGhClient {
   constructor(private readonly ghUser?: string) {}
 
-  private execGh(args: string): string {
-    const userFlag = this.ghUser ? `--hostname github.com` : ''
+  private execGh(args: string[]): string {
     // gh_user가 있으면 해당 계정의 토큰 사용
     const env = this.ghUser
       ? { ...process.env, GH_TOKEN: this.getToken() }
       : process.env
 
-    return execSync(`gh ${args} ${userFlag}`, {
+    const fullArgs = this.ghUser ? [...args, '--hostname', 'github.com'] : args
+    const result = spawnSync('gh', fullArgs, {
       encoding: 'utf-8',
       env,
-    }).trim()
+    })
+
+    if (result.error) throw result.error
+    if (result.status !== 0) {
+      throw new Error(result.stderr || 'gh command failed')
+    }
+    return result.stdout.trim()
   }
 
   private getToken(): string {
     if (!this.ghUser) return ''
-    return execSync(`gh auth token --user ${this.ghUser}`, {
+    const result = spawnSync('gh', ['auth', 'token', '--user', this.ghUser], {
       encoding: 'utf-8',
-    }).trim()
+    })
+    if (result.error) throw result.error
+    if (result.status !== 0) {
+      throw new Error(result.stderr || 'gh auth token failed')
+    }
+    return result.stdout.trim()
   }
 
   async getPrInfo(prUrl: string): Promise<PrInfo> {
     try {
-      const json = this.execGh(
-        `pr view ${prUrl} --json number,title,state,baseRefName,headRefName,url,author,reviewRequests`
-      )
+      const json = this.execGh([
+        'pr', 'view', prUrl,
+        '--json', 'number,title,state,baseRefName,headRefName,url,author,reviewRequests'
+      ])
       return JSON.parse(json)
     } catch (error) {
       throw new Error(`Failed to get PR info for ${prUrl}: ${error}`)
@@ -77,7 +89,7 @@ export class GhClient implements IGhClient {
 
   async getPrReviews(prUrl: string): Promise<PrReviewInfo[]> {
     try {
-      const json = this.execGh(`pr view ${prUrl} --json reviews`)
+      const json = this.execGh(['pr', 'view', prUrl, '--json', 'reviews'])
       const data = JSON.parse(json)
       return data.reviews || []
     } catch (error) {
