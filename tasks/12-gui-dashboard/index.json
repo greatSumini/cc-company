@@ -22,7 +22,9 @@
     {
       "phase": 2,
       "name": "cli-server-package",
-      "status": "pending"
+      "status": "completed",
+      "started_at": "2026-03-24T02:58:08+0900",
+      "completed_at": "2026-03-24T03:11:00+0900"
     },
     {
       "phase": 3,

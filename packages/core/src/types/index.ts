@@ -256,3 +256,6 @@ export interface IGhClient {
   getPrInfo(prUrl: string): Promise<PrInfo>
   getPrReviews(prUrl: string): Promise<PrReviewInfo[]>
 }
+
+// Re-export GitHub event types
+export * from './github-events.js'
