@@ -2,9 +2,10 @@ import express, { Express } from 'express'
 import { ticketsRouter } from './routes/tickets.js'
 import { agentsRouter } from './routes/agents.js'
 import { webhooksRouter } from './routes/webhooks.js'
+import { eventsRouter } from './routes/events.js'
 import { errorHandler } from './middleware/error-handler.js'
 import { verifyGitHubSignature } from './middleware/webhook-signature.js'
-import type { TicketService, IAgentStatusStore } from '@agentinc/core'
+import type { TicketService, IAgentStatusStore, IStore } from '@agentinc/core'
 import type { PullRequestReviewCommentEvent, PullRequestReviewEvent } from '@agentinc/core'
 
 /**
@@ -19,6 +20,7 @@ export interface IPrEventService {
 export interface ServerDependencies {
   ticketService: TicketService
   agentStatusStore: IAgentStatusStore
+  agentStore?: IStore
   webhookSecret?: string
   prEventService?: IPrEventService
 }
@@ -32,6 +34,9 @@ export function createApp(deps: ServerDependencies): Express {
   app.use((req, res, next) => {
     req.ticketService = deps.ticketService
     req.agentStatusStore = deps.agentStatusStore
+    if (deps.agentStore) {
+      req.agentStore = deps.agentStore
+    }
     if (deps.prEventService) {
       req.prEventService = deps.prEventService
     }
@@ -47,6 +52,7 @@ export function createApp(deps: ServerDependencies): Express {
 
   app.use('/tickets', ticketsRouter)
   app.use('/agents', agentsRouter)
+  app.use('/events', eventsRouter)
 
   app.use(errorHandler)
 
@@ -59,6 +65,7 @@ declare global {
     interface Request {
       ticketService: TicketService
       agentStatusStore: IAgentStatusStore
+      agentStore?: IStore
       prEventService?: IPrEventService
     }
   }
@@ -68,8 +75,11 @@ declare global {
 export { ticketsRouter } from './routes/tickets.js'
 export { agentsRouter } from './routes/agents.js'
 export { webhooksRouter } from './routes/webhooks.js'
+export { eventsRouter } from './routes/events.js'
 export { errorHandler } from './middleware/error-handler.js'
 export { verifyGitHubSignature } from './middleware/webhook-signature.js'
 export { SmeeReceiver } from './webhook-receiver/smee-receiver.js'
 export { SseReceiver } from './webhook-receiver/sse-receiver.js'
 export type { IWebhookReceiver, WebhookEvent, WebhookEventHandler } from './webhook-receiver/index.js'
+export { eventBus } from './events/event-bus.js'
+export type { ServerEvent } from './events/event-bus.js'

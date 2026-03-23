@@ -4,6 +4,22 @@ import type { AgentState } from '@agentinc/core'
 export const agentsRouter = Router()
 
 /**
+ * GET /agents
+ * 에이전트 목록 조회 (agentStore 의존성 필요)
+ */
+agentsRouter.get('/', async (req, res, next) => {
+  try {
+    if (!req.agentStore) {
+      return res.status(501).json({ error: 'agentStore not configured' })
+    }
+    const agents = req.agentStore.listAgents()
+    res.json(agents)
+  } catch (error) {
+    next(error)
+  }
+})
+
+/**
  * GET /agents/status
  */
 agentsRouter.get('/status', async (req, res, next) => {

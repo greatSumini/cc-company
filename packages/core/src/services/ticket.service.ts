@@ -20,11 +20,21 @@ import type {
   TicketResult,
 } from '../types/index.js'
 
+export interface TicketServiceOptions {
+  onTicketCreated?: (ticket: Ticket) => void
+  onTicketUpdated?: (ticket: Ticket) => void
+}
+
 export class TicketService {
+  private options: TicketServiceOptions
+
   constructor(
     private ticketStore: ITicketStore,
-    private agentStore: IStore
-  ) {}
+    private agentStore: IStore,
+    options: TicketServiceOptions = {}
+  ) {
+    this.options = options
+  }
 
   /**
    * Ticket 생성
@@ -59,6 +69,7 @@ export class TicketService {
 
     // cc가 없으면 바로 반환
     if (!hasCc) {
+      this.options.onTicketCreated?.(taskTicket)
       return taskTicket
     }
 
@@ -84,6 +95,7 @@ export class TicketService {
       expectedVersion: taskTicket.version,
     })
 
+    this.options.onTicketCreated?.(updatedTicket)
     return updatedTicket
   }
 
@@ -156,6 +168,7 @@ export class TicketService {
       await this.checkCcCompletion(ticket.parentTicketId)
     }
 
+    this.options.onTicketUpdated?.(updated)
     return updated
   }
 
