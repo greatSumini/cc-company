@@ -1,3 +1,3 @@
-# docs-diff: soul-toml
+# spec-diff: soul-toml
 
 No documentation changes.

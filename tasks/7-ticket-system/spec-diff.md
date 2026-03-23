@@ -1,14 +1,14 @@
-# docs-diff: ticket-system
+# spec-diff: ticket-system
 
 Baseline: `d1b015d`
 
 ## `docs/adr.md`
 
 ```diff
-diff --git a/docs/adr.md b/docs/adr.md
+diff --git a/spec/adr.md b/spec/adr.md
 index 63b5a53..e03c989 100644
---- a/docs/adr.md
-+++ b/docs/adr.md
+--- a/spec/adr.md
++++ b/spec/adr.md
 @@ -248,3 +248,63 @@
  - `src/claude-runner/spawner.ts` — env 파라미터 추가
  - `src/services/run.service.ts` — env-builder 호출 → spawner 전달
@@ -78,10 +78,10 @@ index 63b5a53..e03c989 100644
 ## `docs/architecture.md`
 
 ```diff
-diff --git a/docs/architecture.md b/docs/architecture.md
+diff --git a/spec/architecture.md b/spec/architecture.md
 index 6295dff..25ec105 100644
---- a/docs/architecture.md
-+++ b/docs/architecture.md
+--- a/spec/architecture.md
++++ b/spec/architecture.md
 @@ -30,6 +30,29 @@ CLI arg 파싱만 수행하고 service를 호출한다. 로직 없음.
  파일시스템 읽기/쓰기를 인터페이스로 추상화.
  향후 대시보드 서버 API 구현체로 교체 가능.
@@ -209,10 +209,10 @@ index 6295dff..25ec105 100644
 ## `docs/spec.md`
 
 ```diff
-diff --git a/docs/spec.md b/docs/spec.md
+diff --git a/spec/spec.md b/spec/spec.md
 index 0b5abd0..eea5476 100644
---- a/docs/spec.md
-+++ b/docs/spec.md
+--- a/spec/spec.md
++++ b/spec/spec.md
 @@ -38,6 +38,32 @@ cc-company agent remove <name>    # agent 삭제
  cc-company agent <name> show      # agent 상세 조회 (할당된 리소스 포함)
  ```
@@ -315,10 +315,10 @@ index 0b5abd0..eea5476 100644
 ## `docs/test-cases.md`
 
 ```diff
-diff --git a/docs/test-cases.md b/docs/test-cases.md
+diff --git a/spec/test-cases.md b/spec/test-cases.md
 index 30f0e74..b40458d 100644
---- a/docs/test-cases.md
-+++ b/docs/test-cases.md
+--- a/spec/test-cases.md
++++ b/spec/test-cases.md
 @@ -159,3 +159,55 @@ store는 in-memory fake 또는 실제 fs-store + 임시 디렉토리.
  ✓ 캐시 만료 (TTL 초과) → resolver 함수 재실행
  ✓ ghUser 변경 → 이전 캐시 무효화, 새 resolver 실행

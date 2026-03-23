@@ -1,4 +1,4 @@
-# docs-diff: interactive-run
+# spec-diff: interactive-run
 
 ## 변경된 문서 목록
 

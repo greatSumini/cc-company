@@ -4,14 +4,14 @@
 
 먼저 아래 문서들을 반드시 읽고 프로젝트의 전체 아키텍처와 설계 의도를 완전히 이해하라:
 
-- `/docs/spec.md`
-- `/docs/architecture.md`
+- `/spec/spec.md`
+- `/spec/architecture.md`
 - `/prompts/task-create.md`
 - `/.claude/commands/plan-and-build.md`
 
 ## 작업 내용
 
-### 1. `/docs/spec.md` 업데이트
+### 1. `/spec/spec.md` 업데이트
 
 "실행 로그 스키마" 섹션 이후에 아래 내용을 추가:
 

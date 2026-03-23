@@ -4,11 +4,11 @@
 
 먼저 아래 문서들을 반드시 읽고 프로젝트의 전체 아키텍처와 설계 의도를 완전히 이해하라:
 
-- `/docs/adr.md`
+- `/spec/adr.md`
 
 ## 작업 내용
 
-`/docs/adr.md` 파일 맨 아래에 다음 ADR을 추가하라:
+`/spec/adr.md` 파일 맨 아래에 다음 ADR을 추가하라:
 
 ### ADR-013: Soul entry 식별 방식 — 파일별 auto-increment 정수 ID
 

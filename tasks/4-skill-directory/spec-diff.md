@@ -1,14 +1,14 @@
-# docs-diff: skill-directory
+# spec-diff: skill-directory
 
 Baseline: `4ac3815`
 
 ## `docs/adr.md`
 
 ```diff
-diff --git a/docs/adr.md b/docs/adr.md
+diff --git a/spec/adr.md b/spec/adr.md
 index 911d92a..33aebcc 100644
---- a/docs/adr.md
-+++ b/docs/adr.md
+--- a/spec/adr.md
++++ b/spec/adr.md
 @@ -183,3 +183,27 @@
  - Hook은 JSON 유지 (config 필드가 구조화된 JSON이므로 md 변환 부자연스러움)
  
@@ -42,10 +42,10 @@ index 911d92a..33aebcc 100644
 ## `docs/architecture.md`
 
 ```diff
-diff --git a/docs/architecture.md b/docs/architecture.md
+diff --git a/spec/architecture.md b/spec/architecture.md
 index 98b5100..b44f9be 100644
---- a/docs/architecture.md
-+++ b/docs/architecture.md
+--- a/spec/architecture.md
++++ b/spec/architecture.md
 @@ -46,6 +46,13 @@ interface IStore {
    removeSubagent(name: string): void
    // skills, hooks 동일 패턴
@@ -107,10 +107,10 @@ index 98b5100..b44f9be 100644
 ## `docs/spec.md`
 
 ```diff
-diff --git a/docs/spec.md b/docs/spec.md
+diff --git a/spec/spec.md b/spec/spec.md
 index 5dbf1c6..b51d2c3 100644
---- a/docs/spec.md
-+++ b/docs/spec.md
+--- a/spec/spec.md
++++ b/spec/spec.md
 @@ -69,7 +69,11 @@ cc-company hook add|list|remove <name>
  │   ├── git-expert.md
  │   └── code-reviewer.md
@@ -214,10 +214,10 @@ index 5dbf1c6..b51d2c3 100644
 ## `docs/test-cases.md`
 
 ```diff
-diff --git a/docs/test-cases.md b/docs/test-cases.md
+diff --git a/spec/test-cases.md b/spec/test-cases.md
 index ac6b34f..6b3b2bd 100644
---- a/docs/test-cases.md
-+++ b/docs/test-cases.md
+--- a/spec/test-cases.md
++++ b/spec/test-cases.md
 @@ -13,7 +13,10 @@
  ✓ subagents 여러개 → --agents JSON에 전부 포함
  ✓ mcp.json 존재 → --mcp-config 경로 포함
@@ -305,10 +305,10 @@ index ac6b34f..6b3b2bd 100644
 ## `docs/testing.md`
 
 ```diff
-diff --git a/docs/testing.md b/docs/testing.md
+diff --git a/spec/testing.md b/spec/testing.md
 index 1d49b4c..67a848b 100644
---- a/docs/testing.md
-+++ b/docs/testing.md
+--- a/spec/testing.md
++++ b/spec/testing.md
 @@ -16,7 +16,7 @@
  |---|---|---|---|
  | flag-builder | 유닛 | 철저히 | 변환 로직이 틀리면 claude가 엉뚱하게 실행됨 |

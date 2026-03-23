@@ -1,14 +1,14 @@
-# docs-diff: pr-tracking
+# spec-diff: pr-tracking
 
 Baseline: `d7e87fc`
 
 ## `docs/spec.md`
 
 ```diff
-diff --git a/docs/spec.md b/docs/spec.md
+diff --git a/spec/spec.md b/spec/spec.md
 index e4fea98..5fe860c 100644
---- a/docs/spec.md
-+++ b/docs/spec.md
+--- a/spec/spec.md
++++ b/spec/spec.md
 @@ -280,6 +280,32 @@ Hook은 config 필드가 구조화된 JSON이므로 `.json` 형식을 유지한
  - `mode`: `"interactive"` 또는 `"print"`. `-p` flag 유무로 결정.
  - `prompt`: interactive mode에서 prompt 없이 시작한 경우 `null`.

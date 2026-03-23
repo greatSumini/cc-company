@@ -3,9 +3,9 @@
 ## 사전 준비
 
 먼저 아래 문서들을 반드시 읽고 프로젝트의 전체 아키텍처와 설계 의도를 완전히 이해하라:
-- `/docs/spec.md` — 실행 로그 스키마, .cc-company/runs/ 구조
-- `/docs/architecture.md` — logger 모듈의 역할
-- `/docs/adr.md` — ADR-006 (실행 로그 저장 범위), ADR-008 (동시 실행)
+- `/spec/spec.md` — 실행 로그 스키마, .cc-company/runs/ 구조
+- `/spec/architecture.md` — logger 모듈의 역할
+- `/spec/adr.md` — ADR-006 (실행 로그 저장 범위), ADR-008 (동시 실행)
 
 그리고 이전 phase의 작업물을 반드시 확인하라:
 - `src/types/index.ts` — RunLog 타입

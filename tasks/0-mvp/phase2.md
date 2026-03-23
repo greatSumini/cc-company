@@ -3,11 +3,11 @@
 ## 사전 준비
 
 먼저 아래 문서들을 반드시 읽고 프로젝트의 전체 아키텍처와 설계 의도를 완전히 이해하라:
-- `/docs/spec.md` — CLI 스펙, 디렉토리 구조, 스키마
-- `/docs/architecture.md` — 레이어 구조, IStore 인터페이스 정의
-- `/docs/adr.md` — ADR-002 (파일시스템), ADR-004 (공용 풀), ADR-007 (ConfigStore 추상화)
-- `/docs/testing.md` — 테스트 전략
-- `/docs/test-cases.md` — store 관련 테스트 케이스
+- `/spec/spec.md` — CLI 스펙, 디렉토리 구조, 스키마
+- `/spec/architecture.md` — 레이어 구조, IStore 인터페이스 정의
+- `/spec/adr.md` — ADR-002 (파일시스템), ADR-004 (공용 풀), ADR-007 (ConfigStore 추상화)
+- `/spec/testing.md` — 테스트 전략
+- `/spec/test-cases.md` — store 관련 테스트 케이스
 
 그리고 이전 phase의 작업물을 반드시 확인하라:
 - `src/types/index.ts` — 타입 정의 (AgentConfig, SubagentConfig 등)
@@ -88,7 +88,7 @@ IStore를 구현한다. `.cc-company/` 디렉토리 구조:
 
 `tests/store/fs-store.test.ts`
 
-`/docs/test-cases.md`의 store 섹션에 정의된 케이스를 구현하라:
+`/spec/test-cases.md`의 store 섹션에 정의된 케이스를 구현하라:
 
 ```
 [agent CRUD]

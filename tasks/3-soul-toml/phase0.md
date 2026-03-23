@@ -4,9 +4,9 @@
 
 먼저 아래 문서들을 반드시 읽고 프로젝트의 전체 아키텍처와 설계 의도를 완전히 이해하라:
 
-- `/docs/architecture.md`
-- `/docs/spec.md`
-- `/docs/adr.md`
+- `/spec/architecture.md`
+- `/spec/spec.md`
+- `/spec/adr.md`
 
 그리고 현재 soul 파일들의 구조를 확인하라:
 

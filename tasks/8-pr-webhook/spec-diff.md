@@ -1,14 +1,14 @@
-# docs-diff: pr-webhook
+# spec-diff: pr-webhook
 
 Baseline: `3959c95`
 
 ## `docs/adr.md`
 
 ```diff
-diff --git a/docs/adr.md b/docs/adr.md
+diff --git a/spec/adr.md b/spec/adr.md
 index e03c989..f472e70 100644
---- a/docs/adr.md
-+++ b/docs/adr.md
+--- a/spec/adr.md
++++ b/spec/adr.md
 @@ -308,3 +308,56 @@
  - `src/services/orchestrator.service.ts` — 전체 시스템 부트스트랩
  - `src/services/agent-runner.service.ts` — 개별 agent polling loop
@@ -71,10 +71,10 @@ index e03c989..f472e70 100644
 ## `docs/architecture.md`
 
 ```diff
-diff --git a/docs/architecture.md b/docs/architecture.md
+diff --git a/spec/architecture.md b/spec/architecture.md
 index 25ec105..9cedd3d 100644
---- a/docs/architecture.md
-+++ b/docs/architecture.md
+--- a/spec/architecture.md
++++ b/spec/architecture.md
 @@ -15,6 +15,10 @@
  Commands (CLI 파싱) → Services (비즈니스 로직) → Store (데이터 접근) / Claude Runner (실행)
  ```
@@ -212,10 +212,10 @@ index 25ec105..9cedd3d 100644
 ## `docs/spec.md`
 
 ```diff
-diff --git a/docs/spec.md b/docs/spec.md
+diff --git a/spec/spec.md b/spec/spec.md
 index e4fea98..4560b5d 100644
---- a/docs/spec.md
-+++ b/docs/spec.md
+--- a/spec/spec.md
++++ b/spec/spec.md
 @@ -59,6 +59,14 @@ cc-company ticket show <id>
  cc-company ticket cancel <id>
  ```

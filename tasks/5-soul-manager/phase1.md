@@ -4,9 +4,9 @@
 
 먼저 아래 문서들을 반드시 읽고 프로젝트의 전체 아키텍처와 설계 의도를 완전히 이해하라:
 
-- `/docs/adr.md`
-- `/docs/architecture.md`
-- `/tasks/5-soul-manager/docs-diff.md` (이번 task의 문서 변경 기록)
+- `/spec/adr.md`
+- `/spec/architecture.md`
+- `/tasks/5-soul-manager/spec-diff.md` (이번 task의 문서 변경 기록)
 
 그리고 아래 파일들을 반드시 읽어라:
 
@@ -101,7 +101,7 @@ rm -rf __pycache__/
 | 스크립트 | 역할 | 관련 파일 |
 |---|---|---|
 | `run-phases.py` | task의 phase를 순차 실행하는 runner | `tasks/*/index.json`, `tasks/*/phase*.md`, `prompts/task-create.md` |
-| `gen-docs-diff.py` | Phase 0 완료 후 docs/ 변경 diff를 markdown으로 생성 | `tasks/*/docs-diff.md` |
+| `gen-docs-diff.py` | Phase 0 완료 후 docs/ 변경 diff를 markdown으로 생성 | `tasks/*/spec-diff.md` |
 | `_utils.py` | 스크립트 공용 유틸리티 (프로젝트 루트 탐색 등) | - |
 
 의존성과 실행 방법도 포함하라.

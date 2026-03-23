@@ -3,9 +3,9 @@
 ## 사전 준비
 
 먼저 아래 문서들을 반드시 읽고 프로젝트의 전체 아키텍처와 설계 의도를 완전히 이해하라:
-- `/docs/spec.md` — CLI 명령어 전체 스펙
-- `/docs/architecture.md` — commands 레이어의 역할 (얇은 핸들러, 로직 없음)
-- `/docs/adr.md` — ADR-003 (플래그 패스스루), ADR-010 (init 멱등성)
+- `/spec/spec.md` — CLI 명령어 전체 스펙
+- `/spec/architecture.md` — commands 레이어의 역할 (얇은 핸들러, 로직 없음)
+- `/spec/adr.md` — ADR-003 (플래그 패스스루), ADR-010 (init 멱등성)
 
 그리고 이전 phase의 작업물을 반드시 확인하라:
 - `src/index.ts` — 현재 CLI 엔트리포인트 구조
