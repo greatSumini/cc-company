@@ -75,8 +75,18 @@ def run_cmd(cmd: list[str], description: str) -> bool:
     return True
 
 
-def rollback_package_json():
-    """Restore package.json to HEAD state."""
+def rollback_package_json(staged: bool = False):
+    """Restore package.json to HEAD state.
+
+    Args:
+        staged: If True, also unstage the file before restoring.
+    """
+    if staged:
+        subprocess.run(
+            ["git", "reset", "HEAD", "package.json"],
+            cwd=str(ROOT),
+            capture_output=True,
+        )
     subprocess.run(
         ["git", "checkout", "--", "package.json"],
         cwd=str(ROOT),
@@ -165,7 +175,8 @@ def main():
         text=True,
     )
     if result.returncode != 0:
-        print(f"Commit failed: {result.stderr}")
+        rollback_package_json(staged=True)
+        print(f"Commit failed. Rolled back package.json.\n{result.stderr}")
         sys.exit(1)
 
     # Git tag
