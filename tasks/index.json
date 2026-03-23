@@ -1,4 +1,5 @@
 {
+  "repositoryUrl": "https://github.com/greatSumini/cc-company",
   "tasks": [
     {
       "id": 0,
@@ -62,7 +63,9 @@
       "dir": "7-ticket-system",
       "status": "completed",
       "created_at": "2026-03-22T21:30:00+0900",
-      "completed_at": "2026-03-22T18:14:29+0900"
+      "completed_at": "2026-03-22T18:14:29+0900",
+      "pr_number": 10,
+      "pr_url": "https://github.com/greatSumini/cc-company/pull/10"
     },
     {
       "id": 8,
@@ -71,6 +74,13 @@
       "status": "completed",
       "created_at": "2026-03-23T15:30:00+0900",
       "completed_at": "2026-03-23T19:55:57+0900"
+    },
+    {
+      "id": 9,
+      "name": "pr-tracking",
+      "dir": "9-pr-tracking",
+      "status": "pending",
+      "created_at": "2026-03-23T20:19:36+0900"
     }
   ]
 }

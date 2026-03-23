@@ -1,0 +1,12 @@
+{
+  "project": "cc-company",
+  "task": "pr-tracking",
+  "prompt": "생성 및 진행된 task에 대해서, 이로 인해 github pr이 생성되었다면 index.json에 기록되면 좋겠다. 이전 데이터는 채워넣지 않아도 된다.",
+  "totalPhases": 3,
+  "created_at": "2026-03-23T20:19:36+0900",
+  "phases": [
+    { "phase": 0, "name": "docs", "status": "pending" },
+    { "phase": 1, "name": "gh-utils", "status": "pending" },
+    { "phase": 2, "name": "create-pr-script", "status": "pending" }
+  ]
+}
