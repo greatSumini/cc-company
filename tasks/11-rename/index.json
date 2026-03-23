@@ -22,12 +22,15 @@
     {
       "phase": 2,
       "name": "source-code",
-      "status": "pending"
+      "status": "completed",
+      "started_at": "2026-03-24T00:38:21+0900",
+      "completed_at": "2026-03-24T00:41:30+0900"
     },
     {
       "phase": 3,
       "name": "tests-scripts",
-      "status": "pending"
+      "status": "pending",
+      "started_at": "2026-03-24T00:41:30+0900"
     },
     {
       "phase": 4,
