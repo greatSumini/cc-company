@@ -1,0 +1,17 @@
+{
+  "project": "agentinc",
+  "task": "gui-dashboard",
+  "prompt": "gui를 만들것이다. 메인페이지는 kanban(ticket system)이며, 좌측 sidebar에 agent목록/subagent,skill관리/webhook관리 가 존재한다. 일단 메인페이지 외에는 빈 페이지로 작업할 것이다. kanban의 티켓에는 정보들이 적절히 표시된다. 먼저 큰 구조부터 논의하고싶다. gui와 관련된 코드를 어떻게 위치시키는게 좋을까? 아예 monorepo 구조로 진화하는게 나을까? 여러가지 선택지를 시뮬레이팅 해보고싶다.",
+  "totalPhases": 8,
+  "created_at": "2026-03-24T14:30:00+0900",
+  "phases": [
+    { "phase": 0, "name": "docs-update", "status": "pending" },
+    { "phase": 1, "name": "core-package", "status": "pending" },
+    { "phase": 2, "name": "cli-server-package", "status": "pending" },
+    { "phase": 3, "name": "server-api", "status": "pending" },
+    { "phase": 4, "name": "web-setup", "status": "pending" },
+    { "phase": 5, "name": "kanban-board", "status": "pending" },
+    { "phase": 6, "name": "realtime-update", "status": "pending" },
+    { "phase": 7, "name": "integration", "status": "pending" }
+  ]
+}
