@@ -42,7 +42,8 @@
   "dependencies": {
     "commander": "^12.1.0",
     "express": "^5.2.1",
-    "gray-matter": "^4.0.3"
+    "gray-matter": "^4.0.3",
+    "smee-client": "^5.0.0"
   },
   "devDependencies": {
     "@types/express": "^5.0.6",
