@@ -43,7 +43,9 @@
     {
       "phase": 5,
       "name": "kanban-board",
-      "status": "pending"
+      "status": "completed",
+      "started_at": "2026-03-24T10:43:38+0900",
+      "completed_at": "2026-03-24T10:46:22+0900"
     },
     {
       "phase": 6,
