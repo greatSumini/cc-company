@@ -50,12 +50,15 @@
     {
       "phase": 6,
       "name": "realtime-update",
-      "status": "pending"
+      "status": "completed",
+      "started_at": "2026-03-24T10:46:58+0900",
+      "completed_at": "2026-03-24T10:50:06+0900"
     },
     {
       "phase": 7,
       "name": "integration",
-      "status": "pending"
+      "status": "pending",
+      "started_at": "2026-03-24T10:50:06+0900"
     }
   ]
 }

@@ -1,7 +1,6 @@
 import { useMemo } from 'react'
-import { useQuery } from '@tanstack/react-query'
-import { api } from '@/lib/api-client'
 import { useUIStore } from '@/stores/ui-store'
+import { useTickets } from '@/hooks/useTickets'
 import { KanbanColumn } from './KanbanColumn'
 import { getKanbanColumn } from '@/types/ticket'
 import type { Ticket } from '@/types/ticket'
@@ -10,11 +9,7 @@ const DONE_MAX_DISPLAY = 20
 
 export function KanbanBoard() {
   const agentFilter = useUIStore((s) => s.agentFilter)
-
-  const { data: tickets = [], isLoading } = useQuery({
-    queryKey: ['tickets'],
-    queryFn: () => api.tickets.list(),
-  })
+  const { data: tickets = [], isLoading } = useTickets()
 
   // 필터링 및 컬럼별 분류
   const columns = useMemo(() => {
