@@ -1,4 +1,6 @@
 import express, { Express } from 'express'
+import path from 'path'
+import { fileURLToPath } from 'url'
 import { ticketsRouter } from './routes/tickets.js'
 import { agentsRouter } from './routes/agents.js'
 import { webhooksRouter } from './routes/webhooks.js'
@@ -7,6 +9,9 @@ import { errorHandler } from './middleware/error-handler.js'
 import { verifyGitHubSignature } from './middleware/webhook-signature.js'
 import type { TicketService, IAgentStatusStore, IStore } from '@agentinc/core'
 import type { PullRequestReviewCommentEvent, PullRequestReviewEvent } from '@agentinc/core'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
 /**
  * PrEventService 인터페이스
@@ -53,6 +58,28 @@ export function createApp(deps: ServerDependencies): Express {
   app.use('/tickets', ticketsRouter)
   app.use('/agents', agentsRouter)
   app.use('/events', eventsRouter)
+
+  // 정적 파일 서빙 (프로덕션)
+  const publicPath = path.join(__dirname, '../public')
+  app.use(express.static(publicPath))
+
+  // SPA fallback — API 라우트가 아닌 모든 GET 요청을 index.html로
+  app.get('*', (req, res, next) => {
+    // API 요청은 무시
+    if (req.path.startsWith('/tickets') ||
+        req.path.startsWith('/agents') ||
+        req.path.startsWith('/events') ||
+        req.path.startsWith('/webhooks')) {
+      return next()
+    }
+
+    res.sendFile(path.join(publicPath, 'index.html'), (err) => {
+      if (err) {
+        // public/index.html이 없으면 (개발 모드) 404
+        res.status(404).send('Dashboard not built. Run: pnpm build:web')
+      }
+    })
+  })
 
   app.use(errorHandler)
 

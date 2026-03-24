@@ -57,8 +57,9 @@
     {
       "phase": 7,
       "name": "integration",
-      "status": "pending",
-      "started_at": "2026-03-24T10:50:06+0900"
+      "status": "completed",
+      "started_at": "2026-03-24T10:50:06+0900",
+      "completed_at": "2026-03-24T10:53:58+0900"
     }
   ]
 }

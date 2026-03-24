@@ -3,9 +3,13 @@
   "private": true,
   "scripts": {
     "build": "pnpm -r build",
-    "test": "pnpm -r test",
+    "build:web": "pnpm --filter @agentinc/web build && pnpm run copy:web",
+    "copy:web": "rm -rf packages/server/public && cp -r packages/web/dist packages/server/public",
     "dev": "pnpm -r --parallel dev",
-    "clean": "pnpm -r clean"
+    "test": "pnpm -r test",
+    "clean": "pnpm -r clean",
+    "prepublish:cli": "pnpm build && pnpm build:web",
+    "publish:cli": "pnpm prepublish:cli && pnpm --filter @agentinc/cli publish"
   },
   "devDependencies": {
     "typescript": "^5.7.0"

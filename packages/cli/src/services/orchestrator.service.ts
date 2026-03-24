@@ -80,7 +80,12 @@ export class OrchestratorService {
     })
     this.server = await this.startServer(app, ticketServerConfig.port)
 
-    console.log(`[Orchestrator] Ticket Server started on http://localhost:${ticketServerConfig.port}`)
+    console.log('')
+    console.log('\ud83d\ude80 Agent Inc Daemon Started')
+    console.log(`\u251c\u2500 Ticket API:  http://localhost:${ticketServerConfig.port}`)
+    console.log(`\u251c\u2500 Dashboard:   http://localhost:${ticketServerConfig.port}`)
+    console.log('\u2514\u2500 Press Ctrl+C to stop')
+    console.log('')
 
     // 5. Webhook Receiver 시작 (설정 시)
     if (webhookConfig?.enabled && webhookConfig.smeeUrl) {

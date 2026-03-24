@@ -6,3 +6,6 @@ dist/
 __pycache__/
 
 .agentinc
+
+# Build artifacts
+packages/server/public/
