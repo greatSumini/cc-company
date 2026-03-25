@@ -16,7 +16,6 @@ program
   .name('agentinc')
   .description('Run Claude Code like a company')
   .version('0.2.0')
-  .allowUnknownOption()
 
 registerInitCommand(program)
 registerRunCommand(program)
