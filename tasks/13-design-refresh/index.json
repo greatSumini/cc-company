@@ -5,11 +5,37 @@
   "totalPhases": 6,
   "created_at": "2026-03-25T15:30:00+0900",
   "phases": [
-    { "phase": 0, "name": "docs-update", "status": "pending" },
-    { "phase": 1, "name": "deps-tailwind", "status": "pending" },
-    { "phase": 2, "name": "ui-components", "status": "pending" },
-    { "phase": 3, "name": "layout", "status": "pending" },
-    { "phase": 4, "name": "kanban-style", "status": "pending" },
-    { "phase": 5, "name": "agents-page", "status": "pending" }
+    {
+      "phase": 0,
+      "name": "docs-update",
+      "status": "completed",
+      "started_at": "2026-03-25T15:16:59+0900",
+      "completed_at": "2026-03-25T15:45:00+0900"
+    },
+    {
+      "phase": 1,
+      "name": "deps-tailwind",
+      "status": "pending"
+    },
+    {
+      "phase": 2,
+      "name": "ui-components",
+      "status": "pending"
+    },
+    {
+      "phase": 3,
+      "name": "layout",
+      "status": "pending"
+    },
+    {
+      "phase": 4,
+      "name": "kanban-style",
+      "status": "pending"
+    },
+    {
+      "phase": 5,
+      "name": "agents-page",
+      "status": "pending"
+    }
   ]
 }
