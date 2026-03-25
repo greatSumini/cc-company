@@ -36,12 +36,15 @@
     {
       "phase": 4,
       "name": "kanban-style",
-      "status": "pending"
+      "status": "completed",
+      "started_at": "2026-03-25T15:25:34+09:00",
+      "completed_at": "2026-03-25T15:27:25+09:00"
     },
     {
       "phase": 5,
       "name": "agents-page",
-      "status": "pending"
+      "status": "pending",
+      "started_at": "2026-03-25T15:27:25+09:00"
     }
   ]
 }
