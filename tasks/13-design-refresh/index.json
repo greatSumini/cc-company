@@ -43,8 +43,9 @@
     {
       "phase": 5,
       "name": "agents-page",
-      "status": "pending",
-      "started_at": "2026-03-25T15:27:25+09:00"
+      "status": "completed",
+      "started_at": "2026-03-25T15:27:25+09:00",
+      "completed_at": "2026-03-25T15:29:30+09:00"
     }
   ]
 }
