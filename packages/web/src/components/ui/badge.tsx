@@ -1,18 +1,19 @@
 import { cn } from '@/lib/utils'
 
 interface BadgeProps {
-  variant: 'blue' | 'green' | 'yellow' | 'red' | 'purple' | 'gray'
+  variant: 'blue' | 'green' | 'yellow' | 'red' | 'purple' | 'gray' | 'orange'
   children: React.ReactNode
   className?: string
 }
 
 const variantStyles = {
-  blue: 'bg-badge-blue-bg text-badge-blue-text',
-  green: 'bg-badge-green-bg text-badge-green-text',
-  yellow: 'bg-badge-yellow-bg text-badge-yellow-text',
-  red: 'bg-badge-red-bg text-badge-red-text',
-  purple: 'bg-badge-purple-bg text-badge-purple-text',
-  gray: 'bg-badge-gray-bg text-badge-gray-text',
+  blue: 'bg-blue-100 text-blue-400',
+  green: 'bg-green-100 text-green-400',
+  yellow: 'bg-yellow-100 text-yellow-400',
+  red: 'bg-red-100 text-red-400',
+  purple: 'bg-purple-100 text-purple-400',
+  gray: 'bg-gray-100 text-gray-400',
+  orange: 'bg-orange-100 text-orange-400',
 }
 
 export function Badge({ variant, children, className }: BadgeProps) {

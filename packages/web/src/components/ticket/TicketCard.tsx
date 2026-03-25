@@ -45,8 +45,8 @@ export function TicketCard({ ticket }: TicketCardProps) {
     <div
       onClick={() => setSelectedTicketId(ticket.id)}
       className={cn(
-        'bg-white border border-gray-200 rounded-lg shadow-soft',
-        'hover:shadow-soft-md hover:border-gray-300 transition-all',
+        'bg-white border border-gray-200 rounded-lg',
+        'hover:bg-gray-50 transition-colors',
         'p-3 cursor-pointer',
         'flex flex-col gap-2'
       )}

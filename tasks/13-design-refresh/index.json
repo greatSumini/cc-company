@@ -15,12 +15,15 @@
     {
       "phase": 1,
       "name": "deps-tailwind",
-      "status": "pending"
+      "status": "completed",
+      "started_at": "2026-03-25T15:18:32+0900",
+      "completed_at": "2026-03-25T15:20:12+0900"
     },
     {
       "phase": 2,
       "name": "ui-components",
-      "status": "pending"
+      "status": "pending",
+      "started_at": "2026-03-25T15:20:12+0900"
     },
     {
       "phase": 3,
