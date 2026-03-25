@@ -4,7 +4,7 @@ import type { Ticket } from '@agentinc/core'
 export type ServerEvent =
   | { type: 'ticket:created'; payload: Ticket }
   | { type: 'ticket:updated'; payload: Ticket }
-  | { type: 'agent:status'; payload: { agent: string; state: 'idle' | 'working' } }
+  | { type: 'agent:status'; payload: { agent: string; state: 'offline' | 'idle' | 'working' } }
 
 class EventBus extends EventEmitter {
   emitEvent(event: ServerEvent): void {

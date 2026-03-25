@@ -33,7 +33,9 @@ export function Sidebar() {
                 <span
                   className={cn(
                     'w-2 h-2 rounded-full',
-                    statuses[agent.name] === 'working' ? 'bg-green-500' : 'bg-gray-300'
+                    statuses[agent.name] === 'working' ? 'bg-green-500'
+                      : statuses[agent.name] === 'idle' ? 'bg-gray-300'
+                      : 'bg-red-400'
                   )}
                 />
                 {agent.name}

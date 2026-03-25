@@ -65,7 +65,7 @@ export function useSSE() {
       eventSource.addEventListener('agent:status', (event) => {
         const { agent, state } = JSON.parse(event.data) as {
           agent: string
-          state: 'idle' | 'working'
+          state: 'offline' | 'idle' | 'working'
         }
         console.log('[SSE] agent:status', agent, state)
 

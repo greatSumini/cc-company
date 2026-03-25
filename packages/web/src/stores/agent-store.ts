@@ -1,9 +1,11 @@
 import { create } from 'zustand'
 
+type AgentStatusState = 'offline' | 'idle' | 'working'
+
 interface AgentState {
-  statuses: Record<string, 'idle' | 'working'>
-  updateStatus: (agent: string, state: 'idle' | 'working') => void
-  setStatuses: (statuses: Record<string, 'idle' | 'working'>) => void
+  statuses: Record<string, AgentStatusState>
+  updateStatus: (agent: string, state: AgentStatusState) => void
+  setStatuses: (statuses: Record<string, AgentStatusState>) => void
 }
 
 export const useAgentStore = create<AgentState>((set) => ({
