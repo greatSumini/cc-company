@@ -110,17 +110,17 @@
 - Border: 변경 없음
 
 ### 선택 상태 (Active/Selected)
-- 배경색: `bg-blue-50`
-- 왼쪽 accent bar: `border-l-2 border-blue-400`
+- 배경색: `bg-gray-100`
 - 텍스트: 기본 색상 유지 (과한 강조 지양)
+- Border: 없음 (배경색만으로 구분)
 
 ### Focus 상태
 - Ring 대신 subtle outline: `focus:outline-none focus-visible:ring-1 focus-visible:ring-gray-300`
 
 **근거**:
 - Notion의 절제된 시각 피드백 철학
-- 왼쪽 accent bar는 현재 위치를 명확히 표시하면서 과하지 않음
-- 색상 변화는 최소화하고 배경만 변경
+- 배경색만으로 충분한 시각적 구분
+- 색상 변화는 최소화
 
 ---
 
@@ -192,7 +192,7 @@
 | Border | `gray-200` |
 | Divider | `gray-100` |
 | Hover 배경 | `gray-50` |
-| 선택 배경 | `blue-50` |
+| 선택 배경 | `gray-100` |
 
 ### 사용 금지
 - 순수 black (`#000`) — `gray-900` 사용
