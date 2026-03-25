@@ -29,6 +29,6 @@ export const api = {
   },
   agents: {
     list: () => fetchAPI<unknown[]>('/agents'),
-    status: () => fetchAPI<unknown[]>('/agents/status'),
+    status: () => fetchAPI<Record<string, unknown>>('/agents/status'),
   },
 }

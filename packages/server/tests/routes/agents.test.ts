@@ -39,7 +39,7 @@ describe('GET /agents', () => {
 
   const mockAgentStatusStore = {
     get: vi.fn(),
-    getAll: vi.fn().mockResolvedValue([]),
+    getAll: vi.fn().mockResolvedValue({}),
     updateHeartbeat: vi.fn(),
     updateState: vi.fn(),
   } as unknown as IAgentStatusStore
@@ -81,7 +81,7 @@ describe('GET /agents without agentStore', () => {
   const mockTicketService = {} as TicketService
   const mockAgentStatusStore = {
     get: vi.fn(),
-    getAll: vi.fn().mockResolvedValue([]),
+    getAll: vi.fn().mockResolvedValue({}),
     updateHeartbeat: vi.fn(),
     updateState: vi.fn(),
   } as unknown as IAgentStatusStore

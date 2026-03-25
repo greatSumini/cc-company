@@ -19,10 +19,10 @@ export function AgentFilter() {
         <button
           onClick={() => setAgentFilter(null)}
           className={cn(
-            'px-3 py-1 rounded text-sm transition-colors',
+            'px-3 py-1.5 rounded-md text-sm transition-colors border',
             agentFilter === null
-              ? 'bg-gray-900 text-white'
-              : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+              ? 'bg-blue-50 text-gray-900 border-blue-400'
+              : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50'
           )}
         >
           All
@@ -32,10 +32,10 @@ export function AgentFilter() {
             key={agent.name}
             onClick={() => setAgentFilter(agent.name)}
             className={cn(
-              'px-3 py-1 rounded text-sm transition-colors',
+              'px-3 py-1.5 rounded-md text-sm transition-colors border',
               agentFilter === agent.name
-                ? 'bg-gray-900 text-white'
-                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                ? 'bg-blue-50 text-gray-900 border-blue-400'
+                : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50'
             )}
           >
             {agent.name}

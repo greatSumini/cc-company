@@ -24,7 +24,7 @@ export function KanbanColumn({
       {/* Column Header */}
       <div className="flex items-center gap-2 mb-3 px-1">
         <h2 className="text-sm font-semibold text-gray-700">{title}</h2>
-        <span className="text-xs text-gray-400 bg-gray-100 px-1.5 py-0.5 rounded">
+        <span className="text-xs text-gray-500 bg-gray-100 px-1.5 py-0.5 rounded">
           {count}
         </span>
       </div>

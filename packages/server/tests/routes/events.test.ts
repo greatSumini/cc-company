@@ -26,7 +26,7 @@ describe('GET /events (SSE)', () => {
 
   const mockAgentStatusStore = {
     get: vi.fn(),
-    getAll: vi.fn().mockResolvedValue([]),
+    getAll: vi.fn().mockResolvedValue({}),
     updateHeartbeat: vi.fn(),
     updateState: vi.fn(),
   } as unknown as IAgentStatusStore
