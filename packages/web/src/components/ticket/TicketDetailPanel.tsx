@@ -5,11 +5,12 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import type { Ticket } from '@/types/ticket'
 
-const priorityVariant: Record<string, 'red' | 'yellow' | 'gray' | 'blue'> = {
-  urgent: 'red',
-  high: 'yellow',
-  normal: 'gray',
-  low: 'blue',
+// Priority → Badge variant 매핑
+const priorityVariant: Record<string, 'critical' | 'high' | 'medium' | 'low'> = {
+  urgent: 'critical',
+  high: 'high',
+  normal: 'medium',
+  low: 'low',
 }
 
 const statusLabels: Record<string, string> = {
@@ -84,7 +85,7 @@ function TicketDetailContent({ ticket }: { ticket: Ticket }) {
         </div>
         <div className="flex items-center gap-2">
           <span className="text-xs text-gray-500 w-20">Priority</span>
-          <Badge variant={priorityVariant[ticket.priority] || 'gray'}>
+          <Badge variant={priorityVariant[ticket.priority] || 'default'}>
             {ticket.priority}
           </Badge>
         </div>

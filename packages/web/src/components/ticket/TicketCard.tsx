@@ -8,18 +8,18 @@ interface TicketCardProps {
   ticket: Ticket
 }
 
-// Priority 색상 매핑
-const priorityVariant: Record<string, 'red' | 'yellow' | 'gray' | 'blue'> = {
-  urgent: 'red',
-  high: 'yellow',
-  normal: 'gray',
-  low: 'blue',
+// Priority → Badge variant 매핑
+const priorityVariant: Record<string, 'critical' | 'high' | 'medium' | 'low'> = {
+  urgent: 'critical',
+  high: 'high',
+  normal: 'medium',
+  low: 'low',
 }
 
-// Type 색상 매핑
-const typeVariant: Record<string, 'purple' | 'green'> = {
-  task: 'purple',
-  cc_review: 'green',
+// Type → Badge variant 매핑 (직접 사용 가능)
+const typeVariant: Record<string, 'task' | 'cc_review'> = {
+  task: 'task',
+  cc_review: 'cc_review',
 }
 
 // Done 상태 아이콘
@@ -53,11 +53,11 @@ export function TicketCard({ ticket }: TicketCardProps) {
     >
       {/* 상단: Priority, ID, Type, Done 아이콘 */}
       <div className="flex items-center gap-2 text-xs">
-        <Badge variant={priorityVariant[ticket.priority] || 'gray'}>
+        <Badge variant={priorityVariant[ticket.priority] || 'default'}>
           {ticket.priority}
         </Badge>
         <span className="text-gray-400">#{shortId}</span>
-        <Badge variant={typeVariant[ticket.type] || 'gray'}>
+        <Badge variant={typeVariant[ticket.type] || 'default'}>
           {ticket.type}
         </Badge>
         {isDone && (
