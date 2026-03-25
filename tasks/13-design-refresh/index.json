@@ -1,0 +1,15 @@
+{
+  "project": "agentinc",
+  "task": "design-refresh",
+  "prompt": "gui web dashboard의 레이아웃을 slack처럼 바꾸고, 디자인 thesis는 notion/tally 스타일의 깔끔한 모노톤 + 아이콘 사용으로 전환하고싶다. 절제된 색상 사용 + hover background + 매우 절제된 shadow 사용 + status별 color는 배경색은 100/ 강조색은 400 사용이 핵심이다.",
+  "totalPhases": 6,
+  "created_at": "2026-03-25T15:30:00+0900",
+  "phases": [
+    { "phase": 0, "name": "docs-update", "status": "pending" },
+    { "phase": 1, "name": "deps-tailwind", "status": "pending" },
+    { "phase": 2, "name": "ui-components", "status": "pending" },
+    { "phase": 3, "name": "layout", "status": "pending" },
+    { "phase": 4, "name": "kanban-style", "status": "pending" },
+    { "phase": 5, "name": "agents-page", "status": "pending" }
+  ]
+}
